@@ -12,21 +12,22 @@ interface FactorRowProps {
 export default function FactorRow({ factor, delay = 0 }: FactorRowProps) {
   const [expanded, setExpanded] = useState(false);
 
+  // score is 0-100, higher = more human = green
   const getColor = (s: number) => {
-    if (s <= 3.5) return { bar: "#4ade80", bg: "rgba(74,222,128,0.12)", text: "#4ade80" };
-    if (s <= 6.5) return { bar: "#fbbf24", bg: "rgba(251,191,36,0.12)", text: "#fbbf24" };
+    if (s >= 65) return { bar: "#4ade80", bg: "rgba(74,222,128,0.12)", text: "#4ade80" };
+    if (s >= 35) return { bar: "#fbbf24", bg: "rgba(251,191,36,0.12)", text: "#fbbf24" };
     return { bar: "#f87171", bg: "rgba(248,113,113,0.12)", text: "#f87171" };
   };
 
   const colors = getColor(factor.score);
-  const pct = (factor.score / 10) * 100;
+  const pct = factor.score;
 
   const getLabel = (s: number) => {
-    if (s <= 2) return "Strongly Human";
-    if (s <= 3.5) return "Likely Human";
-    if (s <= 5) return "Slight AI";
-    if (s <= 6.5) return "Mixed";
-    if (s <= 8) return "Likely AI";
+    if (s >= 80) return "Strongly Human";
+    if (s >= 65) return "Likely Human";
+    if (s >= 50) return "Slight Human";
+    if (s >= 35) return "Mixed";
+    if (s >= 20) return "Likely AI";
     return "Strongly AI";
   };
 
@@ -57,70 +58,18 @@ export default function FactorRow({ factor, delay = 0 }: FactorRowProps) {
           textAlign: "left",
         }}
       >
-        {/* Factor name */}
-        <span
-          style={{
-            flex: 1,
-            fontSize: "13px",
-            color: "var(--text-secondary)",
-            fontFamily: "Inter, sans-serif",
-            minWidth: 0,
-          }}
-        >
+        <span style={{ flex: 1, fontSize: "13px", color: "var(--text-secondary)", fontFamily: "var(--font)", minWidth: 0 }}>
           {factor.name}
         </span>
 
         {/* Score bar */}
-        <div
-          style={{
-            width: "80px",
-            height: "4px",
-            background: "var(--border)",
-            borderRadius: "2px",
-            flexShrink: 0,
-          }}
-        >
-          <div
-            style={{
-              width: `${pct}%`,
-              height: "100%",
-              background: colors.bar,
-              borderRadius: "2px",
-              boxShadow: `0 0 6px ${colors.bar}60`,
-              transition: "width 0.8s ease-out",
-            }}
-          />
+        <div style={{ width: "80px", height: "4px", background: "var(--border)", borderRadius: "2px", flexShrink: 0 }}>
+          <div style={{ width: `${pct}%`, height: "100%", background: colors.bar, borderRadius: "2px", boxShadow: `0 0 6px ${colors.bar}60`, transition: "width 0.8s ease-out" }} />
         </div>
 
         {/* Score number */}
-        <span
-          style={{
-            fontSize: "13px",
-            fontFamily: "DM Mono, monospace",
-            color: colors.text,
-            fontWeight: 500,
-            width: "28px",
-            textAlign: "right",
-            flexShrink: 0,
-          }}
-        >
+        <span style={{ fontSize: "13px", fontFamily: "var(--font-mono)", color: colors.text, fontWeight: 500, width: "32px", textAlign: "right", flexShrink: 0 }}>
           {factor.score}
-        </span>
-
-        {/* Label */}
-        <span
-          style={{
-            fontSize: "11px",
-            padding: "2px 7px",
-            borderRadius: "4px",
-            background: colors.bg,
-            color: colors.text,
-            flexShrink: 0,
-            display: "none",
-          }}
-          className="label-badge"
-        >
-          {getLabel(factor.score)}
         </span>
 
         {/* Expand icon */}
@@ -129,30 +78,12 @@ export default function FactorRow({ factor, delay = 0 }: FactorRowProps) {
         </span>
       </button>
 
-      {/* Expanded explanations */}
       {expanded && (
-        <div
-          style={{
-            padding: "0 14px 12px 14px",
-            borderTop: "1px solid var(--border)",
-          }}
-        >
+        <div style={{ padding: "0 14px 12px 14px", borderTop: "1px solid var(--border)" }}>
           <ul style={{ listStyle: "none", paddingTop: "10px" }}>
             {factor.explanation.map((point, i) => (
-              <li
-                key={i}
-                style={{
-                  display: "flex",
-                  gap: "8px",
-                  marginBottom: "6px",
-                  fontSize: "12px",
-                  color: "var(--text-secondary)",
-                  lineHeight: "1.5",
-                }}
-              >
-                <span style={{ color: colors.text, flexShrink: 0, marginTop: "1px" }}>
-                  ›
-                </span>
+              <li key={i} style={{ display: "flex", gap: "8px", marginBottom: "6px", fontSize: "12px", color: "var(--text-secondary)", lineHeight: "1.5" }}>
+                <span style={{ color: colors.text, flexShrink: 0, marginTop: "1px" }}>›</span>
                 <span>{point}</span>
               </li>
             ))}

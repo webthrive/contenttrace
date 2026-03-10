@@ -97,7 +97,6 @@ export async function POST(req: NextRequest) {
     try {
       parsed = JSON.parse(content.text);
     } catch {
-      // Try to extract JSON if wrapped in markdown
       const match = content.text.match(/\{[\s\S]*\}/);
       if (match) {
         parsed = JSON.parse(match[0]);
@@ -106,35 +105,41 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Calculate section scores and aggregate
+    // Claude scores 0-10 where 10 = AI
+    // We flip to Human Score 0-100 where 100 = fully human, green is good
     const sections = parsed.sections.map((section: any) => {
-      const sectionScore =
+      const rawSectionScore =
         section.factors.reduce((sum: number, f: any) => sum + f.score, 0) /
         section.factors.length;
+      const flippedFactors = section.factors.map((f: any) => ({
+        ...f,
+        score: Math.round((10 - f.score) * 10),
+      }));
       return {
         ...section,
-        score: Math.round(sectionScore * 10) / 10,
+        factors: flippedFactors,
+        score: Math.round((10 - rawSectionScore) * 10),
       };
     });
 
-    const totalWeight = sections.reduce(
+    const totalWeight = parsed.sections.reduce(
       (sum: number, s: any) => sum + s.weight,
       0
     );
-    const aggregateScore =
-      sections.reduce(
-        (sum: number, s: any) => sum + s.score * s.weight,
-        0
-      ) / totalWeight;
+    const rawAggregate =
+      parsed.sections.reduce((sum: number, s: any) => {
+        const raw = s.factors.reduce((fs: number, f: any) => fs + f.score, 0) / s.factors.length;
+        return sum + raw * s.weight;
+      }, 0) / totalWeight;
 
-    const roundedAggregate = Math.round(aggregateScore * 10) / 10;
+    const humanAggregate = Math.round((10 - rawAggregate) * 10);
 
     let verdict: "Likely Human" | "Ambiguous / Mixed" | "Likely AI-Generated";
     let verdictColor: "green" | "yellow" | "red";
-    if (roundedAggregate <= 3.5) {
+    if (humanAggregate >= 65) {
       verdict = "Likely Human";
       verdictColor = "green";
-    } else if (roundedAggregate <= 6.5) {
+    } else if (humanAggregate >= 35) {
       verdict = "Ambiguous / Mixed";
       verdictColor = "yellow";
     } else {
@@ -149,7 +154,7 @@ export async function POST(req: NextRequest) {
     const result = {
       text: text.substring(0, 500) + (text.length > 500 ? "..." : ""),
       wordCount,
-      aggregateScore: roundedAggregate,
+      aggregateScore: humanAggregate,
       verdict,
       verdictColor,
       confidence,

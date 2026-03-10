@@ -1,6 +1,6 @@
 export interface FactorScore {
   name: string;
-  score: number; // 0-10, higher = more AI
+  score: number; // 0-100, higher = more human
   explanation: string[];
 }
 

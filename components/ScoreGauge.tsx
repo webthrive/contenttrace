@@ -1,19 +1,20 @@
 "use client";
 
 interface ScoreGaugeProps {
-  score: number;
+  score: number; // 0-100, higher = more human
   size?: "sm" | "md" | "lg";
 }
 
 export default function ScoreGauge({ score, size = "md" }: ScoreGaugeProps) {
+  // Green = human (high), Yellow = mixed, Red = AI (low)
   const getColor = (s: number) => {
-    if (s <= 3.5) return "#4ade80";
-    if (s <= 6.5) return "#fbbf24";
+    if (s >= 65) return "#4ade80";
+    if (s >= 35) return "#fbbf24";
     return "#f87171";
   };
 
   const color = getColor(score);
-  const pct = score / 10;
+  const pct = score / 100;
 
   const dims = { sm: 64, md: 96, lg: 140 };
   const strokes = { sm: 5, md: 7, lg: 10 };
@@ -23,34 +24,26 @@ export default function ScoreGauge({ score, size = "md" }: ScoreGaugeProps) {
   const cx = dim / 2;
   const cy = dim / 2;
 
-  // Half-circle gauge (top half)
-  const startAngle = -180;
-  const endAngle = 0;
-  const totalAngle = endAngle - startAngle;
-  const currentAngle = startAngle + totalAngle * pct;
-
   const toRad = (deg: number) => (deg * Math.PI) / 180;
-  const startX = cx + r * Math.cos(toRad(startAngle));
-  const startY = cy + r * Math.sin(toRad(startAngle));
-  const endX = cx + r * Math.cos(toRad(currentAngle));
-  const endY = cy + r * Math.sin(toRad(currentAngle));
+  const startX = cx + r * Math.cos(toRad(-180));
+  const startY = cy + r * Math.sin(toRad(-180));
+  const angle = -180 + 180 * pct;
+  const endX = cx + r * Math.cos(toRad(angle));
+  const endY = cy + r * Math.sin(toRad(angle));
+  const bgEndX = cx + r;
+  const bgEndY = cy;
+  const largeArc = pct > 0.5 ? 1 : 0;
 
-  const largeArc = totalAngle * pct > 180 ? 1 : 0;
-
-  const bgEndX = cx + r * Math.cos(toRad(endAngle));
-  const bgEndY = cy + r * Math.sin(toRad(endAngle));
-
-  const fontSize = { sm: "10px", md: "14px", lg: "22px" };
+  const fontSize = { sm: "11px", md: "15px", lg: "24px" };
   const labelSize = { sm: "7px", md: "9px", lg: "11px" };
 
   return (
     <svg
       width={dim}
-      height={dim / 2 + stroke}
-      viewBox={`0 0 ${dim} ${dim / 2 + stroke}`}
+      height={dim / 2 + stroke + 16}
+      viewBox={`0 0 ${dim} ${dim / 2 + stroke + 16}`}
       style={{ overflow: "visible" }}
     >
-      {/* Background arc */}
       <path
         d={`M ${startX} ${startY} A ${r} ${r} 0 0 1 ${bgEndX} ${bgEndY}`}
         fill="none"
@@ -58,7 +51,6 @@ export default function ScoreGauge({ score, size = "md" }: ScoreGaugeProps) {
         strokeWidth={stroke}
         strokeLinecap="round"
       />
-      {/* Score arc */}
       {pct > 0 && (
         <path
           d={`M ${startX} ${startY} A ${r} ${r} 0 ${largeArc} 1 ${endX} ${endY}`}
@@ -66,33 +58,29 @@ export default function ScoreGauge({ score, size = "md" }: ScoreGaugeProps) {
           stroke={color}
           strokeWidth={stroke}
           strokeLinecap="round"
-          style={{
-            filter: `drop-shadow(0 0 6px ${color}60)`,
-            transition: "all 1s ease-out",
-          }}
+          style={{ filter: `drop-shadow(0 0 6px ${color}60)` }}
         />
       )}
-      {/* Score text */}
       <text
         x={cx}
-        y={cy - 2}
+        y={cy + 2}
         textAnchor="middle"
         fill={color}
         fontSize={fontSize[size]}
         fontFamily="DM Mono, monospace"
         fontWeight="500"
       >
-        {score.toFixed(1)}
+        {score}
       </text>
       <text
         x={cx}
-        y={cy + 10}
+        y={cy + 13}
         textAnchor="middle"
         fill="#55556a"
         fontSize={labelSize[size]}
         fontFamily="Inter, sans-serif"
       >
-        / 10
+        / 100
       </text>
     </svg>
   );
