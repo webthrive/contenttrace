@@ -185,7 +185,7 @@ export default function AnalyzerPage() {
             © {new Date().getFullYear()} Web Thrive, LLC. TelltaleProof is a free AI text detection tool. Results are probabilistic, not definitive.
           </div>
           <div style={{ display: "flex", justifyContent: "center", gap: "24px", flexWrap: "wrap" }}>
-            {[{ label: "Privacy Policy", href: "/privacy" }, { label: "Terms of Use", href: "/terms" }, { label: "Cookie Policy", href: "/cookies" }].map((link) => (
+            {[{ label: "About", href: "/about" }, { label: "Blog", href: "/blog" }, { label: "Contact", href: "/contact" }, { label: "Privacy Policy", href: "/privacy" }, { label: "Terms of Use", href: "/terms" }, { label: "Cookie Policy", href: "/cookies" }].map((link) => (
               <a key={link.href} href={link.href} style={{ fontSize: "14px", color: "var(--text-muted)", textDecoration: "none" }}>{link.label}</a>
             ))}
           </div>
