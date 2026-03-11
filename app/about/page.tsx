@@ -24,7 +24,7 @@ export default function AboutPage() {
       
 
       <h1 style={{ fontSize: "42px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "8px", letterSpacing: "-0.02em" }}>About Telltale Proof</h1>
-      <p style={{ fontSize: "14px", color: "var(--text-muted)", marginBottom: "40px" }}>Built by Web Thrive, LLC</p>
+      <p style={{ fontSize: "14px", color: "var(--text-muted)", marginBottom: "40px" }}>Built by Colin at Web Thrive</p>
 
       {/* Mission */}
       <div style={{ marginBottom: "40px" }}>
@@ -119,7 +119,7 @@ export default function AboutPage() {
       <div style={{ marginBottom: "40px" }}>
         <h2 style={{ fontSize: "22px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "14px" }}>Who we are</h2>
         <p style={{ fontSize: "16px", color: "var(--text-secondary)", marginBottom: "14px" }}>
-          Telltale Proof is built and maintained by <strong style={{ color: "var(--text-primary)" }}>Web Thrive, LLC</strong>, a small digital product studio based in the United States. We build tools that help people work smarter with content — detection, optimization, and authenticity.
+          Telltale Proof is built and maintained by <a href="https://www.webthrive.io/home" target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", textDecoration: "none", fontWeight: 600 }}>Colin</a>, a digital marketing consultant at <strong style={{ color: "var(--text-primary)" }}>Web Thrive</strong> based in the United States.
         </p>
         <p style={{ fontSize: "16px", color: "var(--text-secondary)" }}>
           Have a question, a feature request, or just want to say hello? We'd love to hear from you.{" "}
