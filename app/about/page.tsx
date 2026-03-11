@@ -1,3 +1,4 @@
+import Nav from "@/components/Nav";
 import type { Metadata } from "next";
 
 const SITE_URL = "https://www.telltaleproof.com";
@@ -18,8 +19,9 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <main style={{ maxWidth: "720px", margin: "0 auto", padding: "60px 24px 80px", fontFamily: "var(--font)", lineHeight: "1.75" }}>
-      <a href="/" style={{ fontSize: "14px", color: "var(--accent)", textDecoration: "none", display: "block", marginBottom: "32px" }}>← Back to Telltale Proof</a>
+    <><Nav current="/about" />
+      <main style={{ maxWidth: "720px", margin: "0 auto", padding: "60px 24px 80px", fontFamily: "var(--font)", lineHeight: "1.75" }}>
+      
 
       <h1 style={{ fontSize: "42px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "8px", letterSpacing: "-0.02em" }}>About Telltale Proof</h1>
       <p style={{ fontSize: "14px", color: "var(--text-muted)", marginBottom: "40px" }}>Built by Web Thrive, LLC</p>
@@ -131,5 +133,6 @@ export default function AboutPage() {
         Telltale Proof provides probabilistic analysis only. Results should not be used as definitive evidence in academic, legal, employment, or disciplinary proceedings. AI detection is an imperfect science and no tool — including this one — is 100% accurate.
       </div>
     </main>
+    </>
   );
 }

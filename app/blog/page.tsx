@@ -1,3 +1,4 @@
+import Nav from "@/components/Nav";
 import type { Metadata } from "next";
 import BlogIndex from "./_blog";
 

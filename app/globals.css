@@ -94,3 +94,12 @@ body::before {
     grid-template-columns: 1fr !important;
   }
 }
+
+/* Nav desktop/mobile visibility */
+.nav-desktop { display: flex !important; }
+.nav-mobile  { display: none !important; }
+
+@media (max-width: 600px) {
+  .nav-desktop { display: none !important; }
+  .nav-mobile  { display: block !important; }
+}

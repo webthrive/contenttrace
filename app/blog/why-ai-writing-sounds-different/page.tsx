@@ -1,3 +1,4 @@
+import Nav from "@/components/Nav";
 import type { Metadata } from "next";
 
 const SITE_URL = "https://www.telltaleproof.com";
@@ -19,8 +20,9 @@ export const metadata: Metadata = {
 
 export default function Article2() {
   return (
-    <main style={{ maxWidth: "700px", margin: "0 auto", padding: "60px 24px 80px", fontFamily: "var(--font)" }}>
-      <a href="/blog" style={{ fontSize: "14px", color: "var(--accent)", textDecoration: "none", display: "block", marginBottom: "32px" }}>← Back to Blog</a>
+    <><Nav current="/blog" />
+      <main style={{ maxWidth: "700px", margin: "0 auto", padding: "60px 24px 80px", fontFamily: "var(--font)" }}>
+      
       <div style={{ display: "inline-block", fontSize: "12px", fontWeight: 600, color: "#c47a00", background: "rgba(196,122,0,0.08)", border: "1px solid rgba(196,122,0,0.2)", padding: "3px 10px", borderRadius: "8px", marginBottom: "16px" }}>Analysis</div>
       <h1 style={{ fontSize: "38px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "16px", letterSpacing: "-0.02em", lineHeight: 1.2 }}>Why AI Writing Sounds Different (Even When It's Technically Correct)</h1>
       <div style={{ fontSize: "14px", color: "var(--text-muted)", fontFamily: "var(--font-mono)", marginBottom: "40px" }}>March 10, 2026 · 7 min read · By <a href="https://www.webthrive.io/home/" target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", textDecoration: "none", fontWeight: 500 }}>Colin</a></div>
@@ -82,5 +84,6 @@ export default function Article2() {
         </a>
       </div>
     </main>
+    </>
   );
 }

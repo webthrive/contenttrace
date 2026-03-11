@@ -1,5 +1,6 @@
 "use client";
 
+import Nav from "@/components/Nav";
 import type { Metadata } from "next";
 import { useState } from "react";
 import { Send, CheckCircle } from "lucide-react";
@@ -44,8 +45,9 @@ export default function ContactPage() {
   };
 
   return (
-    <main style={{ maxWidth: "680px", margin: "0 auto", padding: "60px 24px 80px", fontFamily: "var(--font)", lineHeight: "1.75" }}>
-      <a href="/" style={{ fontSize: "14px", color: "var(--accent)", textDecoration: "none", display: "block", marginBottom: "32px" }}>← Back to Telltale Proof</a>
+    <><Nav current="/contact" />
+      <main style={{ maxWidth: "680px", margin: "0 auto", padding: "60px 24px 80px", fontFamily: "var(--font)", lineHeight: "1.75" }}>
+      
 
       <h1 style={{ fontSize: "42px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "8px", letterSpacing: "-0.02em" }}>Contact Us</h1>
       <p style={{ fontSize: "16px", color: "var(--text-secondary)", marginBottom: "36px" }}>
@@ -127,5 +129,6 @@ export default function ContactPage() {
         </div>
       )}
     </main>
+    </>
   );
 }

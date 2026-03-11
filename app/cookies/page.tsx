@@ -1,3 +1,4 @@
+import Nav from "@/components/Nav";
 import type { Metadata } from "next";
 
 const SITE_URL = "https://www.telltaleproof.com";
@@ -19,8 +20,9 @@ export const metadata: Metadata = {
 export default function CookiePolicy() {
   const updated = "March 10, 2026";
   return (
-    <main style={{ maxWidth: "720px", margin: "0 auto", padding: "60px 24px 80px", color: "var(--text-secondary)", fontFamily: "var(--font)", lineHeight: "1.75" }}>
-      <a href="/" style={{ fontSize: "14px", color: "var(--accent)", textDecoration: "none", display: "block", marginBottom: "32px" }}>← Back to Telltale Proof</a>
+    <><Nav current="/cookies" />
+      <main style={{ maxWidth: "720px", margin: "0 auto", padding: "60px 24px 80px", color: "var(--text-secondary)", fontFamily: "var(--font)", lineHeight: "1.75" }}>
+      
       <h1 style={{ fontFamily: "var(--font)", fontSize: "40px", color: "var(--text-primary)", marginBottom: "8px", fontWeight: 700 }}>Cookie Policy</h1>
       <p style={{ fontSize: "14px", color: "var(--text-muted)", marginBottom: "36px" }}>Last updated: {updated}</p>
       {[
@@ -37,5 +39,6 @@ export default function CookiePolicy() {
         </div>
       ))}
     </main>
+    </>
   );
 }
