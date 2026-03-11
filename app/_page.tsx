@@ -56,7 +56,10 @@ export default function AnalyzerPage() {
       <header style={{ maxWidth: "760px", margin: "0 auto", padding: "32px 0 28px", textAlign: "center" }}>
         <a href="/" style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "var(--accent-light)", border: "1px solid rgba(10,115,115,0.3)", borderRadius: "20px", padding: "7px 16px", marginBottom: "24px", textDecoration: "none" }}>
           <Scan size={14} style={{ color: "var(--accent)" }} />
-          <span style={{ fontSize: "13px", color: "var(--accent)", fontFamily: "var(--font-mono)", letterSpacing: "0.04em", fontWeight: 500, textAlign: "center" }}>Free AI Content Detector<br />by Telltale Proof</span>
+          <span style={{ fontSize: "13px", color: "var(--accent)", fontFamily: "var(--font-mono)", letterSpacing: "0.04em", fontWeight: 500, textAlign: "center" }}>
+            <span className="badge-desktop">Free AI Content Detector by Telltale Proof</span>
+            <span className="badge-mobile">Free AI Content Detector<br />by Telltale Proof</span>
+          </span>
         </a>
         <h1 style={{ fontSize: "clamp(32px, 7vw, 62px)", fontWeight: 700, color: "var(--text-primary)", lineHeight: 1.1, marginBottom: "10px", letterSpacing: "-0.03em" }}>
           Deep AI Content Analysis
@@ -201,20 +204,6 @@ export default function AnalyzerPage() {
           Telltale Proof provides probabilistic analysis only and does not constitute a definitive determination of authorship. Results should not be used as evidence in academic, legal, employment, or disciplinary proceedings. AI detection is an imperfect science — scores may be affected by writing style, text length, editing, translation, or subject matter. A high Human Score does not guarantee human authorship, and a low score does not prove AI generation. Telltale Proof is provided free of charge and without warranty of any kind. Web Thrive, LLC accepts no liability for decisions made based on analysis results.
         </div>
       </div>
-
-      {/* FOOTER */}
-      <footer style={{ borderTop: "1px solid var(--border)", padding: "24px 16px", textAlign: "center", background: "var(--bg-card)" }}>
-        <div style={{ maxWidth: "760px", margin: "0 auto" }}>
-          <div style={{ fontSize: "14px", color: "var(--text-muted)", marginBottom: "10px" }}>
-            © {new Date().getFullYear()} Web Thrive, LLC. Telltale Proof is a free AI text detection tool. Results are probabilistic, not definitive.
-          </div>
-          <div style={{ display: "flex", justifyContent: "center", gap: "24px", flexWrap: "wrap" }}>
-            {[{ label: "About", href: "/about" }, { label: "Blog", href: "/blog" }, { label: "Contact", href: "/contact" }, { label: "Privacy Policy", href: "/privacy" }, { label: "Terms of Use", href: "/terms" }, { label: "Cookie Policy", href: "/cookies" }].map((link) => (
-              <a key={link.href} href={link.href} style={{ fontSize: "14px", color: "var(--text-muted)", textDecoration: "none" }}>{link.label}</a>
-            ))}
-          </div>
-        </div>
-      </footer>
     </main>
   );
 }

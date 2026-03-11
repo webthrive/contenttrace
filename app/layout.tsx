@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import Footer from "@/components/Footer";
 import "./globals.css";
 
 const SITE_URL = "https://www.telltaleproof.com";
@@ -12,27 +13,14 @@ export const metadata: Metadata = {
     template: "%s | Telltale Proof",
   },
   description: "Free AI text detector. Analyze any content across 8 sections and 32 signals — structure, voice, cognitive fingerprinting, emotional texture, and more. Get a Human Score out of 100.",
-  keywords: [
-    "free AI content detector",
-    "AI text detector",
-    "AI writing detector",
-    "detect AI generated text",
-    "GPT detector",
-    "ChatGPT detector",
-    "human vs AI text",
-    "AI content checker",
-    "content authenticity tool",
-    "Telltale Proof",
-  ],
+  keywords: ["free AI content detector","AI text detector","AI writing detector","detect AI generated text","GPT detector","ChatGPT detector","human vs AI text","AI content checker","content authenticity tool","Telltale Proof"],
   authors: [{ name: "Web Thrive, LLC" }],
   creator: "Web Thrive, LLC",
   publisher: "Web Thrive, LLC",
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
   alternates: { canonical: SITE_URL },
   openGraph: {
-    type: "website",
-    url: SITE_URL,
-    siteName: "Telltale Proof",
+    type: "website", url: SITE_URL, siteName: "Telltale Proof",
     title: "Telltale Proof — Free AI Content Detector",
     description: "Free AI text detector. 8 sections, 32 signals, Human Score out of 100. No account required.",
     locale: "en_US",
@@ -49,7 +37,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
-        {/* Google Tag Manager */}
         <Script
           id="gtm-script"
           strategy="afterInteractive"
@@ -62,17 +49,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           }}
         />
       </head>
-      <body>
-        {/* Google Tag Manager (noscript) */}
+      <body style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
         <noscript>
-          <iframe
-            src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
-            height="0"
-            width="0"
-            style={{ display: "none", visibility: "hidden" }}
-          />
+          <iframe src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+            height="0" width="0" style={{ display: "none", visibility: "hidden" }} />
         </noscript>
         {children}
+        <Footer />
       </body>
     </html>
   );

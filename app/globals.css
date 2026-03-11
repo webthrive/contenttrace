@@ -103,3 +103,12 @@ body::before {
   .nav-desktop { display: none !important; }
   .nav-mobile  { display: block !important; }
 }
+
+/* Badge text — desktop single line, mobile two lines */
+.badge-desktop { display: inline !important; }
+.badge-mobile  { display: none !important; }
+
+@media (max-width: 600px) {
+  .badge-desktop { display: none !important; }
+  .badge-mobile  { display: inline !important; }
+}

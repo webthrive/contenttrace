@@ -11,68 +11,69 @@ export default function ScoreGauge({ score, size = "md" }: ScoreGaugeProps) {
   };
 
   const color = getColor(score);
-  const pct = score / 100;
-  const dims =    { sm: 64,  md: 96,  lg: 140 };
-  const strokes = { sm: 5,   md: 7,   lg: 10  };
-  const dim = dims[size];
+  const pct = Math.min(Math.max(score, 0), 100) / 100;
+
+  const dims    = { sm: 72,  md: 100, lg: 148 };
+  const strokes = { sm: 6,   md: 8,   lg: 12  };
+  const dim    = dims[size];
   const stroke = strokes[size];
-
-  // Center of circle is at (cx, cy), arc is top half only
-  // We want the flat edge at the bottom, so cy = height of SVG
-  const r = (dim - stroke * 2) / 2;
+  const r  = dim / 2 - stroke;
   const cx = dim / 2;
-  // Place cy so the semicircle sits properly — flat bottom at svg bottom edge
-  const svgH = dim / 2 + stroke;
-  const cy = svgH; // flat edge exactly at bottom of arc area
 
-  const toRad = (deg: number) => (deg * Math.PI) / 180;
-  const startX = cx - r;
-  const startY = cy;
-  const endX   = cx + r;
-  const endY   = cy;
+  // Arc goes left to right across the top — flat bottom at y = cx
+  // Start: left end of diameter  End: right end of diameter
+  const x0 = stroke;           // left point
+  const x1 = dim - stroke;     // right point
+  const y0 = cx;               // both at vertical center = flat bottom
 
-  // Colored arc endpoint
-  const angle = Math.PI * (1 - pct); // from left (180°) sweeping right
-  const arcX = cx + r * Math.cos(Math.PI - angle);
-  const arcY = cy - r * Math.sin(Math.PI - angle);
+  // Point along arc for progress
+  // angle 0 = left (180° in standard), sweeps clockwise to right (0°)
+  const angle = Math.PI - pct * Math.PI;   // goes from π → 0
+  const ax = cx + r * Math.cos(angle);
+  const ay = cx - r * Math.sin(angle);     // subtract because SVG y is flipped
   const largeArc = pct > 0.5 ? 1 : 0;
 
-  const fontSize =  { sm: "12px", md: "16px", lg: "26px" };
-  const labelSize = { sm: "8px",  md: "10px", lg: "12px" };
-  const labelGap =  { sm: 13,     md: 16,     lg: 22     };
-  const scoreY =    { sm: svgH - 6, md: svgH - 8, lg: svgH - 10 };
+  // SVG height = radius + stroke (just the top half) + label space
+  const labelGap = { sm: 18, md: 22, lg: 30 };
+  const svgH = cx + labelGap[size];
+
+  const fontSize  = { sm: "13px", md: "18px", lg: "28px" };
+  const labelSize = { sm: "9px",  md: "11px", lg: "13px" };
+  const scoreOffY = { sm: -4, md: -5, lg: -8 };
+  const labelOffY = { sm: 10, md: 13, lg: 18 };
 
   return (
     <svg
       width={dim}
-      height={svgH + labelGap[size] + 4}
-      viewBox={`0 0 ${dim} ${svgH + labelGap[size] + 4}`}
-      style={{ overflow: "visible", display: "block" }}
+      height={svgH}
+      viewBox={`0 0 ${dim} ${svgH}`}
+      style={{ display: "block", overflow: "visible" }}
     >
-      {/* Background track */}
+      {/* Background track — full semicircle */}
       <path
-        d={`M ${startX} ${startY} A ${r} ${r} 0 0 1 ${endX} ${endY}`}
+        d={`M ${x0} ${y0} A ${r} ${r} 0 0 1 ${x1} ${y0}`}
         fill="none"
         stroke="var(--border)"
         strokeWidth={stroke}
         strokeLinecap="round"
       />
       {/* Colored progress arc */}
-      {pct > 0 && (
+      {pct > 0.01 && (
         <path
-          d={`M ${startX} ${startY} A ${r} ${r} 0 ${largeArc} 1 ${arcX} ${arcY}`}
+          d={`M ${x0} ${y0} A ${r} ${r} 0 ${largeArc} 1 ${ax} ${ay}`}
           fill="none"
           stroke={color}
           strokeWidth={stroke}
           strokeLinecap="round"
-          style={{ filter: `drop-shadow(0 0 4px ${color}40)` }}
+          style={{ filter: `drop-shadow(0 0 3px ${color}50)` }}
         />
       )}
-      {/* Score number */}
+      {/* Score */}
       <text
         x={cx}
-        y={scoreY[size]}
+        y={y0 + scoreOffY[size]}
         textAnchor="middle"
+        dominantBaseline="auto"
         fill={color}
         fontSize={fontSize[size]}
         fontFamily="DM Mono, monospace"
@@ -80,11 +81,12 @@ export default function ScoreGauge({ score, size = "md" }: ScoreGaugeProps) {
       >
         {score}
       </text>
-      {/* /100 label */}
+      {/* /100 */}
       <text
         x={cx}
-        y={scoreY[size] + labelGap[size]}
+        y={y0 + labelOffY[size]}
         textAnchor="middle"
+        dominantBaseline="auto"
         fill="var(--text-muted)"
         fontSize={labelSize[size]}
         fontFamily="Rubik, sans-serif"
