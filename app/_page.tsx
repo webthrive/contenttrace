@@ -57,8 +57,8 @@ export default function AnalyzerPage() {
         <a href="/" style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "var(--accent-light)", border: "1px solid rgba(10,115,115,0.3)", borderRadius: "20px", padding: "7px 16px", marginBottom: "24px", textDecoration: "none" }}>
           <Scan size={14} style={{ color: "var(--accent)" }} />
           <span style={{ fontSize: "13px", color: "var(--accent)", fontFamily: "var(--font-mono)", letterSpacing: "0.04em", fontWeight: 500, textAlign: "center" }}>
-            <span className="badge-desktop">Free AI Content Detector by Telltale Proof</span>
-            <span className="badge-mobile">Free AI Content Detector<br />by Telltale Proof</span>
+            <span className="badge-desktop">Free AI Content Detector by Content Trace</span>
+            <span className="badge-mobile">Free AI Content Detector<br />by Content Trace</span>
           </span>
         </a>
         <h1 style={{ fontSize: "clamp(32px, 7vw, 62px)", fontWeight: 700, color: "var(--text-primary)", lineHeight: 1.1, marginBottom: "10px", letterSpacing: "-0.03em" }}>
@@ -201,7 +201,7 @@ export default function AnalyzerPage() {
       <div style={{ maxWidth: "760px", margin: "0 auto 40px" }}>
         <div style={{ border: "1px solid var(--border)", borderRadius: "10px", padding: "20px 24px", background: "var(--bg-elevated)", fontSize: "14px", color: "var(--text-muted)", lineHeight: "1.75" }}>
           <strong style={{ color: "var(--text-secondary)", display: "block", marginBottom: "6px" }}>Disclaimer</strong>
-          Telltale Proof provides probabilistic analysis only and does not constitute a definitive determination of authorship. Results should not be used as evidence in academic, legal, employment, or disciplinary proceedings. AI detection is an imperfect science — scores may be affected by writing style, text length, editing, translation, or subject matter. A high Human Score does not guarantee human authorship, and a low score does not prove AI generation. Telltale Proof is provided free of charge and without warranty of any kind. Web Thrive, LLC accepts no liability for decisions made based on analysis results.
+          Content Trace provides probabilistic analysis only and does not constitute a definitive determination of authorship. Results should not be used as evidence in academic, legal, employment, or disciplinary proceedings. AI detection is an imperfect science — scores may be affected by writing style, text length, editing, translation, or subject matter. A high Human Score does not guarantee human authorship, and a low score does not prove AI generation. Content Trace is provided free of charge and without warranty of any kind. Web Thrive, LLC accepts no liability for decisions made based on analysis results.
         </div>
       </div>
     </main>

@@ -1,17 +1,17 @@
 import Nav from "@/components/Nav";
 import type { Metadata } from "next";
 
-const SITE_URL = "https://www.telltaleproof.com";
+const SITE_URL = "https://www.contenttrace.ai";
 
 export const metadata: Metadata = {
   title: "About",
-  description: "Telltale Proof is a free AI content detection tool built to help writers, editors, and publishers understand what makes writing feel human — and what gives AI away.",
+  description: "Content Trace is a free AI content detection tool built to help writers, editors, and publishers understand what makes writing feel human — and what gives AI away.",
   alternates: { canonical: `${SITE_URL}/about` },
   openGraph: {
-    title: "About Telltale Proof",
+    title: "About Content Trace",
     description: "Free AI content detection built to help writers, editors, and publishers.",
     url: `${SITE_URL}/about`,
-    siteName: "Telltale Proof",
+    siteName: "Content Trace",
     type: "website",
   },
   robots: { index: true, follow: true },
@@ -23,7 +23,7 @@ export default function AboutPage() {
       <main style={{ maxWidth: "720px", margin: "0 auto", padding: "60px 24px 80px", fontFamily: "var(--font)", lineHeight: "1.75" }}>
       
 
-      <h1 style={{ fontSize: "42px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "8px", letterSpacing: "-0.02em" }}>About Telltale Proof</h1>
+      <h1 style={{ fontSize: "42px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "8px", letterSpacing: "-0.02em" }}>About Content Trace</h1>
       <p style={{ fontSize: "14px", color: "var(--text-muted)", marginBottom: "40px" }}>Built by Colin at Web Thrive</p>
 
       {/* Mission */}
@@ -33,7 +33,7 @@ export default function AboutPage() {
           AI writing tools have become part of everyday work. That's not inherently a problem — but it has created a real need for transparency. Teachers want to know if a student wrote their own essay. Editors want to know if a pitch is authentic. Publishers want to know if the voice they're buying is real.
         </p>
         <p style={{ fontSize: "16px", color: "var(--text-secondary)", marginBottom: "14px" }}>
-          Most AI detectors give you a single score and a verdict with no explanation. We thought that wasn't good enough. Telltale Proof was built to go deeper — to show you <em>why</em> something scores the way it does, not just <em>what</em> the verdict is.
+          Most AI detectors give you a single score and a verdict with no explanation. We thought that wasn't good enough. Content Trace was built to go deeper — to show you <em>why</em> something scores the way it does, not just <em>what</em> the verdict is.
         </p>
         <p style={{ fontSize: "16px", color: "var(--text-secondary)" }}>
           We also wanted it to be free. Content creators, students, and small publishers shouldn't need a subscription to understand their own writing.
@@ -44,7 +44,7 @@ export default function AboutPage() {
       <div style={{ marginBottom: "40px" }}>
         <h2 style={{ fontSize: "22px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "14px" }}>How it works</h2>
         <p style={{ fontSize: "16px", color: "var(--text-secondary)", marginBottom: "14px" }}>
-          Telltale Proof analyzes text across 8 sections and 32 individual signals — from sentence structure and word choice to cognitive fingerprinting and emotional texture. Each factor is scored independently and explained in plain language, so you can understand exactly what's driving the result.
+          Content Trace analyzes text across 8 sections and 32 individual signals — from sentence structure and word choice to cognitive fingerprinting and emotional texture. Each factor is scored independently and explained in plain language, so you can understand exactly what's driving the result.
         </p>
         <p style={{ fontSize: "16px", color: "var(--text-secondary)", marginBottom: "20px" }}>
           The analysis is powered by Claude, Anthropic's AI model, which evaluates writing the way a trained human editor would — looking for the subtle patterns that distinguish authentic human prose from generated text.
@@ -74,7 +74,7 @@ export default function AboutPage() {
       <div style={{ marginBottom: "40px" }}>
         <h2 style={{ fontSize: "22px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "14px" }}>The Human Score</h2>
         <p style={{ fontSize: "16px", color: "var(--text-secondary)", marginBottom: "14px" }}>
-          Rather than labeling text as "AI" or "human" with false confidence, Telltale Proof gives you a Human Score out of 100. Higher scores indicate stronger human writing signals. Lower scores indicate patterns more consistent with AI generation.
+          Rather than labeling text as "AI" or "human" with false confidence, Content Trace gives you a Human Score out of 100. Higher scores indicate stronger human writing signals. Lower scores indicate patterns more consistent with AI generation.
         </p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "10px", margin: "20px 0" }}>
           {[
@@ -97,7 +97,7 @@ export default function AboutPage() {
       <div style={{ marginBottom: "40px" }}>
         <h2 style={{ fontSize: "22px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "14px" }}>Who it's for</h2>
         <p style={{ fontSize: "16px", color: "var(--text-secondary)", marginBottom: "14px" }}>
-          Telltale Proof is useful for anyone who cares about content authenticity:
+          Content Trace is useful for anyone who cares about content authenticity:
         </p>
         <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px" }}>
           {[
@@ -119,7 +119,7 @@ export default function AboutPage() {
       <div style={{ marginBottom: "40px" }}>
         <h2 style={{ fontSize: "22px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "14px" }}>Who we are</h2>
         <p style={{ fontSize: "16px", color: "var(--text-secondary)", marginBottom: "14px" }}>
-          Telltale Proof is built and maintained by <a href="https://www.webthrive.io/home" target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", textDecoration: "none", fontWeight: 600 }}>Colin</a>, a digital marketing consultant at <strong style={{ color: "var(--text-primary)" }}>Web Thrive</strong> based in the United States.
+          Content Trace is built and maintained by <a href="https://www.webthrive.io/home" target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", textDecoration: "none", fontWeight: 600 }}>Colin</a>, a digital marketing consultant at <strong style={{ color: "var(--text-primary)" }}>Web Thrive</strong> based in the United States.
         </p>
         <p style={{ fontSize: "16px", color: "var(--text-secondary)" }}>
           Have a question, a feature request, or just want to say hello? We'd love to hear from you.{" "}
@@ -130,7 +130,7 @@ export default function AboutPage() {
       {/* Disclaimer */}
       <div style={{ border: "1px solid var(--border)", borderRadius: "10px", padding: "20px 24px", background: "var(--bg-elevated)", fontSize: "14px", color: "var(--text-muted)", lineHeight: "1.75" }}>
         <strong style={{ color: "var(--text-secondary)", display: "block", marginBottom: "6px" }}>A note on accuracy</strong>
-        Telltale Proof provides probabilistic analysis only. Results should not be used as definitive evidence in academic, legal, employment, or disciplinary proceedings. AI detection is an imperfect science and no tool — including this one — is 100% accurate.
+        Content Trace provides probabilistic analysis only. Results should not be used as definitive evidence in academic, legal, employment, or disciplinary proceedings. AI detection is an imperfect science and no tool — including this one — is 100% accurate.
       </div>
     </main>
     </>

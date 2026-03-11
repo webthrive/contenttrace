@@ -1,7 +1,7 @@
 import Nav from "@/components/Nav";
 import type { Metadata } from "next";
 
-const SITE_URL = "https://www.telltaleproof.com";
+const SITE_URL = "https://www.contenttrace.ai";
 const SLUG = "how-ai-text-detection-works";
 
 export const metadata: Metadata = {
@@ -9,10 +9,10 @@ export const metadata: Metadata = {
   description: "Most AI detectors feel like a black box — you paste text and get a number. Here's what's actually happening under the hood, and why some approaches are more reliable than others.",
   alternates: { canonical: `${SITE_URL}/blog/${SLUG}` },
   openGraph: {
-    title: "How AI Text Detection Actually Works | Telltale Proof",
+    title: "How AI Text Detection Actually Works | Content Trace",
     description: "What's actually happening when an AI detector analyzes your text — and why some approaches are more reliable than others.",
     url: `${SITE_URL}/blog/${SLUG}`,
-    siteName: "Telltale Proof",
+    siteName: "Content Trace",
     type: "article",
   },
   robots: { index: true, follow: true },
@@ -57,7 +57,7 @@ export default function Article1() {
 
         <p style={{ marginBottom: "20px" }}>Or take specificity. Human writers reach for concrete details — a particular number, a specific place, a named person — in ways that feel autobiographical rather than illustrative. AI reaches for illustrative details, which are subtly different. They serve the point without anchoring it to reality.</p>
 
-        <p style={{ marginBottom: "20px" }}>These are the signals Telltale Proof weighs most heavily, and honestly, they're the ones I trust most. They're harder to fake, harder to prompt away, and more directly connected to whether an actual mind was engaged in the writing.</p>
+        <p style={{ marginBottom: "20px" }}>These are the signals Content Trace weighs most heavily, and honestly, they're the ones I trust most. They're harder to fake, harder to prompt away, and more directly connected to whether an actual mind was engaged in the writing.</p>
 
         <h2 style={{ fontSize: "22px", fontWeight: 700, color: "var(--text-primary)", margin: "36px 0 14px", letterSpacing: "-0.01em" }}>Why no detector is 100% — and why that's okay</h2>
 
@@ -65,14 +65,14 @@ export default function Article1() {
 
         <p style={{ marginBottom: "20px" }}>A doctor reading an X-ray isn't right 100% of the time. A fraud detection algorithm isn't right 100% of the time. The question is whether the signal is better than chance, whether the errors are systematic in ways you can account for, and whether the tool is honest about its limitations. Good AI detectors can absolutely meet that bar — if they explain their reasoning instead of hiding behind a single score.</p>
 
-        <p style={{ marginBottom: "20px" }}>That's the philosophy behind Telltale Proof. Not "here's your verdict," but "here are 32 signals, here's what each one found, make your own judgment." I think that's a more honest way to do this — and ultimately more useful than false confidence in either direction.</p>
+        <p style={{ marginBottom: "20px" }}>That's the philosophy behind Content Trace. Not "here's your verdict," but "here are 32 signals, here's what each one found, make your own judgment." I think that's a more honest way to do this — and ultimately more useful than false confidence in either direction.</p>
 
       </div>
 
       <div style={{ borderTop: "1px solid var(--border)", paddingTop: "32px", marginTop: "48px" }}>
         <div style={{ fontSize: "15px", color: "var(--text-muted)", marginBottom: "20px" }}>Want to see these signals in action?</div>
         <a href="/" style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "12px 24px", background: "var(--accent)", color: "white", borderRadius: "8px", textDecoration: "none", fontSize: "15px", fontWeight: 600, boxShadow: "0 2px 8px rgba(10,115,115,0.25)" }}>
-          Try Telltale Proof free →
+          Try Content Trace free →
         </a>
       </div>
     </main>

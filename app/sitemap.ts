@@ -1,6 +1,6 @@
 import { MetadataRoute } from "next";
 
-const SITE_URL = "https://www.telltaleproof.com";
+const SITE_URL = "https://www.contenttrace.ai";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [

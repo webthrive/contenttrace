@@ -20,7 +20,7 @@ export default function Nav({ current }: { current?: string }) {
         {/* Logo */}
         <a href="/" style={{ display: "flex", alignItems: "center", gap: "8px", textDecoration: "none" }}>
           <Scan size={16} style={{ color: "var(--accent)" }} />
-          <span style={{ fontSize: "15px", fontWeight: 700, color: "var(--text-primary)", letterSpacing: "-0.01em" }}>Telltale Proof</span>
+          <span style={{ fontSize: "15px", fontWeight: 700, color: "var(--text-primary)", letterSpacing: "-0.01em" }}>Content Trace</span>
         </a>
 
         {/* Desktop links */}

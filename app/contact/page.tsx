@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Send, CheckCircle } from "lucide-react";
 
 
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/xdawejqq";
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/xdawgeel";
 
 export default function ContactPage() {
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
@@ -60,7 +60,7 @@ export default function ContactPage() {
           <span style={{ fontSize: "18px" }}>✉️</span>
           <div>
             <div style={{ fontSize: "11px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", fontWeight: 600, marginBottom: "2px" }}>Email</div>
-            <a href="mailto:colin@telltaleproof.com" style={{ fontSize: "15px", color: "var(--accent)", textDecoration: "none", fontWeight: 500 }}>colin@telltaleproof.com</a>
+            <a href="mailto:colin@contenttrace.ai" style={{ fontSize: "15px", color: "var(--accent)", textDecoration: "none", fontWeight: 500 }}>colin@contenttrace.ai</a>
           </div>
         </div>
         <div style={{ border: "1px solid var(--border)", borderRadius: "10px", padding: "14px 20px", background: "var(--bg-card)", display: "flex", alignItems: "center", gap: "10px" }}>
@@ -116,7 +116,7 @@ export default function ContactPage() {
 
           {status === "error" && (
             <div style={{ fontSize: "14px", color: "var(--red)", marginBottom: "16px", padding: "12px 16px", background: "var(--red-bg)", border: "1px solid rgba(196,51,2,0.2)", borderRadius: "8px" }}>
-              Something went wrong. Please try again or email us directly at colin@telltaleproof.com
+              Something went wrong. Please try again or email us directly at colin@contenttrace.ai
             </div>
           )}
 

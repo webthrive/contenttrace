@@ -1,7 +1,7 @@
 import Nav from "@/components/Nav";
 import type { Metadata } from "next";
 
-const SITE_URL = "https://www.telltaleproof.com";
+const SITE_URL = "https://www.contenttrace.ai";
 const SLUG = "why-ai-writing-sounds-different";
 
 export const metadata: Metadata = {
@@ -9,10 +9,10 @@ export const metadata: Metadata = {
   description: "AI writing is grammatically flawless and factually reasonable. So why does it feel off? The answer has less to do with correctness and more to do with how humans actually think on the page.",
   alternates: { canonical: `${SITE_URL}/blog/${SLUG}` },
   openGraph: {
-    title: "Why AI Writing Sounds Different | Telltale Proof",
+    title: "Why AI Writing Sounds Different | Content Trace",
     description: "AI writing is technically correct — so why does it feel off?",
     url: `${SITE_URL}/blog/${SLUG}`,
-    siteName: "Telltale Proof",
+    siteName: "Content Trace",
     type: "article",
   },
   robots: { index: true, follow: true },
@@ -80,7 +80,7 @@ export default function Article2() {
       <div style={{ borderTop: "1px solid var(--border)", paddingTop: "32px", marginTop: "48px" }}>
         <div style={{ fontSize: "15px", color: "var(--text-muted)", marginBottom: "20px" }}>Curious how your own writing scores?</div>
         <a href="/" style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "12px 24px", background: "var(--accent)", color: "white", borderRadius: "8px", textDecoration: "none", fontSize: "15px", fontWeight: 600, boxShadow: "0 2px 8px rgba(10,115,115,0.25)" }}>
-          Try Telltale Proof free →
+          Try Content Trace free →
         </a>
       </div>
     </main>

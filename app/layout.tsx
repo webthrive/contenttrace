@@ -3,33 +3,33 @@ import Script from "next/script";
 import Footer from "@/components/Footer";
 import "./globals.css";
 
-const SITE_URL = "https://www.telltaleproof.com";
+const SITE_URL = "https://www.contenttrace.ai";
 const GTM_ID = "GTM-MGW6ZLP9";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Telltale Proof — Free AI Content Detector",
-    template: "%s | Telltale Proof",
+    default: "Content Trace — Free AI Content Detector",
+    template: "%s | Content Trace",
   },
   description: "Free AI text detector. Analyze any content across 8 sections and 32 signals — structure, voice, cognitive fingerprinting, emotional texture, and more. Get a Human Score out of 100.",
-  keywords: ["free AI content detector","AI text detector","AI writing detector","detect AI generated text","GPT detector","ChatGPT detector","human vs AI text","AI content checker","content authenticity tool","Telltale Proof"],
+  keywords: ["free AI content detector","AI text detector","AI writing detector","detect AI generated text","GPT detector","ChatGPT detector","human vs AI text","AI content checker","content authenticity tool","Content Trace"],
   authors: [{ name: "Web Thrive, LLC" }],
   creator: "Web Thrive, LLC",
   publisher: "Web Thrive, LLC",
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
   alternates: { canonical: SITE_URL },
   openGraph: {
-    type: "website", url: SITE_URL, siteName: "Telltale Proof",
-    title: "Telltale Proof — Free AI Content Detector",
+    type: "website", url: SITE_URL, siteName: "Content Trace",
+    title: "Content Trace — Free AI Content Detector",
     description: "Free AI text detector. 8 sections, 32 signals, Human Score out of 100. No account required.",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Telltale Proof — Free AI Content Detector",
+    title: "Content Trace — Free AI Content Detector",
     description: "Free AI text detector. 8 sections, 32 signals, Human Score out of 100. No account required.",
-    creator: "@telltaleproof",
+    creator: "@contenttrace",
   },
 };
 

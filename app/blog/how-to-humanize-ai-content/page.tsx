@@ -1,7 +1,7 @@
 import Nav from "@/components/Nav";
 import type { Metadata } from "next";
 
-const SITE_URL = "https://www.telltaleproof.com";
+const SITE_URL = "https://www.contenttrace.ai";
 const SLUG = "how-to-humanize-ai-content";
 
 export const metadata: Metadata = {
@@ -9,10 +9,10 @@ export const metadata: Metadata = {
   description: "AI-generated content can be a useful starting point — but it needs real human editing before it's ready to publish. Here's a practical framework for making AI content read authentically.",
   alternates: { canonical: `${SITE_URL}/blog/${SLUG}` },
   openGraph: {
-    title: "How to Humanize AI Content: A Practical Guide | Telltale Proof",
+    title: "How to Humanize AI Content: A Practical Guide | Content Trace",
     description: "A practical framework for editing AI-generated content so it reads like it was written by a real person.",
     url: `${SITE_URL}/blog/${SLUG}`,
-    siteName: "Telltale Proof",
+    siteName: "Content Trace",
     type: "article",
   },
   robots: { index: true, follow: true },
@@ -69,7 +69,7 @@ export default function Article3() {
 
         <h2 style={{ fontSize: "22px", fontWeight: 700, color: "var(--text-primary)", margin: "36px 0 14px", letterSpacing: "-0.01em" }}>Step 6: Score it and iterate</h2>
 
-        <p style={{ marginBottom: "20px" }}>Once I've done a full pass with this framework, I run the piece through Telltale Proof. Not to check whether it'll "pass" — that's the wrong frame. I use it to see which sections are still scoring low, because those sections tell me where my edit didn't go deep enough.</p>
+        <p style={{ marginBottom: "20px" }}>Once I've done a full pass with this framework, I run the piece through Content Trace. Not to check whether it'll "pass" — that's the wrong frame. I use it to see which sections are still scoring low, because those sections tell me where my edit didn't go deep enough.</p>
 
         <p style={{ marginBottom: "20px" }}>Cognitive fingerprinting low? I haven't added enough of my own thinking. Emotional texture low? The piece is still detached. Word choice low? I haven't done the filler-phrase pass thoroughly enough. The score is a diagnostic, not a verdict.</p>
 
@@ -80,7 +80,7 @@ export default function Article3() {
       <div style={{ borderTop: "1px solid var(--border)", paddingTop: "32px", marginTop: "48px" }}>
         <div style={{ fontSize: "15px", color: "var(--text-muted)", marginBottom: "20px" }}>See how your edited content scores across 32 signals.</div>
         <a href="/" style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "12px 24px", background: "var(--accent)", color: "white", borderRadius: "8px", textDecoration: "none", fontSize: "15px", fontWeight: 600, boxShadow: "0 2px 8px rgba(10,115,115,0.25)" }}>
-          Try Telltale Proof free →
+          Try Content Trace free →
         </a>
       </div>
     </main>
