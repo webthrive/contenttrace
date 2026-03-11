@@ -8,8 +8,8 @@ const GTM_ID = "GTM-MGW6ZLP9";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "TelltaleProof — Free AI Content Detector",
-    template: "%s | TelltaleProof",
+    default: "Telltale Proof — Free AI Content Detector",
+    template: "%s | Telltale Proof",
   },
   description: "Free AI text detector. Analyze any content across 8 sections and 32 signals — structure, voice, cognitive fingerprinting, emotional texture, and more. Get a Human Score out of 100.",
   keywords: [
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     "human vs AI text",
     "AI content checker",
     "content authenticity tool",
-    "TelltaleProof",
+    "Telltale Proof",
   ],
   authors: [{ name: "Web Thrive, LLC" }],
   creator: "Web Thrive, LLC",
@@ -32,14 +32,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: SITE_URL,
-    siteName: "TelltaleProof",
-    title: "TelltaleProof — Free AI Content Detector",
+    siteName: "Telltale Proof",
+    title: "Telltale Proof — Free AI Content Detector",
     description: "Free AI text detector. 8 sections, 32 signals, Human Score out of 100. No account required.",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "TelltaleProof — Free AI Content Detector",
+    title: "Telltale Proof — Free AI Content Detector",
     description: "Free AI text detector. 8 sections, 32 signals, Human Score out of 100. No account required.",
     creator: "@telltaleproof",
   },

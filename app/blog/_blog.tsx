@@ -36,7 +36,7 @@ const TAG_COLORS: Record<string, { color: string; bg: string; border: string }> 
 export default function BlogIndex() {
   return (
     <main style={{ maxWidth: "760px", margin: "0 auto", padding: "60px 24px 80px", fontFamily: "var(--font)" }}>
-      <a href="/" style={{ fontSize: "14px", color: "var(--accent)", textDecoration: "none", display: "block", marginBottom: "32px" }}>← Back to TelltaleProof</a>
+      <a href="/" style={{ fontSize: "14px", color: "var(--accent)", textDecoration: "none", display: "block", marginBottom: "32px" }}>← Back to Telltale Proof</a>
 
       <h1 style={{ fontSize: "42px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "8px", letterSpacing: "-0.02em" }}>Blog</h1>
       <p style={{ fontSize: "17px", color: "var(--text-secondary)", marginBottom: "48px", lineHeight: "1.65" }}>

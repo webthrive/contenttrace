@@ -18,7 +18,7 @@ export default function NotFound() {
           ← Run a detection
         </a>
         <a href="/about" style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "12px 24px", background: "var(--bg-card)", color: "var(--text-secondary)", border: "1px solid var(--border)", borderRadius: "8px", textDecoration: "none", fontSize: "15px", fontWeight: 500 }}>
-          About TelltaleProof
+          About Telltale Proof
         </a>
       </div>
     </main>
