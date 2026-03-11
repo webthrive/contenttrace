@@ -21,31 +21,59 @@ export default function Article3() {
   return (
     <main style={{ maxWidth: "700px", margin: "0 auto", padding: "60px 24px 80px", fontFamily: "var(--font)" }}>
       <a href="/blog" style={{ fontSize: "14px", color: "var(--accent)", textDecoration: "none", display: "block", marginBottom: "32px" }}>← Back to Blog</a>
-
       <div style={{ display: "inline-block", fontSize: "12px", fontWeight: 600, color: "#c43302", background: "rgba(196,51,2,0.08)", border: "1px solid rgba(196,51,2,0.2)", padding: "3px 10px", borderRadius: "8px", marginBottom: "16px" }}>Guide</div>
-
-      <h1 style={{ fontSize: "38px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "16px", letterSpacing: "-0.02em", lineHeight: 1.2 }}>
-        How to Humanize AI Content: A Practical Guide
-      </h1>
+      <h1 style={{ fontSize: "38px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "16px", letterSpacing: "-0.02em", lineHeight: 1.2 }}>How to Humanize AI Content: A Practical Guide</h1>
       <div style={{ fontSize: "14px", color: "var(--text-muted)", fontFamily: "var(--font-mono)", marginBottom: "40px" }}>March 10, 2026 · 8 min read · By <a href="https://www.webthrive.io/home/" target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", textDecoration: "none", fontWeight: 500 }}>Colin</a></div>
 
-      {[
-        { heading: null, body: `Using AI to draft content has become a normal part of many writers' workflows. There's nothing inherently wrong with that — but raw AI output rarely publishes well. It's too smooth, too hedged, too generic, and too obviously not written by anyone in particular.\n\nThe goal of humanizing AI content isn't to deceive — it's to take a rough draft and make it actually good. Here's a practical framework for doing that edit effectively, organized by the signals that most reliably distinguish human writing from AI output.` },
-        { heading: "Step 1: Kill the filler phrases first", body: `Before you change anything substantive, do a pass specifically hunting for AI filler phrases. These are the verbal tics that AI models lean on when they don't have anything specific to say.\n\nCommon culprits: "It's important to note," "It's worth mentioning," "In today's world," "In conclusion," "This is a complex issue," "There are several factors to consider," and any sentence that starts with "Overall."\n\nDelete them all. Either the sentence stands on its own without the filler, or the underlying point wasn't strong enough to keep. Either outcome is an improvement.` },
-        { heading: "Step 2: Break the rhythm", body: `AI text has a characteristic smoothness — sentences cluster around a similar length, paragraphs are uniform in size. Your job is to disrupt that.\n\nRead the draft out loud. Where does it feel monotonous? That's where you add variety. Break long sentences in two. Combine short ones. Drop in a one-sentence paragraph for emphasis. Let a long, complicated sentence unfurl when the idea actually warrants it.\n\nYou're not trying to make the writing complicated — you're trying to make it sound like a person wrote it, which means imperfect, varied, and alive.` },
-        { heading: "Step 3: Replace generic with specific", body: `AI writing is generic by default. It talks about "many businesses" when you mean a specific type of company. It says "studies show" without citing anything real. It describes "users" when you know exactly who you're writing for.\n\nGo through the draft and ask: where has the AI replaced something specific with something vague? Then put the specifics back.\n\nThis is also where your own knowledge matters most. Add the example you know. Reference the statistic you've actually read. Name the thing instead of describing it in three words. Specificity is one of the clearest signals of authentic human writing, and it's something only you can add.` },
-        { heading: "Step 4: Add your actual opinion", body: `AI models produce positions but not opinions. They'll argue a case competently without ever seeming to care about the answer. That detachment is one of the hardest things to edit out — you can't fake genuine perspective.\n\nFor each main claim in the draft, ask: do I actually agree with this? Is this how I would say it? What would I add that the AI didn't think to include?\n\nThen write those things. It doesn't have to be contrarian or dramatic. It just has to be real. "In my experience, this approach works best when..." is more valuable than three paragraphs of balanced equivocation. Your perspective is the thing the AI literally cannot supply.` },
-        { heading: "Step 5: Add a moment of vulnerability or uncertainty", body: `One of the clearest cognitive fingerprints of human writing is the willingness to admit something — that you're not sure, that you've changed your mind, that the obvious answer isn't satisfying.\n\nAI writing is confident in a brittle, unconvincing way. It never says "I don't know" or "this surprised me" or "I used to think the opposite." Human writing does, and readers trust it more for it.\n\nFind one place in the piece where you can be genuinely honest about a limitation, a doubt, or a complication. It doesn't undermine your argument — it makes the reader trust everything else you're saying.` },
-        { heading: "Step 6: Check your score and iterate", body: `Once you've done a pass with this framework, run the content through Telltale Proof. Look at which sections are scoring low — that's where your edit still has AI fingerprints.\n\nIf Cognitive Fingerprinting is low, you haven't added enough of your own thinking. If Emotional Texture is low, the piece still feels detached. If Word Choice & Phrasing is low, there are still AI filler patterns you haven't caught.\n\nHumanizing AI content is a skill that improves with practice. The more you understand what the signals actually mean, the faster you can edit toward them.` },
-        { heading: "A note on intent", body: `This guide is about writing quality, not deception. The goal of humanizing AI content is to produce writing that's worth reading — that has a real voice, real opinions, and real value for the reader.\n\nContent that's been edited this way tends to perform better in search, retain readers longer, and build genuine trust with an audience. Those are good outcomes regardless of whether anyone ever runs it through a detector.\n\nWrite like a person because people are worth writing for.` },
-      ].map((section, i) => (
-        <div key={i} style={{ marginBottom: "36px" }}>
-          {section.heading && <h2 style={{ fontSize: "22px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "14px", letterSpacing: "-0.01em" }}>{section.heading}</h2>}
-          {section.body.split("\n\n").map((para, j) => (
-            <p key={j} style={{ fontSize: "17px", color: "var(--text-secondary)", lineHeight: "1.8", marginBottom: "16px" }}>{para}</p>
-          ))}
-        </div>
-      ))}
+      <div style={{ fontSize: "17px", color: "var(--text-secondary)", lineHeight: "1.8" }}>
+
+        <p style={{ marginBottom: "20px" }}>Last year I watched a content team publish forty blog posts in a month using AI drafts with minimal editing. Traffic went up for about six weeks — the posts were hitting the right keywords. Then it flatlined. The posts got clicks but almost no one read past the first two paragraphs. Time-on-page was terrible. Newsletter signups from that content: basically zero.</p>
+
+        <p style={{ marginBottom: "20px" }}>That's the pattern I keep seeing. AI content can win on volume and initial discovery. It almost never wins on the thing that actually builds an audience: making someone feel like they just read something worth reading.</p>
+
+        <p style={{ marginBottom: "20px" }}>Humanizing AI content isn't about tricking detectors. It's about making the writing actually good. Here's how I do it — a framework I've refined through a lot of trial and error, mostly error.</p>
+
+        <h2 style={{ fontSize: "22px", fontWeight: 700, color: "var(--text-primary)", margin: "36px 0 14px", letterSpacing: "-0.01em" }}>Step 1: Kill every filler phrase on the first pass</h2>
+
+        <p style={{ marginBottom: "20px" }}>Before touching anything substantive, I do one pass with a single goal: delete AI filler. These are phrases that signal carefulness without being careful. "It's important to note." "It's worth mentioning." "In today's rapidly changing landscape." "There are several key factors to consider." "In conclusion."</p>
+
+        <p style={{ marginBottom: "20px" }}>Every single one of these should go. If the sentence needs the filler phrase to make sense, the underlying point wasn't strong enough — which means it either needs to be rewritten or cut. I've never lost a good idea by deleting a filler phrase. I've made a lot of weak ones obvious.</p>
+
+        <h2 style={{ fontSize: "22px", fontWeight: 700, color: "var(--text-primary)", margin: "36px 0 14px", letterSpacing: "-0.01em" }}>Step 2: Read it aloud and break the rhythm</h2>
+
+        <p style={{ marginBottom: "20px" }}>AI drafts read fine silently. Aloud, the problem is immediately obvious: everything is the same length. Same sentence rhythm. Same paragraph size. It sounds like a legal disclaimer read by someone who has never had a strong feeling about anything.</p>
+
+        <p style={{ marginBottom: "20px" }}>Read the draft out loud and mark wherever your voice wants to speed up or slow down. Speed up = the sentence is too long, split it. Slow down = the idea needs more space, let it breathe. A three-word sentence after a long one does more rhetorical work than a paragraph of transitions. Use it.</p>
+
+        <h2 style={{ fontSize: "22px", fontWeight: 700, color: "var(--text-primary)", margin: "36px 0 14px", letterSpacing: "-0.01em" }}>Step 3: Replace every illustration with a specific</h2>
+
+        <p style={{ marginBottom: "20px" }}>AI uses illustrative examples: "For instance, a small business might..." "Consider a scenario where..." "Imagine a user who..." These examples are clean and serviceable and completely forgettable.</p>
+
+        <p style={{ marginBottom: "20px" }}>Replace them with real specifics — things you actually know. A client you actually worked with (anonymized if needed). A number you actually looked up. A situation you actually observed. The example doesn't have to be dramatic. It just has to be real. Readers can feel the difference between an invented illustration and something that actually happened. I don't fully understand why, but they can.</p>
+
+        <h2 style={{ fontSize: "22px", fontWeight: 700, color: "var(--text-primary)", margin: "36px 0 14px", letterSpacing: "-0.01em" }}>Step 4: Find the one thing you actually disagree with</h2>
+
+        <p style={{ marginBottom: "20px" }}>This is the step most people skip, and I think it's the most important one. AI drafts are balanced to a fault. They present multiple perspectives, acknowledge complexity, and decline to take strong positions. Which is fine for a Wikipedia article. It's death for anything meant to be read.</p>
+
+        <p style={{ marginBottom: "20px" }}>Go through the draft and find the claim you don't fully agree with. Or the framing that feels slightly wrong. Or the conclusion that's technically defensible but not actually what you'd say. Then rewrite that section to reflect what you actually think — including why the more common take misses something.</p>
+
+        <p style={{ marginBottom: "20px" }}>You don't have to be contrarian for its own sake. But you do have to have a point of view. If you agree with everything in the draft, you haven't read it carefully enough.</p>
+
+        <h2 style={{ fontSize: "22px", fontWeight: 700, color: "var(--text-primary)", margin: "36px 0 14px", letterSpacing: "-0.01em" }}>Step 5: Add one moment of genuine uncertainty</h2>
+
+        <p style={{ marginBottom: "20px" }}>AI writing is confident in a way that should make you suspicious. It never says "I'm not sure about this" or "this surprised me" or "I used to think the opposite and I might still be wrong." That unbroken confidence is one of the easiest tells.</p>
+
+        <p style={{ marginBottom: "20px" }}>Add one place in the piece where you're honest about a limitation or a doubt. Not performative humility — actual uncertainty about something real. Readers trust writing more when it admits what it doesn't know. It makes everything else you say more credible, not less.</p>
+
+        <h2 style={{ fontSize: "22px", fontWeight: 700, color: "var(--text-primary)", margin: "36px 0 14px", letterSpacing: "-0.01em" }}>Step 6: Score it and iterate</h2>
+
+        <p style={{ marginBottom: "20px" }}>Once I've done a full pass with this framework, I run the piece through Telltale Proof. Not to check whether it'll "pass" — that's the wrong frame. I use it to see which sections are still scoring low, because those sections tell me where my edit didn't go deep enough.</p>
+
+        <p style={{ marginBottom: "20px" }}>Cognitive fingerprinting low? I haven't added enough of my own thinking. Emotional texture low? The piece is still detached. Word choice low? I haven't done the filler-phrase pass thoroughly enough. The score is a diagnostic, not a verdict.</p>
+
+        <p style={{ marginBottom: "20px" }}>Done right, this process takes longer than just publishing the AI draft. That's the point. The work is the edit. The AI draft is just a starting point that saved you from staring at a blank page — which is genuinely valuable, but only if you actually do the rest of it.</p>
+
+      </div>
 
       <div style={{ borderTop: "1px solid var(--border)", paddingTop: "32px", marginTop: "48px" }}>
         <div style={{ fontSize: "15px", color: "var(--text-muted)", marginBottom: "20px" }}>See how your edited content scores across 32 signals.</div>

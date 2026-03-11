@@ -133,6 +133,30 @@ export default function AnalyzerPage() {
               ))}
             </div>
 
+            {/* Score Scale Bar */}
+            <div style={{ border: "1px solid var(--border)", borderRadius: "14px", background: "var(--bg-card)", padding: "20px 24px", marginBottom: "12px", boxShadow: "0 1px 6px rgba(1,2,33,0.05)" }}>
+              <div style={{ fontSize: "13px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", fontWeight: 600, marginBottom: "12px" }}>How scores are interpreted</div>
+              <div style={{ position: "relative", marginBottom: "6px" }}>
+                <div style={{ height: "10px", borderRadius: "6px", background: "linear-gradient(to right, #c43302 0%, #c43302 25%, #c47a00 25%, #c47a00 50%, #0a8a6a 50%, #0a8a6a 75%, #0a7373 75%, #0a7373 100%)" }} />
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "10px", color: "var(--text-muted)", fontFamily: "var(--font-mono)", marginBottom: "10px" }}>
+                <span>0</span><span>25</span><span>50</span><span>75</span><span>100</span>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "6px" }}>
+                {[
+                  { label: "Likely AI",    range: "0 – 24",   color: "#c43302", bg: "rgba(196,51,2,0.08)",   border: "rgba(196,51,2,0.2)" },
+                  { label: "Leans AI",     range: "25 – 49",  color: "#c47a00", bg: "rgba(196,122,0,0.08)",  border: "rgba(196,122,0,0.2)" },
+                  { label: "Leans Human",  range: "50 – 74",  color: "#0a8a6a", bg: "rgba(10,138,106,0.08)", border: "rgba(10,138,106,0.2)" },
+                  { label: "Likely Human", range: "75 – 100", color: "#0a7373", bg: "rgba(10,115,115,0.08)", border: "rgba(10,115,115,0.2)" },
+                ].map((z) => (
+                  <div key={z.label} style={{ textAlign: "center", padding: "7px 6px", borderRadius: "8px", background: z.bg, border: `1px solid ${z.border}` }}>
+                    <div style={{ fontSize: "12px", fontWeight: 700, color: z.color }}>{z.label}</div>
+                    <div style={{ fontSize: "10px", color: z.color, fontFamily: "var(--font-mono)", opacity: 0.8, marginTop: "2px" }}>{z.range}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <div style={{ border: "1px solid var(--border)", borderRadius: "14px", background: "var(--bg-card)", overflow: "hidden", boxShadow: "0 1px 6px rgba(1,2,33,0.05)" }}>
               <button onClick={() => setSectionsOpen(!sectionsOpen)}
                 style={{ width: "100%", padding: "20px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "none", border: "none", cursor: "pointer", textAlign: "left" }}>

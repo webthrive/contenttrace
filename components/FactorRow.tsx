@@ -10,8 +10,9 @@ export default function FactorRow({ factor, delay = 0 }: FactorRowProps) {
   const [expanded, setExpanded] = useState(false);
 
   const getColor = (s: number) => {
-    if (s >= 65) return { bar: "#0a7373", text: "#0a7373" };
-    if (s >= 35) return { bar: "#c47a00", text: "#c47a00" };
+    if (s >= 75) return { bar: "#0a7373", text: "#0a7373" };
+    if (s >= 50) return { bar: "#0a8a6a", text: "#0a8a6a" };
+    if (s >= 25) return { bar: "#c47a00", text: "#c47a00" };
     return { bar: "#c43302", text: "#c43302" };
   };
 

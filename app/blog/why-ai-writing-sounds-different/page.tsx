@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   alternates: { canonical: `${SITE_URL}/blog/${SLUG}` },
   openGraph: {
     title: "Why AI Writing Sounds Different | Telltale Proof",
-    description: "AI writing is technically correct — so why does it feel off? The subtle signals that separate human prose from generated text.",
+    description: "AI writing is technically correct — so why does it feel off?",
     url: `${SITE_URL}/blog/${SLUG}`,
     siteName: "Telltale Proof",
     type: "article",
@@ -21,30 +21,59 @@ export default function Article2() {
   return (
     <main style={{ maxWidth: "700px", margin: "0 auto", padding: "60px 24px 80px", fontFamily: "var(--font)" }}>
       <a href="/blog" style={{ fontSize: "14px", color: "var(--accent)", textDecoration: "none", display: "block", marginBottom: "32px" }}>← Back to Blog</a>
-
       <div style={{ display: "inline-block", fontSize: "12px", fontWeight: 600, color: "#c47a00", background: "rgba(196,122,0,0.08)", border: "1px solid rgba(196,122,0,0.2)", padding: "3px 10px", borderRadius: "8px", marginBottom: "16px" }}>Analysis</div>
-
-      <h1 style={{ fontSize: "38px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "16px", letterSpacing: "-0.02em", lineHeight: 1.2 }}>
-        Why AI Writing Sounds Different (Even When It's Technically Correct)
-      </h1>
+      <h1 style={{ fontSize: "38px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "16px", letterSpacing: "-0.02em", lineHeight: 1.2 }}>Why AI Writing Sounds Different (Even When It's Technically Correct)</h1>
       <div style={{ fontSize: "14px", color: "var(--text-muted)", fontFamily: "var(--font-mono)", marginBottom: "40px" }}>March 10, 2026 · 7 min read · By <a href="https://www.webthrive.io/home/" target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", textDecoration: "none", fontWeight: 500 }}>Colin</a></div>
 
-      {[
-        { heading: null, body: `Read enough AI-generated content and you develop a sense for it. Something feels off — even when the grammar is perfect, the facts are accurate, and the structure is logical. Editors describe it as "flat." Writers call it "soulless." Teachers say it reads like a textbook written by no one in particular.\n\nBut what exactly is that feeling pointing to? It turns out it's not one thing — it's a cluster of signals, each subtle on its own, that accumulate into an unmistakable impression.` },
-        { heading: "The problem isn't correctness — it's absence", body: `Human writing isn't good because it follows the rules. It's good because it carries something extra: the fingerprints of a specific mind working through a specific problem. When you read a great essay or a compelling argument, you can feel the writer's presence in the choices they make.\n\nAI writing is correct but empty of those choices. It doesn't make unexpected word selections. It doesn't go on a detour that turns out to be the best part. It doesn't reveal something about the writer by accident. It produces output that is technically adequate and experientially hollow.\n\nThis is the core problem that AI detectors are trying to measure — not rule violations, but the absence of authentic cognitive presence.` },
-        { heading: "The hedging problem", body: `One of the most reliable AI signals is excessive hedging. Open almost any AI-generated article and you'll find phrases like "it's important to note," "it's worth considering," "there are several factors to keep in mind," and "this is a nuanced topic."\n\nHuman writers hedge too — but they do it strategically, when they actually feel uncertain. AI models hedge reflexively, as a kind of verbal tic that signals carefulness without actually being careful. The result is writing that feels like it was produced by someone terrified of being wrong, who pads every sentence with qualifications that don't add meaning.\n\nExperienced readers pick this up immediately, even if they can't name what they're noticing.` },
-        { heading: "Uniform rhythm", body: `Read a paragraph of AI text out loud. Then read a paragraph from a good human writer. The difference in rhythm is stark.\n\nHuman writers vary sentence length dramatically — a short punch. Then a longer, more expansive sentence that develops the idea in a way that gives you room to follow along. Then another short one. This variation is partly unconscious, driven by the natural rhythm of thought.\n\nAI models tend toward uniformity. Sentences cluster around a similar length. Paragraphs are roughly the same size. The rhythm is consistent in a way that real speech and real thought never are. Linguists call this "burstiness" — human writing is bursty, AI writing is smooth. And smooth, in this context, means lifeless.` },
-        { heading: "The over-explanation problem", body: `Human writers trust their readers. They make a point and move on, confident that the reader can follow the logic without being walked through every step. AI models don't extend that trust — they explain, restate, summarize, and conclude, often within the same paragraph.\n\nThis over-explicitness is a product of how language models are trained. They're optimized to be helpful and complete, which in practice means they rarely leave anything implied. Subtext, irony, and implication are human tools. AI tends to say what it means, directly, every time — which sounds less like a writer and more like a manual.` },
-        { heading: "The absence of opinion drift", body: `Real human thinking changes in motion. A writer starts a paragraph believing one thing and ends it believing something slightly different, because the act of writing clarified their thinking. This cognitive drift — the small self-corrections, the "actually, that's not quite right" moments — is one of the most distinctively human things in prose.\n\nAI doesn't drift. It commits to a position at the start of a response and executes it without deviation. The conclusion is already baked into the introduction. There's no visible thinking happening — only visible output.\n\nThis is why the "cognitive fingerprinting" section of Telltale Proof carries the highest weight in our scoring system. It's measuring something that AI genuinely can't fake: the evidence of a mind in motion.` },
-        { heading: "What this means for writers using AI tools", body: `If you're using AI tools as part of your writing process — and many people are — understanding these signals helps you edit more effectively. The goal isn't to eliminate AI assistance; it's to ensure the final product carries your fingerprints, not the model's.\n\nThat means adding specificity where AI is generic. Breaking up uniform rhythm. Cutting hedging phrases that add no meaning. Most importantly, it means adding your actual opinion — not just a position statement, but a perspective that evolved as you thought through the topic.\n\nHuman writing sounds different because it was made by a human. The job of editing AI-assisted content is to make it sound like it was made by you.` },
-      ].map((section, i) => (
-        <div key={i} style={{ marginBottom: "36px" }}>
-          {section.heading && <h2 style={{ fontSize: "22px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "14px", letterSpacing: "-0.01em" }}>{section.heading}</h2>}
-          {section.body.split("\n\n").map((para, j) => (
-            <p key={j} style={{ fontSize: "17px", color: "var(--text-secondary)", lineHeight: "1.8", marginBottom: "16px" }}>{para}</p>
-          ))}
-        </div>
-      ))}
+      <div style={{ fontSize: "17px", color: "var(--text-secondary)", lineHeight: "1.8" }}>
+
+        <p style={{ marginBottom: "20px" }}>A few months ago I handed a colleague a piece of writing and asked if anything felt off about it. She read it for maybe thirty seconds, handed it back, and said: "Nobody wrote this." She couldn't explain exactly why. But she was right.</p>
+
+        <p style={{ marginBottom: "20px" }}>That experience stuck with me. The writing was grammatically clean, factually accurate, logically structured. By any technical measure it was fine. And yet something was missing — something she identified immediately and instinctively, without being able to name it.</p>
+
+        <p style={{ marginBottom: "20px" }}>I've spent a lot of time since then trying to name it. Here's what I think is actually going on.</p>
+
+        <h2 style={{ fontSize: "22px", fontWeight: 700, color: "var(--text-primary)", margin: "36px 0 14px", letterSpacing: "-0.01em" }}>Writing is a record of thinking, not just a container for information</h2>
+
+        <p style={{ marginBottom: "20px" }}>When a person writes, they're not just transferring information from their head to the page. They're thinking on the page. The act of writing changes what they think. Sentences get abandoned mid-way because a better formulation appears. Paragraphs end somewhere different from where they started because the argument evolved. Digressions happen — sometimes the digression turns out to be the point.</p>
+
+        <p style={{ marginBottom: "20px" }}>None of that happens with AI. The model doesn't think while it writes. It generates. The conclusion is implicit in the prompt before the first word is produced. What looks like reasoning is pattern completion. The structure of genuine thought — tentative, self-correcting, occasionally surprised by its own conclusions — is absent.</p>
+
+        <p style={{ marginBottom: "20px" }}>This is why AI writing can be technically perfect and still feel hollow. It's not missing information. It's missing the evidence of a mind at work.</p>
+
+        <h2 style={{ fontSize: "22px", fontWeight: 700, color: "var(--text-primary)", margin: "36px 0 14px", letterSpacing: "-0.01em" }}>The hedging problem is worse than people realize</h2>
+
+        <p style={{ marginBottom: "20px" }}>If I had to pick one single signal that most reliably flags AI text in my experience, it's reflexive hedging. "It's important to note." "It's worth considering." "There are several factors at play here." "This is a complex topic with many dimensions."</p>
+
+        <p style={{ marginBottom: "20px" }}>Humans hedge too — but strategically, when we're genuinely uncertain about something. AI hedges constantly, regardless of whether uncertainty is warranted, because hedging was rewarded during training. It signals carefulness without actually being careful. The result is writing that qualifies everything and commits to nothing, which readers experience as evasive even when they can't say why.</p>
+
+        <p style={{ marginBottom: "20px" }}>I've started doing a quick ctrl+F for "it's worth" when I'm editing AI-assisted content. The count is usually embarrassing.</p>
+
+        <h2 style={{ fontSize: "22px", fontWeight: 700, color: "var(--text-primary)", margin: "36px 0 14px", letterSpacing: "-0.01em" }}>Rhythm gives it away faster than vocabulary</h2>
+
+        <p style={{ marginBottom: "20px" }}>Read a paragraph of AI text aloud. Then read something from a writer you love. The difference in rhythm is usually immediate.</p>
+
+        <p style={{ marginBottom: "20px" }}>Human writers vary sentence length dramatically — sometimes by instinct, sometimes deliberately. A short sentence lands. Then something longer unfolds, carrying the reader through a more complex idea at a pace that matches the complexity. Then another short one, to reset.</p>
+
+        <p style={{ marginBottom: "20px" }}>AI text is metronomic. Sentences cluster around a similar length. Paragraphs are similar sizes. The cadence is even and consistent in a way that real thought never is. Linguists sometimes call this burstiness — human writing is bursty, AI writing is smooth. In prose, smooth is another word for dead.</p>
+
+        <h2 style={{ fontSize: "22px", fontWeight: 700, color: "var(--text-primary)", margin: "36px 0 14px", letterSpacing: "-0.01em" }}>The specificity gap</h2>
+
+        <p style={{ marginBottom: "20px" }}>Human writers reach for specifics. Not "a major city" but "Cincinnati." Not "a well-known study" but "the 2019 Kahneman replication." Not "many users reported problems" but "fourteen people in the beta complained about the same thing in the first week."</p>
+
+        <p style={{ marginBottom: "20px" }}>These specifics serve two functions. They make the writing credible — they suggest the writer actually knows what they're talking about. And they make it personal — they anchor the writing to a real experience rather than a constructed illustration.</p>
+
+        <p style={{ marginBottom: "20px" }}>AI reaches for illustrative generalities because it doesn't have real experiences to draw from. It can invent specifics, but invented specifics have a different texture — they're too clean, too perfectly illustrative, too conveniently on-point. Real specifics are slightly awkward. They don't fit perfectly. That imperfect fit is part of what makes them feel true.</p>
+
+        <h2 style={{ fontSize: "22px", fontWeight: 700, color: "var(--text-primary)", margin: "36px 0 14px", letterSpacing: "-0.01em" }}>What my colleague was sensing</h2>
+
+        <p style={{ marginBottom: "20px" }}>I think what she picked up on — in those thirty seconds — was the cumulative absence of all these things. No rhythm variation. No opinion that shifted. No specific detail that felt accidentally true. No hedging that was actually earned. No evidence of a person thinking.</p>
+
+        <p style={{ marginBottom: "20px" }}>The writing wasn't wrong. It just wasn't from anywhere. And readers, even when they can't articulate it, feel that absence. They read faster and retain less. They don't quote it or share it. It washes through them without leaving a mark.</p>
+
+        <p style={{ marginBottom: "20px" }}>That's the real cost of AI writing used carelessly — not that it's inaccurate, but that it's forgettable in a way that well-written human prose isn't.</p>
+
+      </div>
 
       <div style={{ borderTop: "1px solid var(--border)", paddingTop: "32px", marginTop: "48px" }}>
         <div style={{ fontSize: "15px", color: "var(--text-muted)", marginBottom: "20px" }}>Curious how your own writing scores?</div>

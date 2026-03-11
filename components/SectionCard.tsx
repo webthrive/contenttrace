@@ -23,8 +23,9 @@ export default function SectionCard({ section, index }: SectionCardProps) {
   const [expanded, setExpanded] = useState(index === 0);
 
   const getColor = (s: number) => {
-    if (s >= 65) return { accent: "#0a7373", bg: "rgba(10,115,115,0.04)" };
-    if (s >= 35) return { accent: "#c47a00", bg: "rgba(196,122,0,0.04)" };
+    if (s >= 75) return { accent: "#0a7373", bg: "rgba(10,115,115,0.04)" };
+    if (s >= 50) return { accent: "#0a8a6a", bg: "rgba(10,138,106,0.04)" };
+    if (s >= 25) return { accent: "#c47a00", bg: "rgba(196,122,0,0.04)" };
     return { accent: "#c43302", bg: "rgba(196,51,2,0.04)" };
   };
 

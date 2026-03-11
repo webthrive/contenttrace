@@ -134,14 +134,17 @@ export async function POST(req: NextRequest) {
 
     const humanAggregate = Math.round((10 - rawAggregate) * 10);
 
-    let verdict: "Likely Human" | "Ambiguous / Mixed" | "Likely AI-Generated";
-    let verdictColor: "green" | "yellow" | "red";
-    if (humanAggregate >= 65) {
+    let verdict: "Likely Human" | "Leans Human" | "Leans AI" | "Likely AI-Generated";
+    let verdictColor: "green" | "teal" | "amber" | "red";
+    if (humanAggregate >= 75) {
       verdict = "Likely Human";
       verdictColor = "green";
-    } else if (humanAggregate >= 35) {
-      verdict = "Ambiguous / Mixed";
-      verdictColor = "yellow";
+    } else if (humanAggregate >= 50) {
+      verdict = "Leans Human";
+      verdictColor = "teal";
+    } else if (humanAggregate >= 25) {
+      verdict = "Leans AI";
+      verdictColor = "amber";
     } else {
       verdict = "Likely AI-Generated";
       verdictColor = "red";

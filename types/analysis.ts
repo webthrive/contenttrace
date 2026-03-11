@@ -16,8 +16,8 @@ export interface AnalysisResult {
   text: string;
   wordCount: number;
   aggregateScore: number;
-  verdict: "Likely Human" | "Ambiguous / Mixed" | "Likely AI-Generated";
-  verdictColor: "green" | "yellow" | "red";
+  verdict: "Likely Human" | "Leans Human" | "Leans AI" | "Likely AI-Generated";
+  verdictColor: "green" | "teal" | "amber" | "red";
   confidence: "Low" | "Medium" | "High";
   sections: SectionScore[];
   createdAt?: string;
