@@ -3,28 +3,28 @@ import Nav from "@/components/Nav";
 
 const POSTS = [
   {
-    slug: "how-ai-text-detection-works",
-    title: "How AI Text Detection Actually Works",
-    date: "March 10, 2026",
-    readTime: "6 min read",
-    excerpt: "Most AI detectors feel like a black box — you paste text and get a number. Here's what's actually happening under the hood, and why some approaches are more reliable than others.",
-    tag: "Explainer",
+    slug: "how-to-humanize-ai-content",
+    title: "How to Humanize AI Content: A Practical Guide",
+    date: "March 12, 2026",
+    readTime: "10 min read",
+    excerpt: "AI drafts are a useful starting point, but they need real editing before they're worth publishing. Here's the practical framework for making AI content read like it was actually written by a person.",
+    tag: "Guide",
   },
   {
     slug: "why-ai-writing-sounds-different",
     title: "Why AI Writing Sounds Different (Even When It's Technically Correct)",
     date: "March 11, 2026",
-    readTime: "7 min read",
+    readTime: "10 min read",
     excerpt: "AI writing is grammatically flawless and factually reasonable. So why does it feel off? The answer has less to do with correctness and more to do with how humans actually think on the page.",
     tag: "Analysis",
   },
   {
-    slug: "how-to-humanize-ai-content",
-    title: "How to Humanize AI Content: A Practical Guide",
-    date: "March 12, 2026",
-    readTime: "8 min read",
-    excerpt: "AI-generated content can be a useful starting point — but it needs real human editing before it's ready to publish. Here's a practical framework for making AI content read authentically.",
-    tag: "Guide",
+    slug: "how-ai-text-detection-works",
+    title: "How AI Text Detection Actually Works",
+    date: "March 10, 2026",
+    readTime: "9 min read",
+    excerpt: "Most AI detectors feel like a black box. Here's what's actually happening under the hood, and why some approaches are far more reliable than others.",
+    tag: "Explainer",
   },
 ];
 

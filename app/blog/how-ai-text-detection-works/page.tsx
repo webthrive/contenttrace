@@ -33,7 +33,7 @@ export default function Article1() {
 
         {/* TL;DR */}
         <div style={{ background: "var(--accent-light)", border: "1px solid rgba(10,115,115,0.25)", borderRadius: "12px", padding: "16px 20px", marginBottom: "36px" }}>
-          <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--accent)", fontFamily: "var(--font-mono)", marginBottom: "10px" }}>TL;DR</div>
+          <div style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--accent)", fontFamily: "var(--font-mono)", marginBottom: "12px" }}>TL;DR</div>
           <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "6px" }}>
             {[
               "AI detectors use two approaches: statistical (perplexity, burstiness) and behavioral (opinion drift, specificity). Behavioral signals are harder to fake.",
@@ -42,7 +42,7 @@ export default function Article1() {
               "No detector is 100% accurate. Short texts, heavily edited AI content, and structured human writing all reduce reliability.",
               "A breakdown across 32 signals tells you far more than a single number - look at which sections score low, not just the aggregate.",
             ].map((item, i) => (
-              <li key={i} style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.5, display: "flex", gap: "8px" }}>
+              <li key={i} style={{ fontSize: "16px", color: "var(--text-secondary)", lineHeight: 1.6, display: "flex", gap: "8px" }}>
                 <span style={{ color: "var(--accent)", fontWeight: 600, flexShrink: 0 }}>→</span><span>{item}</span>
               </li>
             ))}

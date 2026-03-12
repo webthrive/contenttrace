@@ -33,7 +33,7 @@ export default function Article3() {
 
         {/* TL;DR */}
         <div style={{ background: "var(--accent-light)", border: "1px solid rgba(10,115,115,0.25)", borderRadius: "12px", padding: "16px 20px", marginBottom: "36px" }}>
-          <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--accent)", fontFamily: "var(--font-mono)", marginBottom: "10px" }}>TL;DR</div>
+          <div style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--accent)", fontFamily: "var(--font-mono)", marginBottom: "12px" }}>TL;DR</div>
           <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "6px" }}>
             {[
               "Humanizing AI content isn't about tricking detectors - it's about making the writing actually good enough to be worth reading.",
@@ -43,7 +43,7 @@ export default function Article3() {
               "Find the one thing in the draft you genuinely disagree with. Rewrite that section to say what you actually think.",
               "Use Content Trace's section scores as a diagnostic - low Cognitive Fingerprinting means you haven't added enough of your own thinking yet.",
             ].map((item, i) => (
-              <li key={i} style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.5, display: "flex", gap: "8px" }}>
+              <li key={i} style={{ fontSize: "16px", color: "var(--text-secondary)", lineHeight: 1.6, display: "flex", gap: "8px" }}>
                 <span style={{ color: "var(--accent)", fontWeight: 600, flexShrink: 0 }}>→</span><span>{item}</span>
               </li>
             ))}

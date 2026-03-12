@@ -33,7 +33,7 @@ export default function Article2() {
 
         {/* TL;DR */}
         <div style={{ background: "var(--accent-light)", border: "1px solid rgba(10,115,115,0.25)", borderRadius: "12px", padding: "16px 20px", marginBottom: "36px" }}>
-          <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--accent)", fontFamily: "var(--font-mono)", marginBottom: "10px" }}>TL;DR</div>
+          <div style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--accent)", fontFamily: "var(--font-mono)", marginBottom: "12px" }}>TL;DR</div>
           <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "6px" }}>
             {[
               "AI writing is technically correct but feels hollow because it's missing evidence of a mind actually working through a problem.",
@@ -42,7 +42,7 @@ export default function Article2() {
               "AI specifics are too clean. Real examples are slightly awkward and imperfectly illustrative - that's what makes them feel true.",
               "Readers sense the absence of a real person even when they can't articulate it. The result is content that gets read but not remembered.",
             ].map((item, i) => (
-              <li key={i} style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.5, display: "flex", gap: "8px" }}>
+              <li key={i} style={{ fontSize: "16px", color: "var(--text-secondary)", lineHeight: 1.6, display: "flex", gap: "8px" }}>
                 <span style={{ color: "var(--accent)", fontWeight: 600, flexShrink: 0 }}>→</span><span>{item}</span>
               </li>
             ))}
