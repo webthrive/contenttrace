@@ -30,9 +30,10 @@ type SectionObj = {
 };
 
 function scoreSection(raw: { name: string; weight: number; factors: { name: string; score: number; explanation: string[] }[] }): SectionObj {
-  const sectionScore =
-    raw.factors.reduce((sum, f) => sum + f.score, 0) / raw.factors.length;
-  return { ...raw, score: Math.round(sectionScore * 10) / 10 };
+  // Prompt returns 0-10; UI expects 0-100. Multiply by 10.
+  const scaledFactors = raw.factors.map(f => ({ ...f, score: Math.round(f.score * 10) }));
+  const sectionScore = scaledFactors.reduce((sum, f) => sum + f.score, 0) / scaledFactors.length;
+  return { ...raw, factors: scaledFactors, score: Math.round(sectionScore) };
 }
 
 function computeResult(sections: SectionObj[], wordCount: number) {
@@ -44,11 +45,12 @@ function computeResult(sections: SectionObj[], wordCount: number) {
   let verdict: "Likely Human" | "Leans Human" | "Leans AI" | "Likely AI-Generated";
   let verdictColor: "green" | "teal" | "amber" | "red";
 
-  if (roundedAggregate >= 7.5) {
+  // Scores are now 0-100
+  if (roundedAggregate >= 75) {
     verdict = "Likely Human"; verdictColor = "green";
-  } else if (roundedAggregate >= 5.0) {
+  } else if (roundedAggregate >= 50) {
     verdict = "Leans Human"; verdictColor = "teal";
-  } else if (roundedAggregate >= 2.5) {
+  } else if (roundedAggregate >= 25) {
     verdict = "Leans AI"; verdictColor = "amber";
   } else {
     verdict = "Likely AI-Generated"; verdictColor = "red";
