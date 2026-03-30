@@ -58,7 +58,7 @@ Factors: "Vocabulary Richness", "Burstiness Approximation", "Response Calibratio
 
 Return ONLY the JSON object. No markdown, no preamble, no explanation outside the JSON.`;
 
-export const runtime = "edge";
+
 
 export async function POST(req: NextRequest) {
   const { text } = await req.json();
@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
   // Stream from Claude
   const claudeStream = await client.messages.stream({
     model: "claude-haiku-4-5-20251001",
-    max_tokens: 4000,
+    max_tokens: 2000,
     system: SYSTEM_PROMPT,
     messages: [
       {
