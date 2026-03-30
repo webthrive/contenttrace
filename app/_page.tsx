@@ -4,7 +4,7 @@ import { useState } from "react";
 import { AnalysisResult } from "@/types/analysis";
 import ResultsDisplay from "@/components/ResultsDisplay";
 import SectionCard from "@/components/SectionCard";
-import { Scan, X, ArrowRight, ChevronDown, ChevronUp } from "lucide-react";
+import { Scan, X, ArrowRight, ChevronDown, ChevronUp, Zap } from "lucide-react";
 
 const CHAR_LIMIT = 10000;
 
