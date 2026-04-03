@@ -101,8 +101,7 @@ export default function AnalyzerPage() {
           Paste. Analyze. Know.
         </h2>
         <p style={{ fontSize: "18px", color: "var(--text-secondary)", maxWidth: "640px", margin: "0 auto", lineHeight: "1.7" }}>
-          The free AI writing detector that goes deeper.<br />
-          Analyze any text across <strong style={{ color: "var(--accent)", fontWeight: 600 }}>8 sections and 32 individual signals</strong> — structure, voice, cognitive fingerprinting, emotional texture, and more.
+          Content Trace is a free AI detection tool that analyzes text across <strong style={{ color: "var(--accent)", fontWeight: 600 }}>32 signals</strong> including writing patterns, sentence structure, and cognitive fingerprinting. Used by educators, writers, and content professionals worldwide.
         </p>
       </header>
 
@@ -261,6 +260,108 @@ export default function AnalyzerPage() {
         <div style={{ border: "1px solid var(--border)", borderRadius: "10px", padding: "20px 24px", background: "var(--bg-elevated)", fontSize: "14px", color: "var(--text-muted)", lineHeight: "1.75" }}>
           <strong style={{ color: "var(--text-secondary)", display: "block", marginBottom: "6px" }}>Disclaimer</strong>
           Content Trace provides probabilistic analysis only and does not constitute a definitive determination of authorship. Results should not be used as evidence in academic, legal, employment, or disciplinary proceedings. AI detection is an imperfect science — scores may be affected by writing style, text length, editing, translation, or subject matter. A high Human Score does not guarantee human authorship, and a low score does not prove AI generation. Content Trace is provided free of charge and without warranty of any kind. Web Thrive, LLC accepts no liability for decisions made based on analysis results.
+        </div>
+      </div>
+
+      {/* HOW IT WORKS */}
+      <div style={{ maxWidth: "760px", margin: "0 auto 60px" }}>
+        <h2 style={{ fontSize: "clamp(22px, 4vw, 30px)", fontWeight: 700, color: "var(--text-primary)", textAlign: "center", marginBottom: "8px", letterSpacing: "-0.02em" }}>How It Works</h2>
+        <p style={{ textAlign: "center", color: "var(--text-muted)", fontSize: "16px", marginBottom: "32px" }}>Three steps. No account. No waiting.</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px" }}>
+          {[
+            { step: "1", icon: "📋", title: "Paste Your Text", desc: "Drop in any text — an essay, blog post, email, social caption, or anything else you want to check." },
+            { step: "2", icon: "🔍", title: "Analyze", desc: "Our model scores your content across 8 sections and 32 individual signals in seconds." },
+            { step: "3", icon: "📊", title: "Get Your Results", desc: "Receive a Human Score out of 100, with a full breakdown by section so you know exactly why." },
+          ].map((item) => (
+            <div key={item.step} style={{ border: "1px solid var(--border)", borderRadius: "14px", padding: "28px 22px", background: "var(--bg-card)", textAlign: "center", boxShadow: "0 1px 6px rgba(1,2,33,0.05)" }}>
+              <div style={{ fontSize: "32px", marginBottom: "12px" }}>{item.icon}</div>
+              <div style={{ display: "inline-block", fontSize: "11px", fontWeight: 700, color: "var(--accent)", background: "var(--accent-light)", border: "1px solid rgba(10,115,115,0.3)", borderRadius: "12px", padding: "3px 10px", marginBottom: "12px", fontFamily: "var(--font-mono)", letterSpacing: "0.06em" }}>STEP {item.step}</div>
+              <div style={{ fontSize: "17px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "8px" }}>{item.title}</div>
+              <div style={{ fontSize: "15px", color: "var(--text-muted)", lineHeight: "1.6" }}>{item.desc}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* WHO USES THIS */}
+      <div style={{ maxWidth: "760px", margin: "0 auto 60px" }}>
+        <h2 style={{ fontSize: "clamp(22px, 4vw, 30px)", fontWeight: 700, color: "var(--text-primary)", textAlign: "center", marginBottom: "8px", letterSpacing: "-0.02em" }}>Who Uses Content Trace</h2>
+        <p style={{ textAlign: "center", color: "var(--text-muted)", fontSize: "16px", marginBottom: "32px" }}>Trusted by people who care about content authenticity.</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "12px" }}>
+          {[
+            { icon: "🎓", label: "Teachers & Educators", desc: "Verify student submissions and maintain academic integrity without expensive institutional tools." },
+            { icon: "✍️", label: "Writers & Bloggers", desc: "Confirm your own work reads as authentically human before publishing or submitting." },
+            { icon: "📣", label: "Content & SEO Professionals", desc: "Audit content before it goes live — especially when working with freelancers or AI-assisted drafts." },
+            { icon: "📚", label: "Students", desc: "Check your own writing for AI-like patterns before submitting, and understand how to write more naturally." },
+            { icon: "🗞️", label: "Publishers & Editors", desc: "Screen incoming content and maintain quality standards across a growing volume of submissions." },
+          ].map((item) => (
+            <div key={item.label} style={{ border: "1px solid var(--border)", borderRadius: "12px", padding: "20px", background: "var(--bg-card)", display: "flex", gap: "14px", alignItems: "flex-start", boxShadow: "0 1px 6px rgba(1,2,33,0.05)" }}>
+              <span style={{ fontSize: "24px", flexShrink: 0 }}>{item.icon}</span>
+              <div>
+                <div style={{ fontSize: "15px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "5px" }}>{item.label}</div>
+                <div style={{ fontSize: "14px", color: "var(--text-muted)", lineHeight: "1.5" }}>{item.desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* WHY CHOOSE US */}
+      <div style={{ maxWidth: "760px", margin: "0 auto 60px" }}>
+        <h2 style={{ fontSize: "clamp(22px, 4vw, 30px)", fontWeight: 700, color: "var(--text-primary)", textAlign: "center", marginBottom: "8px", letterSpacing: "-0.02em" }}>Why Content Trace</h2>
+        <p style={{ textAlign: "center", color: "var(--text-muted)", fontSize: "16px", marginBottom: "32px" }}>Not all AI detectors are built the same.</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "14px" }}>
+          {[
+            { icon: "🆓", title: "100% Free", desc: "No paywalls. No trial periods. No credit card. Free, always." },
+            { icon: "🧠", title: "32 Signals", desc: "Far beyond basic perplexity checks — we analyze cognitive fingerprinting, voice, emotion, and more." },
+            { icon: "🚫", title: "No Signup Required", desc: "Paste and analyze. No account, no email, no friction." },
+            { icon: "🔒", title: "Privacy Focused", desc: "Your text is never stored or used to train models. What you paste stays yours." },
+          ].map((item) => (
+            <div key={item.title} style={{ border: "1px solid var(--border)", borderRadius: "14px", padding: "24px 18px", background: "var(--bg-card)", textAlign: "center", boxShadow: "0 1px 6px rgba(1,2,33,0.05)" }}>
+              <div style={{ fontSize: "28px", marginBottom: "10px" }}>{item.icon}</div>
+              <div style={{ fontSize: "15px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "6px" }}>{item.title}</div>
+              <div style={{ fontSize: "14px", color: "var(--text-muted)", lineHeight: "1.5" }}>{item.desc}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* TESTIMONIALS */}
+      <div style={{ maxWidth: "760px", margin: "0 auto 60px" }}>
+        <h2 style={{ fontSize: "clamp(22px, 4vw, 30px)", fontWeight: 700, color: "var(--text-primary)", textAlign: "center", marginBottom: "8px", letterSpacing: "-0.02em" }}>What People Are Saying</h2>
+        <p style={{ textAlign: "center", color: "var(--text-muted)", fontSize: "16px", marginBottom: "32px" }}>Used by educators, writers, and content teams every day.</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px" }}>
+          {[
+            { quote: "Quick and accurate — a lifesaver for my classroom. I finally have a free tool I can actually rely on.", author: "High school English teacher" },
+            { quote: "I use this before submitting any freelance piece. It catches patterns in my writing I didn't even notice.", author: "Freelance content writer" },
+            { quote: "The section breakdown is genuinely useful. It doesn't just give a score — it tells you why.", author: "SEO manager at a digital agency" },
+          ].map((t, i) => (
+            <div key={i} style={{ border: "1px solid var(--border)", borderRadius: "14px", padding: "24px", background: "var(--bg-card)", boxShadow: "0 1px 6px rgba(1,2,33,0.05)" }}>
+              <div style={{ fontSize: "24px", color: "var(--accent)", marginBottom: "12px", lineHeight: 1 }}>"</div>
+              <p style={{ fontSize: "15px", color: "var(--text-secondary)", lineHeight: "1.7", marginBottom: "16px", fontStyle: "italic" }}>{t.quote}</p>
+              <div style={{ fontSize: "13px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>— {t.author}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* FAQ */}
+      <div style={{ maxWidth: "760px", margin: "0 auto 60px" }}>
+        <h2 style={{ fontSize: "clamp(22px, 4vw, 30px)", fontWeight: 700, color: "var(--text-primary)", textAlign: "center", marginBottom: "8px", letterSpacing: "-0.02em" }}>Frequently Asked Questions</h2>
+        <p style={{ textAlign: "center", color: "var(--text-muted)", fontSize: "16px", marginBottom: "32px" }}>Everything you need to know about Content Trace.</p>
+        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+          {[
+            { q: "How accurate is Content Trace?", a: "Content Trace uses a multi-signal approach across 32 factors to produce a probabilistic Human Score. It is significantly more nuanced than single-metric detectors, but no AI detection tool is 100% accurate. Scores should be interpreted as indicators, not verdicts — particularly for short texts or content that has been heavily edited." },
+            { q: "Is it really free?", a: "Yes, completely. There is no paid tier, no trial, and no credit card required. Content Trace is free to use for any volume of analysis. We're supported by advertising, not subscriptions." },
+            { q: "Can I use it for academic work?", a: "Content Trace is commonly used by educators to screen student work and by students to review their own writing. However, our disclaimer applies: results should not be used as sole evidence in academic disciplinary proceedings. AI detection is probabilistic, and a low Human Score does not prove AI authorship." },
+            { q: "Does Content Trace store my text?", a: "No. Text submitted for analysis is processed in real time and is not stored, logged, or used to train any models. Your content remains private." },
+            { q: "What makes Content Trace different from other AI detectors?", a: "Most AI detectors rely on statistical proxies like perplexity and burstiness. Content Trace goes further — analyzing cognitive fingerprinting, emotional texture, voice authenticity, and pragmatic signals that are much harder for AI to replicate. The result is a richer, more explainable score." },
+          ].map((item, i) => (
+            <div key={i} style={{ border: "1px solid var(--border)", borderRadius: "12px", padding: "22px 24px", background: "var(--bg-card)", boxShadow: "0 1px 6px rgba(1,2,33,0.05)" }}>
+              <div style={{ fontSize: "16px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "10px" }}>{item.q}</div>
+              <div style={{ fontSize: "15px", color: "var(--text-muted)", lineHeight: "1.7" }}>{item.a}</div>
+            </div>
+          ))}
         </div>
       </div>
     </main>
