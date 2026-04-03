@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Menu, X, Scan } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 const LINKS = [
   { label: "Home", href: "/" },
@@ -19,9 +19,8 @@ export default function Nav({ current }: { current?: string }) {
       <div style={{ maxWidth: "760px", margin: "0 auto", padding: "0 16px", display: "flex", alignItems: "center", justifyContent: "space-between", height: "56px" }}>
 
         {/* Logo */}
-        <a href="/" style={{ display: "flex", alignItems: "center", gap: "8px", textDecoration: "none" }}>
-          <Scan size={16} style={{ color: "var(--accent)" }} />
-          <span style={{ fontSize: "15px", fontWeight: 700, color: "var(--text-primary)", letterSpacing: "-0.01em" }}>Content Trace</span>
+        <a href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
+          <img src="/logo.svg" alt="Content Trace" style={{ height: "28px", width: "auto" }} />
         </a>
 
         {/* Desktop links */}
