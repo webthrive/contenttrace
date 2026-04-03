@@ -367,6 +367,36 @@ export default function AnalyzerPage() {
           ))}
         </div>
       </div>
+
+      {/* BLOG POSTS */}
+      <div style={{ maxWidth: "760px", margin: "0 auto 60px" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "24px" }}>
+          <div>
+            <h2 style={{ fontSize: "clamp(22px, 4vw, 30px)", fontWeight: 700, color: "var(--text-primary)", letterSpacing: "-0.02em", marginBottom: "4px" }}>From the blog</h2>
+            <p style={{ fontSize: "15px", color: "var(--text-muted)" }}>Articles on AI writing, detection, and content authenticity.</p>
+          </div>
+          <a href="/blog" style={{ fontSize: "14px", color: "var(--accent)", fontWeight: 600, textDecoration: "none", whiteSpace: "nowrap", flexShrink: 0, marginLeft: "16px" }}>All posts →</a>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px" }}>
+          {[
+            { slug: "how-ai-text-detection-works", title: "How AI Text Detection Actually Works", date: "March 10, 2026", readTime: "6 min", excerpt: "What's actually happening under the hood, and why some detection approaches are more reliable than others.", tag: "Explainer", tagColor: "#0a7373", tagBg: "rgba(10,115,115,0.08)", tagBorder: "rgba(10,115,115,0.2)" },
+            { slug: "why-ai-writing-sounds-different", title: "Why AI Writing Sounds Different", date: "March 10, 2026", readTime: "7 min", excerpt: "AI writing is grammatically flawless. So why does it feel off? The answer is in how humans actually think on the page.", tag: "Analysis", tagColor: "#c47a00", tagBg: "rgba(196,122,0,0.08)", tagBorder: "rgba(196,122,0,0.2)" },
+            { slug: "how-to-humanize-ai-content", title: "How to Humanize AI Content: A Practical Guide", date: "March 10, 2026", readTime: "8 min", excerpt: "A practical framework for making AI-generated content read authentically before you publish.", tag: "Guide", tagColor: "#c43302", tagBg: "rgba(196,51,2,0.08)", tagBorder: "rgba(196,51,2,0.2)" },
+          ].map((post) => (
+            <a key={post.slug} href={`/blog/${post.slug}`} style={{ textDecoration: "none", display: "flex", flexDirection: "column", border: "1px solid var(--border)", borderRadius: "14px", padding: "22px", background: "var(--bg-card)", boxShadow: "0 1px 6px rgba(1,2,33,0.05)", transition: "box-shadow 0.2s" }}
+              onMouseEnter={e => (e.currentTarget.style.boxShadow = "0 4px 20px rgba(1,2,33,0.1)")}
+              onMouseLeave={e => (e.currentTarget.style.boxShadow = "0 1px 6px rgba(1,2,33,0.05)")}>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
+                <span style={{ fontSize: "11px", fontWeight: 600, color: post.tagColor, background: post.tagBg, border: `1px solid ${post.tagBorder}`, padding: "2px 8px", borderRadius: "6px" }}>{post.tag}</span>
+                <span style={{ fontSize: "12px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>{post.readTime}</span>
+              </div>
+              <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "8px", lineHeight: 1.35, letterSpacing: "-0.01em" }}>{post.title}</h3>
+              <p style={{ fontSize: "14px", color: "var(--text-muted)", lineHeight: "1.6", marginBottom: "16px", flex: 1 }}>{post.excerpt}</p>
+              <span style={{ fontSize: "13px", color: "var(--accent)", fontWeight: 600 }}>Read →</span>
+            </a>
+          ))}
+        </div>
+      </div>
     </main>
     </>
   );
