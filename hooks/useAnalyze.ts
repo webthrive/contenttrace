@@ -56,11 +56,17 @@ export function useAnalyze() {
       });
 
       if (!response.ok) {
-        const data = await response.json();
+        let message = "Analysis failed. Please try again.";
+        try {
+          const data = await response.json();
+          if (data?.error) message = data.error;
+        } catch {
+          // Server sent a non-JSON error page (e.g. 500/504). Keep the friendly message.
+        }
         setState((prev) => ({
           ...prev,
           isLoading: false,
-          error: data.error || "Analysis failed.",
+          error: message,
         }));
         return;
       }

@@ -1,6 +1,12 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest } from "next/server";
 
+// Allow long analyses (10,000-char inputs) to finish before Vercel stops the function.
+export const maxDuration = 60;
+
+// Model can be changed in Vercel (ANTHROPIC_MODEL) without a code change.
+const MODEL = process.env.ANTHROPIC_MODEL || "claude-sonnet-4-6";
+
 const client = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
@@ -80,7 +86,7 @@ export async function POST(req: NextRequest) {
   }
 
   const claudeStream = await client.messages.stream({
-    model: "claude-sonnet-4-20250514",
+    model: MODEL,
     max_tokens: 4000,
     system: SYSTEM_PROMPT,
     messages: [
@@ -104,6 +110,7 @@ export async function POST(req: NextRequest) {
       const parsedSections: SectionObj[] = [];
       let emittedCount = 0;
 
+      try {
       for await (const chunk of claudeStream) {
         if (
           chunk.type === "content_block_delta" &&
@@ -150,6 +157,13 @@ export async function POST(req: NextRequest) {
             // Continue accumulating
           }
         }
+      }
+
+      } catch (err) {
+        console.error("Anthropic API error:", err);
+        send({ type: "error", message: "The analysis service is unavailable. Please try again in a moment." });
+        controller.close();
+        return;
       }
 
       try {
