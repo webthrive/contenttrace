@@ -11,8 +11,9 @@ const MODEL = process.env.ANTHROPIC_MODEL || "claude-sonnet-4-6";
 
 const client = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
-  timeout: 45_000,
-  maxRetries: 1,
+  timeout: 30_000,
+  // Retries use backoff and honor Anthropic's retry-after header (helps with 429 rate limits).
+  maxRetries: 3,
 });
 
 type SectionDef = { name: string; factors: string[]; source: "model" | "code" };
@@ -122,7 +123,14 @@ function computeResult(
   const confidence: "Low" | "Medium" | "High" =
     wordCount < 100 ? "Low" : wordCount < 300 ? "Medium" : "High";
 
-  return { aggregateScore: roundedAggregate, verdict, verdictColor, wordCount, confidence, contentType, sections: allSections };
+  // Explain how scoring changed for this content type, so users see why some signals are not counted.
+  const adjustment = {
+    note: CONTENT_PROFILES[contentType.id].note,
+    excludedFactors: allSections.flatMap((s) => s.factors.filter((f) => !f.applicable).map((f) => f.name)),
+    excludedSections: allSections.filter((s) => !s.applicable).map((s) => s.name),
+  };
+
+  return { aggregateScore: roundedAggregate, verdict, verdictColor, wordCount, confidence, contentType, adjustment, sections: allSections };
 }
 
 // Match the model's factors to the expected names, in the expected order.
@@ -249,7 +257,13 @@ export async function POST(req: NextRequest) {
 
       if (failures.length > 0) {
         console.error("Anthropic API error:", failures.map((f) => f.reason));
-        send({ type: "error", message: "The analysis service is unavailable. Please try again in a moment." });
+        const rateLimited = failures.some((f) => f.reason instanceof Anthropic.APIError && (f.reason.status === 429 || f.reason.status === 529));
+        send({
+          type: "error",
+          message: rateLimited
+            ? "High demand right now. Please wait a minute and try again."
+            : "The analysis service is unavailable. Please try again in a moment.",
+        });
       } else {
         send({ type: "complete", result: computeResult(results as SectionObj[], wordCount, await typePromise) });
       }

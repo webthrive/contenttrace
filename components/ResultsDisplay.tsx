@@ -81,6 +81,27 @@ export default function ResultsDisplay({ result }: ResultsDisplayProps) {
           )}
         </div>
 
+        {/* Content type adjustment */}
+        {result.contentType && result.adjustment && (
+          <div style={{ border: "1px solid var(--border)", borderRadius: "10px", background: "var(--bg-card)", padding: "14px 16px", marginBottom: "20px" }}>
+            <div style={{ fontSize: "11px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: "6px" }}>
+              Adjusted for {result.contentType.label}
+            </div>
+            <div style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: "1.6" }}>{result.adjustment.note}</div>
+            {result.adjustment.excludedFactors.length > 0 && (
+              <div style={{ fontSize: "13px", color: "var(--text-muted)", lineHeight: "1.6", marginTop: "8px" }}>
+                <strong style={{ color: "var(--text-secondary)", fontWeight: 600 }}>Not counted ({result.adjustment.excludedFactors.length}):</strong>{" "}
+                {result.adjustment.excludedFactors.join(" · ")}
+              </div>
+            )}
+            {result.contentType.detected && (
+              <div style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "8px" }}>
+                Wrong type? Click New Analysis, choose the content type under the text box, and run it again.
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Takeaway */}
         <div style={{ borderTop: `1px solid ${v.border}`, paddingTop: "18px", marginBottom: "20px" }}>
           <div style={{ fontSize: "11px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: "8px" }}>Our Takeaway</div>

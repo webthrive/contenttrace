@@ -29,6 +29,7 @@ export interface AnalysisResult {
   verdictColor: "green" | "teal" | "amber" | "red";
   confidence: "Low" | "Medium" | "High";
   contentType?: ContentTypeInfo;
+  adjustment?: { note: string; excludedFactors: string[]; excludedSections: string[] };
   sections: SectionScore[];
   createdAt?: string;
 }

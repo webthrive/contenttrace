@@ -6,6 +6,7 @@ export const CONTENT_TYPE_IDS = [
   "general",
   "personal_blog",
   "thought_leadership",
+  "company_blog",
   "corporate",
   "technical",
   "academic",
@@ -30,6 +31,7 @@ export type ContentProfile = {
   id: ContentTypeId;
   label: string;
   description: string; // used by the auto-detect prompt
+  note: string; // shown in results: why scoring is adjusted for this type
   weights: Record<SectionName, number>; // 0 = whole section N/A
   naFactors: string[];
 };
@@ -52,13 +54,15 @@ export const CONTENT_PROFILES: Record<ContentTypeId, ContentProfile> = {
     id: "general",
     label: "General",
     description: "Mixed or unclear genre. Use only if no other type fits.",
+    note: "Standard weights. No signals are excluded.",
     weights: BASE,
     naFactors: [],
   },
   personal_blog: {
     id: "personal_blog",
     label: "Personal blog / essay",
-    description: "First-person blog post, personal essay, newsletter, or story about the author's own experience.",
+    description: "First-person blog post, personal essay, newsletter, or story about the author's own experience, written as 'I'.",
+    note: "First-person writing is expected here, so voice, personal stories, and emotional texture carry more weight.",
     weights: w({ "Structure & Flow": 0.1, "Word Choice & Phrasing": 0.14, "Voice & Perspective": 0.18, "Content & Logic": 0.1, "Emotional Texture": 0.16, "Statistical Proxies": 0.06 }),
     naFactors: [],
   },
@@ -66,13 +70,23 @@ export const CONTENT_PROFILES: Record<ContentTypeId, ContentProfile> = {
     id: "thought_leadership",
     label: "Thought leadership / opinion",
     description: "Opinion piece, LinkedIn article, op-ed, or expert commentary that argues a point of view.",
+    note: "Opinion writing should show a clear point of view and strong reasoning, so those signals carry more weight. Personal vulnerability is not expected.",
     weights: w({ "Structure & Flow": 0.1, "Voice & Perspective": 0.18, "Content & Logic": 0.18, "Cognitive Fingerprinting": 0.14, "Emotional Texture": 0.07 }),
     naFactors: ["Vulnerability Present"],
+  },
+  company_blog: {
+    id: "company_blog",
+    label: "Company blog / brand article",
+    description: "Blog post or article published by a company or brand, written in a 'we' or neutral voice for customers. Not about one author's own life. Choose this over personal_blog when the text speaks for a business.",
+    note: "Company blog posts speak for a brand, so they rarely include one person's stories, vulnerability, or self-correction. We do not count these first-person signals against the text. Specific detail, real insight, and natural phrasing carry more weight.",
+    weights: w({ "Structure & Flow": 0.12, "Word Choice & Phrasing": 0.18, "Voice & Perspective": 0.1, "Content & Logic": 0.22, "Cognitive Fingerprinting": 0.1, "Emotional Texture": 0.04, "Pragmatics & Subtext": 0.1, "Statistical Proxies": 0.14 }),
+    naFactors: ["Personal Anecdotes Present", "Vulnerability Present", "Opinion Drift / Self-Correction", "Thinking Out Loud"],
   },
   corporate: {
     id: "corporate",
     label: "Corporate / white paper",
     description: "White paper, report, case study, press release, or formal business content written for a company.",
+    note: "Formal business writing normally has no personal stories, emotion, or thinking out loud. We do not count these against the text. Specificity, evidence, and phrasing carry more weight.",
     weights: w({ "Structure & Flow": 0.14, "Word Choice & Phrasing": 0.2, "Voice & Perspective": 0.08, "Content & Logic": 0.26, "Cognitive Fingerprinting": 0.08, "Emotional Texture": 0, "Pragmatics & Subtext": 0.08, "Statistical Proxies": 0.16 }),
     naFactors: ["Personal Anecdotes Present", "Emotional Authenticity", "Opinion Drift / Self-Correction", "Thinking Out Loud", "Irony or Dry Humor"],
   },
@@ -80,6 +94,7 @@ export const CONTENT_PROFILES: Record<ContentTypeId, ContentProfile> = {
     id: "technical",
     label: "Technical / documentation",
     description: "Documentation, how-to guide, FAQ, specification, tutorial, or technical explainer.",
+    note: "Documentation is written to be neutral and exact. Personal voice, opinions, and emotion are not expected, so we do not count them. Accuracy, specificity, and phrasing carry more weight.",
     weights: w({ "Structure & Flow": 0.14, "Word Choice & Phrasing": 0.22, "Voice & Perspective": 0.05, "Content & Logic": 0.28, "Cognitive Fingerprinting": 0.06, "Emotional Texture": 0, "Pragmatics & Subtext": 0.07, "Statistical Proxies": 0.18 }),
     naFactors: ["Personal Anecdotes Present", "Emotional Authenticity", "Opinion Strength", "Opinion Drift / Self-Correction", "Thinking Out Loud", "Cognitive Bias Presence", "Irony or Dry Humor"],
   },
@@ -87,6 +102,7 @@ export const CONTENT_PROFILES: Record<ContentTypeId, ContentProfile> = {
     id: "academic",
     label: "Academic / student essay",
     description: "School or university essay, research paper, thesis, or academic article.",
+    note: "Academic writing is formal and rarely personal. Personal stories, vulnerability, and humor are not expected. Argument quality and phrasing carry more weight.",
     weights: w({ "Structure & Flow": 0.14, "Word Choice & Phrasing": 0.18, "Voice & Perspective": 0.12, "Content & Logic": 0.24, "Cognitive Fingerprinting": 0.12, "Emotional Texture": 0.04, "Pragmatics & Subtext": 0.06, "Statistical Proxies": 0.1 }),
     naFactors: ["Personal Anecdotes Present", "Vulnerability Present", "Irony or Dry Humor"],
   },
@@ -94,6 +110,7 @@ export const CONTENT_PROFILES: Record<ContentTypeId, ContentProfile> = {
     id: "marketing",
     label: "Marketing / web copy",
     description: "Landing page, product description, ad copy, sales page, or promotional web content.",
+    note: "Marketing copy is written to persuade, not to reflect. Self-correction and thinking out loud are not expected. Phrasing and specific claims carry more weight.",
     weights: w({ "Word Choice & Phrasing": 0.22, "Content & Logic": 0.16, "Cognitive Fingerprinting": 0.06, "Emotional Texture": 0.1, "Statistical Proxies": 0.1 }),
     naFactors: ["Opinion Drift / Self-Correction", "Thinking Out Loud", "Vulnerability Present"],
   },
@@ -101,6 +118,7 @@ export const CONTENT_PROFILES: Record<ContentTypeId, ContentProfile> = {
     id: "social",
     label: "Social post",
     description: "Short social media post (LinkedIn, X, Facebook, Reddit comment) or forum reply.",
+    note: "Social posts are short and informal. Paragraph structure and complete arguments are not expected. Voice and tone carry more weight.",
     weights: w({ "Structure & Flow": 0.08, "Word Choice & Phrasing": 0.16, "Voice & Perspective": 0.18, "Content & Logic": 0.08, "Cognitive Fingerprinting": 0.14, "Emotional Texture": 0.16, "Pragmatics & Subtext": 0.14, "Statistical Proxies": 0.06 }),
     naFactors: ["Paragraph Length Consistency", "Argument Completeness"],
   },
@@ -108,6 +126,7 @@ export const CONTENT_PROFILES: Record<ContentTypeId, ContentProfile> = {
     id: "email",
     label: "Email / letter",
     description: "Email, cover letter, or personal or business letter to a specific reader.",
+    note: "Emails are short and written to one reader. Paragraph structure is not scored. Tone, directness, and phrasing carry more weight.",
     weights: w({ "Structure & Flow": 0.1, "Word Choice & Phrasing": 0.2, "Voice & Perspective": 0.16, "Content & Logic": 0.12, "Cognitive Fingerprinting": 0.1, "Pragmatics & Subtext": 0.14, "Statistical Proxies": 0.06 }),
     naFactors: ["Paragraph Length Consistency"],
   },
