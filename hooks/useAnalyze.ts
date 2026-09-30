@@ -74,6 +74,7 @@ export function useAnalyze() {
       const reader = response.body!.getReader();
       const decoder = new TextDecoder();
       let buffer = "";
+      let finished = false; // true once a "complete" or "error" event arrives
 
       while (true) {
         const { done, value } = await reader.read();
@@ -97,6 +98,7 @@ export function useAnalyze() {
                 sectionsComplete: prev.sectionsComplete + 1,
               }));
             } else if (event.type === "complete") {
+              finished = true;
               setState((prev) => ({
                 ...prev,
                 isLoading: false,
@@ -106,6 +108,7 @@ export function useAnalyze() {
                 sectionsComplete: event.result.sections.length,
               }));
             } else if (event.type === "error") {
+              finished = true;
               setState((prev) => ({
                 ...prev,
                 isLoading: false,
@@ -116,6 +119,15 @@ export function useAnalyze() {
             // Malformed JSON in stream chunk — skip
           }
         }
+      }
+
+      // Stream closed early (for example, a server timeout): do not leave the spinner running.
+      if (!finished) {
+        setState((prev) => ({
+          ...prev,
+          isLoading: false,
+          error: "The analysis did not finish. Please try again.",
+        }));
       }
     } catch (err) {
       setState((prev) => ({
