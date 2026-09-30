@@ -6,6 +6,7 @@ import ResultsDisplay from "@/components/ResultsDisplay";
 import SectionCard from "@/components/SectionCard";
 import Nav from "@/components/Nav";
 import { Scan, X, ArrowRight, ChevronDown, ChevronUp, Zap } from "lucide-react";
+import { CONTENT_TYPE_OPTIONS } from "@/lib/contentTypes";
 
 const CHAR_LIMIT = 10000;
 
@@ -34,18 +35,23 @@ export default function AnalyzerPage() {
   const [sectionsComplete, setSectionsComplete] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [sectionsOpen, setSectionsOpen] = useState(false);
+  const [contentType, setContentType] = useState<string>("auto");
+  const [detectedType, setDetectedType] = useState<string | null>(null);
 
   const charCount = text.length;
   const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
 
   const handleAnalyze = async () => {
     if (!text.trim() || text.length < 50) { setError("Please enter at least 50 characters."); return; }
-    setLoading(true); setError(null); setResult(null); setStreamingSections([]); setSectionsComplete(0);
+    setLoading(true); setError(null); setResult(null); setStreamingSections([]); setSectionsComplete(0); setDetectedType(null);
+    let finished = false; // true once a "complete" or "error" event arrives
     try {
-      const res = await fetch("/api/analyze", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text }) });
+      const res = await fetch("/api/analyze", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text, contentType }) });
       if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Analysis failed");
+        // The server can return an HTML error page (500/504), so do not assume JSON.
+        let message = "Analysis failed. Please try again.";
+        try { const data = await res.json(); if (data?.error) message = data.error; } catch { /* non-JSON error page */ }
+        throw new Error(message);
       }
       const reader = res.body!.getReader();
       const decoder = new TextDecoder();
@@ -60,14 +66,18 @@ export default function AnalyzerPage() {
           if (!line.startsWith("data: ")) continue;
           try {
             const event = JSON.parse(line.slice(6));
-            if (event.type === "section") {
+            if (event.type === "contentType") {
+              setDetectedType(event.contentType?.label ?? null);
+            } else if (event.type === "section") {
               setStreamingSections((prev) => [...prev, event.section]);
               setSectionsComplete((n) => n + 1);
             } else if (event.type === "complete") {
+              finished = true;
               setResult({ ...event.result, text: text.substring(0, 500) });
               setStreamingSections(event.result.sections);
               setLoading(false);
             } else if (event.type === "error") {
+              finished = true;
               throw new Error(event.message);
             }
           } catch (parseErr: any) {
@@ -75,6 +85,8 @@ export default function AnalyzerPage() {
           }
         }
       }
+      // Stream closed early (for example, a server timeout): do not leave the spinner running.
+      if (!finished) throw new Error("The analysis did not finish. Please try again.");
     } catch (err: any) {
       setError(err.message || "Something went wrong. Please try again.");
       setLoading(false);
@@ -119,6 +131,25 @@ export default function AnalyzerPage() {
               placeholder="Paste any text here — blog post, email, essay, social content, product description, marketing copy..."
               style={{ width: "100%", minHeight: result ? "120px" : "240px", padding: "22px", background: "none", border: "none", outline: "none", color: "var(--text-primary)", fontSize: "16px", fontFamily: "var(--font)", lineHeight: "1.75", resize: result ? "none" : "vertical", boxSizing: "border-box", opacity: result ? 0.7 : 1 }}
             />
+            {!result && (
+              <div style={{ borderTop: "1px solid var(--border)", padding: "10px 18px", display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap", background: "var(--bg-card)" }}>
+                <label style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", color: "var(--text-muted)" }}>
+                  <span>Content type</span>
+                  <select
+                    value={contentType}
+                    onChange={(e) => setContentType(e.target.value)}
+                    disabled={loading}
+                    aria-label="Content type"
+                    style={{ fontSize: "13px", fontFamily: "var(--font)", color: "var(--text-primary)", background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: "6px", padding: "5px 8px", cursor: "pointer", maxWidth: "210px" }}
+                  >
+                    <option value="auto">Auto-detect</option>
+                    {CONTENT_TYPE_OPTIONS.map((o) => (<option key={o.id} value={o.id}>{o.label}</option>))}
+                    <option value="general">General (standard weights)</option>
+                  </select>
+                </label>
+                <span style={{ fontSize: "12px", color: "var(--text-muted)" }}>Adjusts which signals count for this kind of writing.</span>
+              </div>
+            )}
             {!result && <div style={{ borderTop: "1px solid var(--border)", padding: "14px 18px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "10px", background: "var(--bg-elevated)" }}>
               <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
                 <span style={{ fontSize: "13px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>{wordCount} words · {charCount.toLocaleString()}/{CHAR_LIMIT.toLocaleString()} chars</span>
@@ -147,6 +178,7 @@ export default function AnalyzerPage() {
               <div style={{ width: "16px", height: "16px", border: "2px solid var(--border)", borderTopColor: "var(--accent)", borderRadius: "50%", flexShrink: 0 }} className="spin" />
               <span style={{ fontSize: "13px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>
                 {sectionsComplete === 0 ? "Analyzing across 32 signals…" : `Analyzing… ${sectionsComplete} / 8 sections complete`}
+                {detectedType && ` · Scoring as: ${detectedType}`}
               </span>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "14px" }}>

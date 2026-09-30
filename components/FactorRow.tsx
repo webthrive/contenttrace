@@ -14,17 +14,18 @@ function getColor(s: number) {
 
 export default function FactorRow({ factor }: FactorRowProps) {
   const [open, setOpen] = useState(false);
-  const color = getColor(factor.score);
-  const pct = Math.max(factor.score, 4);
+  const na = factor.applicable === false;
+  const color = na ? "var(--text-muted)" : getColor(factor.score);
+  const pct = na ? 0 : Math.max(factor.score, 4);
 
   return (
-    <div style={{ borderRadius: "8px", overflow: "hidden", background: "var(--bg-elevated)", marginBottom: "4px" }}>
+    <div style={{ borderRadius: "8px", overflow: "hidden", background: "var(--bg-elevated)", marginBottom: "4px", opacity: na ? 0.6 : 1 }}>
       <div onClick={() => setOpen(!open)} style={{ padding: "12px 14px", display: "flex", alignItems: "center", gap: "12px", cursor: "pointer" }}>
         {/* Mini bar */}
         <div style={{ width: "60px", flexShrink: 0 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "3px" }}>
-            <span style={{ fontSize: "12px", fontWeight: 600, color, fontFamily: "var(--font-mono)" }}>{factor.score}</span>
-            <span style={{ fontSize: "9px", color: "var(--text-muted)" }}>/100</span>
+            <span style={{ fontSize: "12px", fontWeight: 600, color, fontFamily: "var(--font-mono)" }}>{na ? "N/A" : factor.score}</span>
+            {!na && <span style={{ fontSize: "9px", color: "var(--text-muted)" }}>/100</span>}
           </div>
           <div style={{ height: "4px", background: "var(--border)", borderRadius: "2px", overflow: "hidden" }}>
             <div style={{ width: `${pct}%`, height: "100%", background: color, borderRadius: "2px" }} />

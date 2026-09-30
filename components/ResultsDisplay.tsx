@@ -43,6 +43,8 @@ const SCALE_ZONES = [
 
 export default function ResultsDisplay({ result }: ResultsDisplayProps) {
   const v = VERDICTS[result.verdictColor];
+  const scoredSections = result.sections.filter((s) => s.applicable !== false);
+  const scoredFactors = scoredSections.reduce((n, s) => n + s.factors.filter((f) => f.applicable !== false).length, 0);
 
   return (
     <div>
@@ -54,11 +56,11 @@ export default function ResultsDisplay({ result }: ResultsDisplayProps) {
 
         {/* Meta */}
         <div style={{ fontSize: "14px", color: "var(--text-muted)", margin: "10px 0 16px" }}>
-          Human Score across {result.sections.length} sections · {result.sections.reduce((s, x) => s + x.factors.length, 0)} individual factors
+          Human Score across {scoredSections.length} sections · {scoredFactors} individual factors
         </div>
 
         {/* Word count + confidence */}
-        <div style={{ display: "flex", gap: "24px", marginBottom: "20px" }}>
+        <div style={{ display: "flex", gap: "24px", marginBottom: "20px", flexWrap: "wrap" }}>
           <div>
             <div style={{ fontSize: "11px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "3px", fontWeight: 500 }}>Word Count</div>
             <div style={{ fontSize: "15px", fontFamily: "var(--font-mono)", color: "var(--text-primary)", fontWeight: 500 }}>{result.wordCount}</div>
@@ -68,6 +70,15 @@ export default function ResultsDisplay({ result }: ResultsDisplayProps) {
             <div style={{ fontSize: "15px", fontFamily: "var(--font-mono)", color: "var(--text-primary)", fontWeight: 500 }}>{result.confidence}</div>
             {result.confidence === "Low" && <div style={{ fontSize: "11px", color: "var(--text-muted)", marginTop: "2px" }}>Short text reduces accuracy</div>}
           </div>
+          {result.contentType && (
+            <div style={{ minWidth: 0 }}>
+              <div style={{ fontSize: "11px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "3px", fontWeight: 500 }}>Scored As</div>
+              <div style={{ fontSize: "15px", fontFamily: "var(--font-mono)", color: "var(--text-primary)", fontWeight: 500 }}>{result.contentType.label}</div>
+              <div style={{ fontSize: "11px", color: "var(--text-muted)", marginTop: "2px" }}>
+                {result.contentType.detected ? "Auto-detected" : "Selected by you"}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Takeaway */}
