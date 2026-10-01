@@ -94,6 +94,9 @@ export default function ResultsDisplay({ result }: ResultsDisplayProps) {
                 {result.adjustment.excludedFactors.join(" · ")}
               </div>
             )}
+            <div style={{ fontSize: "13px", color: "var(--text-muted)", lineHeight: "1.6", marginTop: "8px" }}>
+              The Human Score is calibrated against known human and AI samples of this kind of writing. Section scores below show the raw signals before calibration.
+            </div>
             {result.contentType.detected && (
               <div style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "8px" }}>
                 Wrong type? Click New Analysis, choose the content type under the text box, and run it again.
@@ -145,7 +148,7 @@ export default function ResultsDisplay({ result }: ResultsDisplayProps) {
       </div>
 
       <div style={{ border: "1px solid var(--border)", borderRadius: "8px", padding: "14px 18px", fontSize: "13px", color: "var(--text-muted)", lineHeight: "1.6", background: "var(--bg-elevated)" }}>
-        <strong style={{ color: "var(--text-secondary)" }}>Note:</strong> These scores are probabilistic, not definitive. Short texts (&lt;100 words) produce lower confidence results. Heavily edited AI text or highly structured human writing may score unexpectedly.
+        <strong style={{ color: "var(--text-secondary)" }}>Note:</strong> These scores are probabilistic, not definitive. Short texts (&lt;100 words) produce lower confidence results. Heavily edited AI text or highly structured human writing may score unexpectedly. AI text that was deliberately written or edited to sound casual and personal can score as human, because this analysis measures how human the writing reads.
       </div>
     </div>
   );

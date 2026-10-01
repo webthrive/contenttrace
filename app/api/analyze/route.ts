@@ -1,7 +1,11 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest } from "next/server";
 import { computeMetrics, metricsBrief, statisticalFactors, RawFactor } from "@/lib/textMetrics";
-import { CONTENT_PROFILES, CONTENT_TYPE_IDS, ContentProfile, ContentTypeId, isContentTypeId } from "@/lib/contentTypes";
+import { CONTENT_PROFILES, CONTENT_TYPE_IDS, ContentProfile, ContentTypeId, calibrate, isContentTypeId } from "@/lib/contentTypes";
+
+// Measured and shown, but not counted: the September 2026 evaluation showed these do not
+// separate human from AI text (Vocabulary Richness pointed the wrong way).
+const INFORMATIONAL_FACTORS = ["Vocabulary Richness", "Response Calibration", "Entropy Variance"];
 
 // Sections run in parallel, so a full analysis normally finishes in well under this limit.
 export const maxDuration = 60;
@@ -79,15 +83,18 @@ function scoreSection(raw: { name: string; factors: RawFactor[] }, profile: Cont
   const weight = profile.weights[raw.name as keyof ContentProfile["weights"]] ?? 0;
   const sectionNA = weight === 0;
   const factors: FactorObj[] = raw.factors.map((f) => {
-    const applicable = !sectionNA && !profile.naFactors.includes(f.name);
+    const informational = INFORMATIONAL_FACTORS.includes(f.name);
+    const notExpected = sectionNA || profile.naFactors.includes(f.name);
+    const applicable = !informational && !notExpected;
+    const reason = informational
+      ? "Shown for reference only. In our testing this measure did not reliably separate human and AI writing, so it is not counted."
+      : `Not expected in ${profile.label.toLowerCase()} writing, so it is excluded from the score.`;
     return {
       name: f.name,
       // Factors use 0-10; UI expects 0-100.
       score: Math.round(f.score * 10),
       applicable,
-      explanation: applicable
-        ? f.explanation
-        : [`Not expected in ${profile.label.toLowerCase()} writing, so it is excluded from the score.`, ...f.explanation],
+      explanation: applicable ? f.explanation : [reason, ...f.explanation],
     };
   });
   const scored = factors.filter((f) => f.applicable);
@@ -103,7 +110,9 @@ function computeResult(
 ) {
   const sections = allSections.filter((s) => s.applicable);
   const totalWeight = sections.reduce((sum, s) => sum + s.weight, 0);
-  const aggregateScore = sections.reduce((sum, s) => sum + s.score * s.weight, 0) / totalWeight;
+  const rawScore = sections.reduce((sum, s) => sum + s.score * s.weight, 0) / totalWeight;
+  // Calibrate for the genre so that typical human text lands near 75 and typical AI text near 25.
+  const aggregateScore = calibrate(rawScore, CONTENT_PROFILES[contentType.id].group);
   const roundedAggregate = Math.round(aggregateScore * 10) / 10;
 
   let verdict: "Likely Human" | "Leans Human" | "Leans AI" | "Likely AI-Generated";
@@ -126,7 +135,10 @@ function computeResult(
   // Explain how scoring changed for this content type, so users see why some signals are not counted.
   const adjustment = {
     note: CONTENT_PROFILES[contentType.id].note,
-    excludedFactors: allSections.flatMap((s) => s.factors.filter((f) => !f.applicable).map((f) => f.name)),
+    excludedFactors: allSections.flatMap((s) =>
+      s.factors.filter((f) => !f.applicable && !INFORMATIONAL_FACTORS.includes(f.name)).map((f) => f.name)
+    ),
+    rawScore: Math.round(rawScore * 10) / 10,
     excludedSections: allSections.filter((s) => !s.applicable).map((s) => s.name),
   };
 

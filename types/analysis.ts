@@ -29,7 +29,7 @@ export interface AnalysisResult {
   verdictColor: "green" | "teal" | "amber" | "red";
   confidence: "Low" | "Medium" | "High";
   contentType?: ContentTypeInfo;
-  adjustment?: { note: string; excludedFactors: string[]; excludedSections: string[] };
+  adjustment?: { note: string; excludedFactors: string[]; excludedSections: string[]; rawScore?: number };
   sections: SectionScore[];
   createdAt?: string;
 }
