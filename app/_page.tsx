@@ -36,6 +36,7 @@ export default function AnalyzerPage() {
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<AnalysisResult | null>(null);
+  const [historyId, setHistoryId] = useState<string | null>(null);
   const [streamingSections, setStreamingSections] = useState<AnalysisResult["sections"]>([]);
   const [sectionsComplete, setSectionsComplete] = useState(0);
   const [error, setError] = useState<string | null>(null);
@@ -116,6 +117,7 @@ export default function AnalyzerPage() {
             } else if (event.type === "complete") {
               finished = true;
               setResult({ ...event.result, text: text.substring(0, 500) });
+              setHistoryId(typeof event.historyId === "string" ? event.historyId : null);
               setStreamingSections(event.result.sections);
               setLoading(false);
             } else if (event.type === "error") {
@@ -138,7 +140,7 @@ export default function AnalyzerPage() {
     }
   };
 
-  const handleReset = () => { setResult(null); setError(null); setStreamingSections([]); setSectionsComplete(0); };
+  const handleReset = () => { setHistoryId(null); setResult(null); setError(null); setStreamingSections([]); setSectionsComplete(0); };
   const loadSample = () => { setText(SAMPLE_TEXT); setResult(null); setError(null); };
 
   return (
@@ -288,6 +290,16 @@ export default function AnalyzerPage() {
                 <X size={13} />New Analysis
               </button>
             </div>
+            {historyId && (
+              <div style={{ fontSize: "14px", color: "var(--text-secondary)", border: "1px solid var(--border)", background: "var(--bg-card)", borderRadius: "10px", padding: "10px 14px", marginBottom: "16px" }}>
+                Saved to your history. <a href={`/account/history/${historyId}`} style={{ color: "var(--accent)", fontWeight: 600 }}>Open it any time</a> · <a href="/account/history" style={{ color: "var(--accent)" }}>All past analyses</a>
+              </div>
+            )}
+            {!historyId && usage?.enabled && !usage.signedIn && (
+              <div style={{ fontSize: "14px", color: "var(--text-secondary)", border: "1px solid var(--border)", background: "var(--bg-card)", borderRadius: "10px", padding: "10px 14px", marginBottom: "16px" }}>
+                This result is not saved. <a href="/login?next=/account/history" style={{ color: "var(--accent)", fontWeight: 600 }}>Sign in</a> to save future results to your history.
+              </div>
+            )}
             <ResultsDisplay result={result} />
           </>
         )}

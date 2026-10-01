@@ -112,6 +112,14 @@ export default function AccountPanel() {
         {error && <p role="alert" style={{ marginTop: "12px", fontSize: "14px", color: "var(--red)" }}>{error}</p>}
       </div>
 
+      <a href="/account/history" style={{ ...card, display: "flex", justifyContent: "space-between", alignItems: "center", textDecoration: "none" }}>
+        <span>
+          <span style={{ display: "block", fontSize: "17px", fontWeight: 700, color: "var(--text-primary)" }}>Your past analyses</span>
+          <span style={{ fontSize: "14px", color: "var(--text-secondary)" }}>Open, review or delete the results you saved.</span>
+        </span>
+        <span style={{ fontSize: "20px", color: "var(--accent)" }}>→</span>
+      </a>
+
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px" }}>
         <a href="/" style={{ fontSize: "14px", color: "var(--accent)" }}>← Back to the analyzer</a>
         <button onClick={signOut} style={{ ...btn, border: "1px solid var(--border)", background: "var(--bg-card)", color: "var(--text-secondary)" }}>Sign out</button>

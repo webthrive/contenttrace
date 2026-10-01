@@ -1,18 +1,34 @@
 "use client";
 
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Menu, X, UserRound } from "lucide-react";
+import { authAvailable, supabaseBrowser } from "@/lib/billing/browser";
 
 const LINKS = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
-  { label: "Blog", href: "/blog" },
+  { label: "Pricing", href: "/pricing" },
   { label: "Contact", href: "/contact" },
   { label: "FAQ", href: "/#faq" },
 ];
 
 export default function Nav({ current }: { current?: string }) {
   const [open, setOpen] = useState(false);
+  // null = not known yet (or accounts are off), true/false = signed in or not
+  const [signedIn, setSignedIn] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    if (!authAvailable()) return;
+    const sb = supabaseBrowser();
+    sb.auth.getSession().then(({ data }) => setSignedIn(Boolean(data.session)));
+    const { data: sub } = sb.auth.onAuthStateChange((_e, session) => setSignedIn(Boolean(session)));
+    return () => sub.subscription.unsubscribe();
+  }, []);
+
+  const account = signedIn === null ? null : signedIn
+    ? { label: "Account", href: "/account" }
+    : { label: "Sign in", href: `/login?next=${encodeURIComponent(current && current !== "/login" ? current : "/account")}` };
+  const accountActive = current === "/account";
 
   return (
     <nav style={{ borderBottom: "1px solid var(--border)", background: "var(--bg-card)", position: "sticky", top: 0, zIndex: 100 }}>
@@ -35,6 +51,17 @@ export default function Nav({ current }: { current?: string }) {
               {l.label}
             </a>
           ))}
+          {account && (
+            <a href={account.href} style={{
+              display: "flex", alignItems: "center", gap: "6px", marginLeft: "8px",
+              fontSize: "14px", fontWeight: 600, padding: "6px 14px", borderRadius: "999px", textDecoration: "none",
+              border: "1px solid var(--accent)",
+              color: accountActive ? "white" : "var(--accent)",
+              background: accountActive ? "var(--accent)" : "transparent",
+            }}>
+              <UserRound size={15} />{account.label}
+            </a>
+          )}
         </div>
 
         {/* Mobile hamburger */}
@@ -56,6 +83,14 @@ export default function Nav({ current }: { current?: string }) {
               {l.label}
             </a>
           ))}
+          {account && (
+            <a href={account.href} onClick={() => setOpen(false)} style={{
+              display: "flex", alignItems: "center", gap: "8px", fontSize: "16px", fontWeight: 600, padding: "12px 8px",
+              textDecoration: "none", color: "var(--accent)",
+            }}>
+              <UserRound size={17} />{account.label}
+            </a>
+          )}
         </div>
       )}
     </nav>

@@ -63,13 +63,6 @@ export default function ContactPage() {
             <a href="mailto:colin@contenttrace.ai" style={{ fontSize: "15px", color: "var(--accent)", textDecoration: "none", fontWeight: 500 }}>colin@contenttrace.ai</a>
           </div>
         </div>
-        <div style={{ border: "1px solid var(--border)", borderRadius: "10px", padding: "14px 20px", background: "var(--bg-card)", display: "flex", alignItems: "center", gap: "10px" }}>
-          <span style={{ fontSize: "18px" }}>🏢</span>
-          <div>
-            <div style={{ fontSize: "11px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", fontWeight: 600, marginBottom: "2px" }}>Company</div>
-            <div style={{ fontSize: "15px", color: "var(--text-secondary)", fontWeight: 500 }}>Web Thrive, LLC</div>
-          </div>
-        </div>
       </div>
 
       {/* Form */}

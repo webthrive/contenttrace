@@ -222,6 +222,31 @@ async function analyzeSection(def: SectionDef, text: string, brief: string): Pro
   return normalizeFactors(def.factors, input.factors ?? []);
 }
 
+// Save a finished analysis to the user's history. A failure here never breaks the analysis.
+async function saveAnalysis(userId: string, text: string, result: ReturnType<typeof computeResult>): Promise<string | null> {
+  try {
+    const { data, error } = await supabaseAdmin()
+      .from("analyses")
+      .insert({
+        user_id: userId,
+        content_type: result.contentType?.label ?? null,
+        word_count: result.wordCount,
+        score: result.aggregateScore,
+        verdict: result.verdict,
+        preview: text.replace(/\s+/g, " ").trim().slice(0, 160),
+        input_text: text,
+        result,
+      })
+      .select("id")
+      .single();
+    if (error) throw error;
+    return data.id as string;
+  } catch (err) {
+    logError("Could not save analysis to history:", err);
+    return null;
+  }
+}
+
 export async function POST(req: NextRequest) {
   let text: string;
   let requestedType: unknown;
@@ -242,10 +267,12 @@ export async function POST(req: NextRequest) {
 
   // Usage limits (only when the database is configured; otherwise the site runs without limits).
   let reservation: Reservation | null = null;
+  let historyUserId: string | null = null; // signed-in users get their results saved
   if (billingEnabled()) {
     try {
       const store = supabaseStore(supabaseAdmin());
       const identity = await getIdentity();
+      historyUserId = identity.userId;
       const status = await getStatus(store, identity);
       if (status.plan === "free" && !(await verifyTurnstile(turnstileToken))) {
         return Response.json({ error: "Please complete the quick human check and try again.", code: "bot_check" }, { status: 403 });
@@ -310,7 +337,9 @@ export async function POST(req: NextRequest) {
             : "The analysis service is unavailable. Please try again in a moment.",
         });
       } else {
-        send({ type: "complete", result: computeResult(results as SectionObj[], wordCount, await typePromise) });
+        const result = computeResult(results as SectionObj[], wordCount, await typePromise);
+        const historyId = historyUserId ? await saveAnalysis(historyUserId, text, result) : null;
+        send({ type: "complete", result, historyId });
       }
       controller.close();
     },

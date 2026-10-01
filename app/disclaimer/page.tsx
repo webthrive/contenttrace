@@ -33,11 +33,11 @@ const sections = [
   },
   {
     title: "4. No Warranty",
-    body: `Content Trace is provided free of charge and on an \"as is\" basis, without warranty of any kind, express or implied. Web Thrive, LLC makes no representations or warranties regarding the accuracy, completeness, or fitness for purpose of the analysis results.\n\nWe do not warrant that the service will be uninterrupted, error-free, or that any particular result will be correct.`,
+    body: `Content Trace, including its free and paid plans, is provided on an \"as is\" basis, without warranty of any kind, express or implied. Web Thrive, LLC makes no representations or warranties regarding the accuracy, completeness, or fitness for purpose of the analysis results.\n\nWe do not warrant that the service will be uninterrupted, error-free, or that any particular result will be correct.`,
   },
   {
     title: "5. Limitation of Liability",
-    body: `To the fullest extent permitted by applicable law, Web Thrive, LLC and its operators, employees, and affiliates shall not be liable for any direct, indirect, incidental, special, or consequential damages arising from the use of Content Trace or reliance on its results.\n\nThis includes, but is not limited to, damages arising from academic or employment decisions, reputational harm, or any other outcome resulting from the use or misuse of Content Trace analysis results.`,
+    body: `To the fullest extent permitted by applicable law, Web Thrive, LLC and its operators, employees, and affiliates shall not be liable for any direct, indirect, incidental, special, or consequential damages arising from the use of Content Trace or reliance on its results.\n\nThis includes, but is not limited to, damages arising from academic or employment decisions, reputational harm, or any other outcome resulting from the use or misuse of Content Trace analysis results.\n\nA paid plan gives you more analyses and longer texts. It does not make results more certain, and it does not change this disclaimer.`,
   },
   {
     title: "6. Intended Use",
@@ -50,7 +50,7 @@ const sections = [
 ];
 
 export default function DisclaimerPage() {
-  const updated = "April 2, 2026";
+  const updated = "October 1, 2026";
   return (
     <>
       <Nav current="/disclaimer" />
