@@ -31,9 +31,11 @@ type SectionName =
 // personal human writing. Anchors are the median raw scores of known human and known AI samples
 // from the September 2026 evaluation run (137 samples). Displayed score = 25 at the AI anchor,
 // 75 at the human anchor. Re-run the evaluation and update these when the scoring changes.
-export type CalibrationGroup = "formal" | "personal";
+export type CalibrationGroup = "formal" | "business" | "personal";
 export const CALIBRATION: Record<CalibrationGroup, { ai: number; human: number }> = {
   formal: { ai: 19.6, human: 42.2 },
+  // Company blogs, thought leadership, marketing: between formal and personal (Oct 2026 run, 19 samples).
+  business: { ai: 30.5, human: 52.7 },
   personal: { ai: 36.9, human: 74.8 },
 };
 
@@ -87,7 +89,7 @@ export const CONTENT_PROFILES: Record<ContentTypeId, ContentProfile> = {
   },
   thought_leadership: {
     id: "thought_leadership",
-    group: "personal",
+    group: "business",
     label: "Thought leadership / opinion",
     description: "Opinion piece, LinkedIn article, op-ed, or expert commentary that argues a point of view.",
     note: "Opinion writing should show a clear point of view and strong reasoning, so those signals carry more weight. Personal vulnerability is not expected.",
@@ -96,7 +98,7 @@ export const CONTENT_PROFILES: Record<ContentTypeId, ContentProfile> = {
   },
   company_blog: {
     id: "company_blog",
-    group: "formal",
+    group: "business",
     label: "Company blog / brand article",
     description: "Blog post or article published by a company or brand, written in a 'we' or neutral voice for customers. Not about one author's own life. Choose this over personal_blog when the text speaks for a business.",
     note: "Company blog posts speak for a brand, so they rarely include one person's stories, vulnerability, or self-correction. We do not count these first-person signals against the text. Specific detail, real insight, and natural phrasing carry more weight.",
@@ -132,7 +134,7 @@ export const CONTENT_PROFILES: Record<ContentTypeId, ContentProfile> = {
   },
   marketing: {
     id: "marketing",
-    group: "personal",
+    group: "business",
     label: "Marketing / web copy",
     description: "Landing page, product description, ad copy, sales page, or promotional web content.",
     note: "Marketing copy is written to persuade, not to reflect. Self-correction and thinking out loud are not expected. Phrasing and specific claims carry more weight.",
