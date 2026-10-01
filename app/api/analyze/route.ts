@@ -1,6 +1,10 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest } from "next/server";
 import { computeMetrics, metricsBrief, statisticalFactors, RawFactor } from "@/lib/textMetrics";
+import { PLANS, billingEnabled, countWords } from "@/lib/billing/config";
+import { getStatus, reserve, supabaseStore, type Reservation } from "@/lib/billing/entitlements";
+import { getIdentity, verifyTurnstile } from "@/lib/billing/identity";
+import { supabaseAdmin } from "@/lib/billing/supabase";
 import { CONTENT_PROFILES, CONTENT_TYPE_IDS, ContentProfile, ContentTypeId, calibrate, isContentTypeId } from "@/lib/contentTypes";
 
 // Measured and shown, but not counted: the September 2026 evaluation showed these do not
@@ -220,8 +224,9 @@ async function analyzeSection(def: SectionDef, text: string, brief: string): Pro
 export async function POST(req: NextRequest) {
   let text: string;
   let requestedType: unknown;
+  let turnstileToken: unknown;
   try {
-    ({ text, contentType: requestedType } = await req.json());
+    ({ text, contentType: requestedType, turnstileToken } = await req.json());
   } catch {
     return Response.json({ error: "Invalid request." }, { status: 400 });
   }
@@ -229,9 +234,35 @@ export async function POST(req: NextRequest) {
   if (!text || typeof text !== "string" || text.trim().length < 50) {
     return Response.json({ error: "Please provide at least 50 characters of text to analyze." }, { status: 400 });
   }
-  if (text.length > 10000) {
-    return Response.json({ error: "Text must be under 10,000 characters." }, { status: 400 });
+  const maxChars = billingEnabled() ? PLANS.pro.charLimit : PLANS.free.charLimit;
+  if (text.length > maxChars) {
+    return Response.json({ error: `Text must be under ${maxChars.toLocaleString()} characters.` }, { status: 400 });
   }
+
+  // Usage limits (only when the database is configured; otherwise the site runs without limits).
+  let reservation: Reservation | null = null;
+  if (billingEnabled()) {
+    try {
+      const store = supabaseStore(supabaseAdmin());
+      const identity = await getIdentity();
+      const status = await getStatus(store, identity);
+      if (status.plan === "free" && !(await verifyTurnstile(turnstileToken))) {
+        return Response.json({ error: "Please complete the quick human check and try again.", code: "bot_check" }, { status: 403 });
+      }
+      reservation = await reserve(store, identity, text, countWords(text));
+      if (!reservation.ok) {
+        return Response.json({ error: reservation.message, code: reservation.code }, { status: reservation.code === "limit" ? 402 : 413 });
+      }
+    } catch (err) {
+      console.error("Billing check failed:", err);
+      return Response.json({ error: "We could not check your plan right now. Please try again in a moment." }, { status: 503 });
+    }
+  }
+  const releaseUsage = async () => {
+    if (reservation?.ok) {
+      try { await reservation.release(); } catch (err) { console.error("Usage release failed:", err); }
+    }
+  };
 
   const metrics = computeMetrics(text);
   const brief = metricsBrief(metrics);
@@ -269,6 +300,7 @@ export async function POST(req: NextRequest) {
 
       if (failures.length > 0) {
         console.error("Anthropic API error:", failures.map((f) => f.reason));
+        await releaseUsage(); // failed analyses do not count against the user's limit
         const rateLimited = failures.some((f) => f.reason instanceof Anthropic.APIError && (f.reason.status === 429 || f.reason.status === 529));
         send({
           type: "error",

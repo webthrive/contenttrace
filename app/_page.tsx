@@ -1,12 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnalysisResult } from "@/types/analysis";
 import ResultsDisplay from "@/components/ResultsDisplay";
 import SectionCard from "@/components/SectionCard";
 import Nav from "@/components/Nav";
 import { Scan, X, ArrowRight, ChevronDown, ChevronUp, Zap } from "lucide-react";
 import { CONTENT_TYPE_OPTIONS } from "@/lib/contentTypes";
+import { fetchUsage, type UsageInfo } from "@/lib/billing/browser";
+import { PLANS } from "@/lib/billing/config";
+
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+type TurnstileApi = { render: (el: HTMLElement, opts: Record<string, unknown>) => string; reset: (id?: string) => void };
 
 const CHAR_LIMIT = 10000;
 
@@ -37,20 +42,57 @@ export default function AnalyzerPage() {
   const [sectionsOpen, setSectionsOpen] = useState(false);
   const [contentType, setContentType] = useState<string>("auto");
   const [detectedType, setDetectedType] = useState<string | null>(null);
+  const [usage, setUsage] = useState<UsageInfo | null>(null);
+  const [limitMessage, setLimitMessage] = useState<string | null>(null);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const turnstileRef = useRef<HTMLDivElement>(null);
+  const turnstileId = useRef<string | null>(null);
+
+  const charLimit = usage?.charLimit ?? CHAR_LIMIT;
+  const needsBotCheck = Boolean(TURNSTILE_SITE_KEY && usage?.enabled && usage.plan === "free");
+
+  useEffect(() => { fetchUsage().then(setUsage); }, []);
+
+  // Cloudflare Turnstile: a quick, usually invisible human check for free analyses.
+  useEffect(() => {
+    if (!needsBotCheck || turnstileId.current) return;
+    const render = () => {
+      const ts = (window as unknown as { turnstile?: TurnstileApi }).turnstile;
+      if (!ts || !turnstileRef.current || turnstileId.current) return;
+      turnstileId.current = ts.render(turnstileRef.current, {
+        sitekey: TURNSTILE_SITE_KEY, appearance: "interaction-only",
+        callback: (t: string) => setTurnstileToken(t),
+        "expired-callback": () => setTurnstileToken(null),
+      });
+    };
+    if ((window as unknown as { turnstile?: TurnstileApi }).turnstile) { render(); return; }
+    const sc = document.createElement("script");
+    sc.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+    sc.async = true; sc.onload = render;
+    document.head.appendChild(sc);
+  }, [needsBotCheck]);
+
+  const resetTurnstile = () => {
+    const ts = (window as unknown as { turnstile?: TurnstileApi }).turnstile;
+    if (ts && turnstileId.current) { ts.reset(turnstileId.current); setTurnstileToken(null); }
+  };
 
   const charCount = text.length;
   const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
 
   const handleAnalyze = async () => {
     if (!text.trim() || text.length < 50) { setError("Please enter at least 50 characters."); return; }
-    setLoading(true); setError(null); setResult(null); setStreamingSections([]); setSectionsComplete(0); setDetectedType(null);
+    if (needsBotCheck && !turnstileToken) { setError("Please wait a moment while we run a quick human check, then try again."); return; }
+    setLoading(true); setError(null); setLimitMessage(null); setResult(null); setStreamingSections([]); setSectionsComplete(0); setDetectedType(null);
     let finished = false; // true once a "complete" or "error" event arrives
     try {
-      const res = await fetch("/api/analyze", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text, contentType }) });
+      const res = await fetch("/api/analyze", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text, contentType, turnstileToken }) });
       if (!res.ok) {
         // The server can return an HTML error page (500/504), so do not assume JSON.
         let message = "Analysis failed. Please try again.";
-        try { const data = await res.json(); if (data?.error) message = data.error; } catch { /* non-JSON error page */ }
+        let code: string | undefined;
+        try { const data = await res.json(); if (data?.error) message = data.error; code = data?.code; } catch { /* non-JSON error page */ }
+        if (code === "limit" || code === "too_long") { setLimitMessage(message); setLoading(false); resetTurnstile(); return; }
         throw new Error(message);
       }
       const reader = res.body!.getReader();
@@ -87,8 +129,11 @@ export default function AnalyzerPage() {
       }
       // Stream closed early (for example, a server timeout): do not leave the spinner running.
       if (!finished) throw new Error("The analysis did not finish. Please try again.");
+      resetTurnstile();
+      fetchUsage().then(setUsage);
     } catch (err: any) {
       setError(err.message || "Something went wrong. Please try again.");
+      resetTurnstile();
       setLoading(false);
     }
   };
@@ -126,7 +171,7 @@ export default function AnalyzerPage() {
           <div style={{ border: "1px solid var(--border)", borderRadius: "16px", background: "var(--bg-card)", overflow: "hidden", marginBottom: "20px", boxShadow: "0 2px 12px rgba(1,2,33,0.06)" }}>
             <textarea
               value={text}
-              onChange={(e) => { if (!result && !loading) setText(e.target.value.slice(0, CHAR_LIMIT)); }}
+              onChange={(e) => { if (!result && !loading) setText(e.target.value.slice(0, charLimit)); }}
               readOnly={!!result || loading}
               placeholder="Paste any text here — blog post, email, essay, social content, product description, marketing copy..."
               style={{ width: "100%", minHeight: result ? "120px" : "240px", padding: "22px", background: "none", border: "none", outline: "none", color: "var(--text-primary)", fontSize: "16px", fontFamily: "var(--font)", lineHeight: "1.75", resize: result ? "none" : "vertical", boxSizing: "border-box", opacity: result ? 0.7 : 1 }}
@@ -152,7 +197,7 @@ export default function AnalyzerPage() {
             )}
             {!result && <div style={{ borderTop: "1px solid var(--border)", padding: "14px 18px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "10px", background: "var(--bg-elevated)" }}>
               <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
-                <span style={{ fontSize: "13px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>{wordCount} words · {charCount.toLocaleString()}/{CHAR_LIMIT.toLocaleString()} chars</span>
+                <span style={{ fontSize: "13px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>{wordCount} words · {charCount.toLocaleString()}/{charLimit.toLocaleString()} chars</span>
                 <button onClick={loadSample} style={{ fontSize: "13px", color: "var(--accent)", background: "none", border: "none", cursor: "pointer", textDecoration: "underline" }}>Load sample</button>
               </div>
               <button onClick={handleAnalyze} disabled={loading || charCount < 50}
@@ -162,6 +207,35 @@ export default function AnalyzerPage() {
                   : (<><Scan size={15} />Analyze Text<ArrowRight size={15} /></>)}
               </button>
             </div>}
+          </div>
+        )}
+
+        {needsBotCheck && <div ref={turnstileRef} style={{ display: "flex", justifyContent: "center", marginBottom: "12px" }} />}
+
+        {usage?.enabled && !usage.error && !result && (
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px", fontSize: "13px", color: "var(--text-muted)", margin: "-8px 2px 16px" }}>
+            <span>
+              {usage.plan === "pro" && usage.proWordsLeft != null && <>Pro · {usage.proWordsLeft.toLocaleString()} words left this month</>}
+              {usage.plan === "pack" && <>Word Pack · {(usage.packWords ?? 0).toLocaleString()} words left</>}
+              {usage.plan === "free" && <>{usage.freeAnalysesLeft} of {usage.freeAnalysesTotal} free analyses left this month</>}
+            </span>
+            <span style={{ display: "flex", gap: "14px" }}>
+              {usage.plan !== "pro" && <a href="/pricing" style={{ color: "var(--accent)", fontWeight: 600 }}>{usage.plan === "free" ? "Go Pro for longer texts" : "Upgrade"}</a>}
+              <a href={usage.signedIn ? "/account" : "/login?next=/"} style={{ color: "var(--text-secondary)" }}>{usage.signedIn ? "Account" : "Sign in"}</a>
+            </span>
+          </div>
+        )}
+
+        {limitMessage && (
+          <div role="alert" style={{ border: "1px solid rgba(10,115,115,0.35)", borderRadius: "12px", background: "var(--accent-light)", padding: "18px 20px", marginBottom: "16px" }}>
+            <div style={{ fontSize: "16px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "6px" }}>{limitMessage}</div>
+            <div style={{ fontSize: "14px", color: "var(--text-secondary)", marginBottom: "12px" }}>
+              Pro is ${PLANS.pro.monthlyPrice} a month for {PLANS.pro.wordsPerMonth.toLocaleString()} words and texts up to {PLANS.pro.charLimit.toLocaleString()} characters. Or buy a one-time Word Pack ({PLANS.pack.words.toLocaleString()} words for ${PLANS.pack.price}).
+            </div>
+            <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+              <a href="/pricing" style={{ padding: "10px 16px", borderRadius: "8px", background: "var(--accent)", color: "white", fontSize: "14px", fontWeight: 600, textDecoration: "none" }}>See plans</a>
+              {!usage?.signedIn && <a href="/login?next=/" style={{ padding: "10px 16px", borderRadius: "8px", border: "1px solid var(--border)", color: "var(--text-primary)", fontSize: "14px", fontWeight: 600, textDecoration: "none", background: "var(--bg-card)" }}>Sign in</a>}
+            </div>
           </div>
         )}
 
@@ -221,7 +295,7 @@ export default function AnalyzerPage() {
         {!result && !loading && (
           <div style={{ marginTop: "32px" }}>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: "10px", marginBottom: "20px" }}>
-              {[{ value: "8", label: "Sections" }, { value: "32", label: "Signals" }, { value: "100", label: "Point Scale" }, { value: "Free", label: "Always" }].map((s) => (
+              {[{ value: "8", label: "Sections" }, { value: "32", label: "Signals" }, { value: "100", label: "Point Scale" }, { value: String(PLANS.free.analysesPerMonth), label: "Free each month" }].map((s) => (
                 <div key={s.label} style={{ border: "1px solid var(--border)", borderRadius: "12px", padding: "20px 12px", background: "var(--bg-card)", textAlign: "center", boxShadow: "0 1px 6px rgba(1,2,33,0.05)" }}>
                   <div style={{ fontSize: "32px", fontWeight: 700, color: "var(--accent)", marginBottom: "6px" }}>{s.value}</div>
                   <div style={{ fontSize: "15px", color: "var(--text-muted)" }}>{s.label}</div>
@@ -294,7 +368,7 @@ export default function AnalyzerPage() {
       <div style={{ maxWidth: "760px", margin: "0 auto 40px" }}>
         <div style={{ border: "1px solid var(--border)", borderRadius: "10px", padding: "20px 24px", background: "var(--bg-elevated)", fontSize: "14px", color: "var(--text-muted)", lineHeight: "1.75" }}>
           <strong style={{ color: "var(--text-secondary)", display: "block", marginBottom: "6px" }}>Disclaimer</strong>
-          Content Trace provides probabilistic analysis only and does not constitute a definitive determination of authorship. Results should not be used as evidence in academic, legal, employment, or disciplinary proceedings. AI detection is an imperfect science — scores may be affected by writing style, text length, editing, translation, or subject matter. A high Human Score does not guarantee human authorship, and a low score does not prove AI generation. Content Trace is provided free of charge and without warranty of any kind. Web Thrive, LLC accepts no liability for decisions made based on analysis results.
+          Content Trace provides probabilistic analysis only and does not constitute a definitive determination of authorship. Results should not be used as evidence in academic, legal, employment, or disciplinary proceedings. AI detection is an imperfect science — scores may be affected by writing style, text length, editing, translation, or subject matter. A high Human Score does not guarantee human authorship, and a low score does not prove AI generation. Content Trace is provided without warranty of any kind. Web Thrive, LLC accepts no liability for decisions made based on analysis results.
         </div>
       </div>
 
@@ -347,9 +421,9 @@ export default function AnalyzerPage() {
         <p style={{ textAlign: "center", color: "var(--text-muted)", fontSize: "16px", marginBottom: "32px" }}>Not all AI detectors are built the same.</p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "14px" }}>
           {[
-            { icon: "🆓", title: "100% Free", desc: "No paywalls. No trial periods. No credit card. Free, always." },
+            { icon: "🆓", title: "Free to Start", desc: `${PLANS.free.analysesPerMonth} free analyses every month. No credit card. Pro from $${PLANS.pro.monthlyPrice}/month when you need more.` },
             { icon: "🧠", title: "32 Signals", desc: "Far beyond basic perplexity checks — we analyze cognitive fingerprinting, voice, emotion, and more." },
-            { icon: "🚫", title: "No Signup Required", desc: "Paste and analyze. No account, no email, no friction." },
+            { icon: "🚫", title: "No Signup Required", desc: "Paste and analyze. Free analyses need no account and no email." },
             { icon: "🔒", title: "Privacy Focused", desc: "Your text is never stored or used to train models. What you paste stays yours." },
           ].map((item) => (
             <div key={item.title} style={{ border: "1px solid var(--border)", borderRadius: "14px", padding: "24px 18px", background: "var(--bg-card)", textAlign: "center", boxShadow: "0 1px 6px rgba(1,2,33,0.05)" }}>
@@ -387,7 +461,7 @@ export default function AnalyzerPage() {
         <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           {[
             { q: "How accurate is Content Trace?", a: "Content Trace uses a multi-signal approach across 32 factors to produce a probabilistic Human Score. It is significantly more nuanced than single-metric detectors, but no AI detection tool is 100% accurate. Scores should be interpreted as indicators, not verdicts — particularly for short texts or content that has been heavily edited." },
-            { q: "Is it really free?", a: "Yes, completely. There is no paid tier, no trial, and no credit card required. Content Trace is free to use for any volume of analysis. We're supported by advertising, not subscriptions." },
+            { q: "Is it free?", a: `Yes, for ${PLANS.free.analysesPerMonth} analyses a month of up to ${PLANS.free.charLimit.toLocaleString()} characters each, with no account and no credit card. For more analyses and longer texts (up to ${PLANS.pro.charLimit.toLocaleString()} characters), Pro is $${PLANS.pro.monthlyPrice} a month with no ads, or you can buy a one-time Word Pack. See the Pricing page for details.` },
             { q: "Can I use it for academic work?", a: "Content Trace is commonly used by educators to screen student work and by students to review their own writing. However, our disclaimer applies: results should not be used as sole evidence in academic disciplinary proceedings. AI detection is probabilistic, and a low Human Score does not prove AI authorship." },
             { q: "Does Content Trace store my text?", a: "No. Text submitted for analysis is processed in real time and is not stored, logged, or used to train any models. Your content remains private." },
             { q: "What makes Content Trace different from other AI detectors?", a: "Most AI detectors rely on statistical proxies like perplexity and burstiness. Content Trace goes further — analyzing cognitive fingerprinting, emotional texture, voice authenticity, and pragmatic signals that are much harder for AI to replicate. The result is a richer, more explainable score." },
