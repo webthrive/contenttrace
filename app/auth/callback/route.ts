@@ -1,3 +1,4 @@
+import { logError } from "@/lib/log";
 import { NextResponse } from "next/server";
 import { supabaseFromCookies } from "@/lib/billing/supabase";
 
@@ -14,7 +15,7 @@ export async function GET(req: Request) {
     const sb = await supabaseFromCookies();
     const { error } = await sb.auth.exchangeCodeForSession(code);
     if (!error) return NextResponse.redirect(new URL(next, url.origin));
-    console.error("Sign-in code exchange failed:", error.message);
+    logError("Sign-in code exchange failed:", error.message);
   }
   return NextResponse.redirect(new URL("/login?error=link", url.origin));
 }

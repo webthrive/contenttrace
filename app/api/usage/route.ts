@@ -1,3 +1,4 @@
+import { logError } from "@/lib/log";
 import { PLANS, billingEnabled, stripeEnabled } from "@/lib/billing/config";
 import { getStatus, supabaseStore } from "@/lib/billing/entitlements";
 import { getIdentity } from "@/lib/billing/identity";
@@ -17,7 +18,7 @@ export async function GET() {
       { headers: { "Cache-Control": "no-store" } }
     );
   } catch (err) {
-    console.error("Usage lookup failed:", err);
+    logError("Usage lookup failed:", err);
     return Response.json({ enabled: true, error: "unavailable", charLimit: PLANS.free.charLimit }, { status: 503 });
   }
 }

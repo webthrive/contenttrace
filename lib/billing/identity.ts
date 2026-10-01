@@ -1,6 +1,7 @@
 import { createHash, randomBytes } from "crypto";
 import { cookies, headers } from "next/headers";
 import { getSessionUser } from "./supabase";
+import { env } from "./env";
 import type { Identity } from "./entitlements";
 
 const ANON_COOKIE = "ct_aid";
@@ -22,7 +23,7 @@ export async function getIdentity(): Promise<Identity> {
   const h = await headers();
   const ip = (h.get("x-forwarded-for")?.split(",")[0] || h.get("x-real-ip") || "unknown").trim();
   const ipHash = createHash("sha256")
-    .update(`${process.env.IP_HASH_SALT || "contenttrace"}:${ip}`)
+    .update(`${env("IP_HASH_SALT") || "contenttrace"}:${ip}`)
     .digest("hex")
     .slice(0, 32);
 
@@ -32,7 +33,7 @@ export async function getIdentity(): Promise<Identity> {
 
 // Cloudflare Turnstile check for free (not paid) analyses. Skipped when no secret is configured.
 export async function verifyTurnstile(token: unknown): Promise<boolean> {
-  const secret = process.env.TURNSTILE_SECRET_KEY;
+  const secret = env("TURNSTILE_SECRET_KEY");
   if (!secret) return true;
   if (typeof token !== "string" || !token) return false;
   try {

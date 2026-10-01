@@ -1,3 +1,5 @@
+import { env, PUBLIC_SUPABASE_URL } from "./env";
+
 // Plans, prices and limits. Change values here; the API, pricing page and account page all read them.
 
 export const PLANS = {
@@ -28,21 +30,21 @@ export const ACTIVE_SUB_STATUSES = new Set(["active", "trialing"]);
 
 // Billing turns on only when the database is configured. Without it, the site works as before (no limits).
 export function billingEnabled(): boolean {
-  return Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY && process.env.NEXT_PUBLIC_SUPABASE_URL);
+  return Boolean(env("SUPABASE_SERVICE_ROLE_KEY") && PUBLIC_SUPABASE_URL);
 }
 
 export function stripeEnabled(): boolean {
-  return Boolean(process.env.STRIPE_SECRET_KEY);
+  return Boolean(env("STRIPE_SECRET_KEY"));
 }
 
 export function siteUrl(): string {
-  return (process.env.NEXT_PUBLIC_SITE_URL || "https://www.contenttrace.ai").replace(/\/$/, "");
+  return (process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://www.contenttrace.ai").replace(/\/$/, "");
 }
 
 export const STRIPE_PRICES = {
-  monthly: () => process.env.STRIPE_PRICE_MONTHLY,
-  yearly: () => process.env.STRIPE_PRICE_YEARLY,
-  pack: () => process.env.STRIPE_PRICE_PACK,
+  monthly: () => env("STRIPE_PRICE_MONTHLY"),
+  yearly: () => env("STRIPE_PRICE_YEARLY"),
+  pack: () => env("STRIPE_PRICE_PACK"),
 };
 
 export function currentPeriod(d = new Date()): string {

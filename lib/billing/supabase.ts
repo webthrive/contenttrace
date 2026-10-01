@@ -1,13 +1,14 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { env, PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from "./env";
 
 let admin: SupabaseClient | null = null;
 
 // Server-only client with the service role key. Never import this from a client component.
 export function supabaseAdmin(): SupabaseClient {
   if (!admin) {
-    admin = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
+    admin = createClient(PUBLIC_SUPABASE_URL!, env("SUPABASE_SERVICE_ROLE_KEY")!, {
       auth: { persistSession: false, autoRefreshToken: false },
     });
   }
@@ -17,7 +18,7 @@ export function supabaseAdmin(): SupabaseClient {
 // Server client that reads the signed-in user's session from cookies.
 export async function supabaseFromCookies() {
   const store = await cookies();
-  return createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
+  return createServerClient(PUBLIC_SUPABASE_URL!, PUBLIC_SUPABASE_ANON_KEY!, {
     cookies: {
       getAll: () => store.getAll(),
       setAll: (list) => {
@@ -34,7 +35,7 @@ export async function supabaseFromCookies() {
 export type SessionUser = { id: string; email: string | null };
 
 export async function getSessionUser(): Promise<SessionUser | null> {
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) return null;
+  if (!PUBLIC_SUPABASE_URL || !PUBLIC_SUPABASE_ANON_KEY) return null;
   try {
     const sb = await supabaseFromCookies();
     const { data } = await sb.auth.getUser();

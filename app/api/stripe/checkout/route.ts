@@ -1,3 +1,4 @@
+import { logError } from "@/lib/log";
 import type Stripe from "stripe";
 import { STRIPE_PRICES, siteUrl, stripeEnabled, billingEnabled } from "@/lib/billing/config";
 import { isProActive, supabaseStore } from "@/lib/billing/entitlements";
@@ -50,7 +51,7 @@ export async function POST(req: Request) {
     const session = await getStripe().checkout.sessions.create(params);
     return Response.json({ url: session.url });
   } catch (err) {
-    console.error("Checkout failed:", err);
+    logError("Checkout failed:", err);
     return Response.json({ error: "Could not start checkout. Please try again." }, { status: 502 });
   }
 }

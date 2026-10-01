@@ -1,3 +1,4 @@
+import { logError } from "@/lib/log";
 import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest } from "next/server";
 import { computeMetrics, metricsBrief, statisticalFactors, RawFactor } from "@/lib/textMetrics";
@@ -254,13 +255,13 @@ export async function POST(req: NextRequest) {
         return Response.json({ error: reservation.message, code: reservation.code }, { status: reservation.code === "limit" ? 402 : 413 });
       }
     } catch (err) {
-      console.error("Billing check failed:", err);
+      logError("Billing check failed:", err);
       return Response.json({ error: "We could not check your plan right now. Please try again in a moment." }, { status: 503 });
     }
   }
   const releaseUsage = async () => {
     if (reservation?.ok) {
-      try { await reservation.release(); } catch (err) { console.error("Usage release failed:", err); }
+      try { await reservation.release(); } catch (err) { logError("Usage release failed:", err); }
     }
   };
 
@@ -281,7 +282,7 @@ export async function POST(req: NextRequest) {
           : detectContentType(text)
               .then((d) => ({ id: d.id, label: CONTENT_PROFILES[d.id].label, detected: true, reason: d.reason }))
               .catch((err) => {
-                console.error("Content type detection failed:", err);
+                logError("Content type detection failed:", err);
                 return { id: "general" as const, label: CONTENT_PROFILES.general.label, detected: true };
               });
 
@@ -299,7 +300,7 @@ export async function POST(req: NextRequest) {
       const failures = settled.filter((s) => s.status === "rejected") as PromiseRejectedResult[];
 
       if (failures.length > 0) {
-        console.error("Anthropic API error:", failures.map((f) => f.reason));
+        logError("Anthropic API error:", failures.map((f) => f.reason));
         await releaseUsage(); // failed analyses do not count against the user's limit
         const rateLimited = failures.some((f) => f.reason instanceof Anthropic.APIError && (f.reason.status === 429 || f.reason.status === 529));
         send({

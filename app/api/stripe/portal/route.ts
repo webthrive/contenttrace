@@ -1,3 +1,4 @@
+import { logError } from "@/lib/log";
 import { siteUrl, stripeEnabled, billingEnabled } from "@/lib/billing/config";
 import { supabaseStore } from "@/lib/billing/entitlements";
 import { getStripe } from "@/lib/billing/stripe";
@@ -21,7 +22,7 @@ export async function POST() {
     });
     return Response.json({ url: session.url });
   } catch (err) {
-    console.error("Portal failed:", err);
+    logError("Portal failed:", err);
     return Response.json({ error: "Could not open billing. Please try again." }, { status: 502 });
   }
 }

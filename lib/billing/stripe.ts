@@ -1,10 +1,11 @@
 import Stripe from "stripe";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { PLANS } from "./config";
+import { env } from "./env";
 
 let client: Stripe | null = null;
 export function getStripe(): Stripe {
-  if (!client) client = new Stripe(process.env.STRIPE_SECRET_KEY!);
+  if (!client) client = new Stripe(env("STRIPE_SECRET_KEY")!);
   return client;
 }
 
