@@ -12,6 +12,8 @@ import { fetchUsage, type UsageInfo } from "@/lib/billing/browser";
 import { PLANS } from "@/lib/billing/config";
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+// Testimonials stay hidden until they come from real customers who agreed to be quoted.
+const SHOW_TESTIMONIALS = false;
 type TurnstileApi = { render: (el: HTMLElement, opts: Record<string, unknown>) => string; reset: (id?: string) => void };
 
 const CHAR_LIMIT = 10000;
@@ -164,7 +166,7 @@ export default function AnalyzerPage() {
           Paste. Analyze. Know.
         </h2>
         <p style={{ fontSize: "18px", color: "var(--text-secondary)", maxWidth: "640px", margin: "0 auto", lineHeight: "1.7" }}>
-          Content Trace is a free AI detection tool that analyzes text across <strong style={{ color: "var(--accent)", fontWeight: 600 }}>32 signals</strong> including writing patterns, sentence structure, and cognitive fingerprinting. Used by educators, writers, and content professionals worldwide.
+          Content Trace is an AI detection tool that analyzes text across <strong style={{ color: "var(--accent)", fontWeight: 600 }}>32 signals</strong> including writing patterns, sentence structure, and cognitive fingerprinting. Built for educators, writers, and content professionals.
         </p>
       </header>
 
@@ -410,7 +412,7 @@ export default function AnalyzerPage() {
       {/* WHO USES THIS */}
       <div style={{ maxWidth: "760px", margin: "0 auto 60px" }}>
         <h2 style={{ fontSize: "clamp(22px, 4vw, 30px)", fontWeight: 700, color: "var(--text-primary)", textAlign: "center", marginBottom: "8px", letterSpacing: "-0.02em" }}>Who Uses Content Trace</h2>
-        <p style={{ textAlign: "center", color: "var(--text-muted)", fontSize: "16px", marginBottom: "32px" }}>Trusted by people who care about content authenticity.</p>
+        <p style={{ textAlign: "center", color: "var(--text-muted)", fontSize: "16px", marginBottom: "32px" }}>Built for people who care about content authenticity.</p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "12px" }}>
           {[
             { icon: "🎓", label: "Teachers & Educators", desc: "Verify student submissions and maintain academic integrity without expensive institutional tools." },
@@ -450,8 +452,8 @@ export default function AnalyzerPage() {
         </div>
       </div>
 
-      {/* TESTIMONIALS */}
-      <div style={{ maxWidth: "760px", margin: "0 auto 60px" }}>
+      {/* TESTIMONIALS — hidden until we have quotes from real, named users (see SHOW_TESTIMONIALS) */}
+      {SHOW_TESTIMONIALS && <div style={{ maxWidth: "760px", margin: "0 auto 60px" }}>
         <h2 style={{ fontSize: "clamp(22px, 4vw, 30px)", fontWeight: 700, color: "var(--text-primary)", textAlign: "center", marginBottom: "8px", letterSpacing: "-0.02em" }}>What People Are Saying</h2>
         <p style={{ textAlign: "center", color: "var(--text-muted)", fontSize: "16px", marginBottom: "32px" }}>Used by educators, writers, and content teams every day.</p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px" }}>
@@ -467,7 +469,7 @@ export default function AnalyzerPage() {
             </div>
           ))}
         </div>
-      </div>
+      </div>}
 
       {/* FAQ */}
       <div id="faq" style={{ maxWidth: "760px", margin: "0 auto 60px" }}>
@@ -477,7 +479,7 @@ export default function AnalyzerPage() {
           {[
             { q: "How accurate is Content Trace?", a: "Content Trace uses a multi-signal approach across 32 factors to produce a probabilistic Human Score. It is significantly more nuanced than single-metric detectors, but no AI detection tool is 100% accurate. Scores should be interpreted as indicators, not verdicts — particularly for short texts or content that has been heavily edited." },
             { q: "Is it free?", a: `Yes, for ${PLANS.free.analysesPerMonth} analyses a month of up to ${PLANS.free.charLimit.toLocaleString()} characters each, with no account and no credit card. For more analyses and longer texts (up to ${PLANS.pro.charLimit.toLocaleString()} characters), Pro is $${PLANS.pro.monthlyPrice} a month with no ads, or you can buy a one-time Word Pack. See the Pricing page for details.` },
-            { q: "Can I use it for academic work?", a: "Content Trace is commonly used by educators to screen student work and by students to review their own writing. However, our disclaimer applies: results should not be used as sole evidence in academic disciplinary proceedings. AI detection is probabilistic, and a low Human Score does not prove AI authorship." },
+            { q: "Can I use it for academic work?", a: "Educators can use Content Trace to screen student work, and students can use it to review their own writing. However, our disclaimer applies: results should not be used as sole evidence in academic disciplinary proceedings. AI detection is probabilistic, and a low Human Score does not prove AI authorship." },
             { q: "Does Content Trace store my text?", a: "No. Text submitted for analysis is processed in real time and is not stored, logged, or used to train any models. Your content remains private." },
             { q: "What makes Content Trace different from other AI detectors?", a: "Most AI detectors rely on statistical proxies like perplexity and burstiness. Content Trace goes further — analyzing cognitive fingerprinting, emotional texture, voice authenticity, and pragmatic signals that are much harder for AI to replicate. The result is a richer, more explainable score." },
           ].map((item, i) => (

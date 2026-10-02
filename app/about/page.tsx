@@ -5,11 +5,11 @@ const SITE_URL = "https://www.contenttrace.ai";
 
 export const metadata: Metadata = {
   title: "About",
-  description: "Content Trace is a free AI content detection tool built to help writers, editors, and publishers understand what makes writing feel human — and what gives AI away.",
+  description: "Content Trace is an AI content detector that explains its score: 32 signals, scoring adjusted for the type of content, and a Human Score you can read and understand.",
   alternates: { canonical: `${SITE_URL}/about` },
   openGraph: {
     title: "About Content Trace",
-    description: "Free AI content detection built to help writers, editors, and publishers.",
+    description: "AI content detection that explains why, and adjusts for the type of writing.",
     url: `${SITE_URL}/about`,
     siteName: "Content Trace",
     type: "website",
@@ -36,7 +36,7 @@ export default function AboutPage() {
           Most AI detectors give you a single score and a verdict with no explanation. We thought that wasn't good enough. Content Trace was built to go deeper — to show you <em>why</em> something scores the way it does, not just <em>what</em> the verdict is.
         </p>
         <p style={{ fontSize: "16px", color: "var(--text-secondary)" }}>
-          We also wanted it to be free. Content creators, students, and small publishers shouldn't need a subscription to understand their own writing.
+          We also wanted it to be accessible. Anyone can run a few full analyses every month for free, with no account. Pro and one-time Word Packs are there for people who check longer texts or check them often.
         </p>
       </div>
 
@@ -44,43 +44,66 @@ export default function AboutPage() {
       <div style={{ marginBottom: "40px" }}>
         <h2 style={{ fontSize: "22px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "14px" }}>How it works</h2>
         <p style={{ fontSize: "16px", color: "var(--text-secondary)", marginBottom: "14px" }}>
-          Content Trace analyzes text across 8 sections and 32 individual signals — from sentence structure and word choice to cognitive fingerprinting and emotional texture. Each factor is scored independently and explained in plain language, so you can understand exactly what's driving the result.
+          Content Trace analyzes text across 8 sections and 32 individual signals — from sentence rhythm and word choice to reasoning patterns and emotional texture. Each signal is scored on its own and explained in plain language, so you can see exactly what drives the result.
         </p>
         <p style={{ fontSize: "16px", color: "var(--text-secondary)", marginBottom: "20px" }}>
-          The analysis is powered by Claude, Anthropic's AI model, which evaluates writing the way a trained human editor would — looking for the subtle patterns that distinguish authentic human prose from generated text.
+          Most signals are read by Claude, Anthropic's AI model, which reviews the writing the way a trained editor would. A few are measured directly from the text, such as how much sentence length varies. The analysis settings are fixed, so the same text gets the same or a very close score each time.
         </p>
 
-        {/* Sections grid */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "10px" }}>
           {[
-            { name: "Cognitive Fingerprinting", weight: "16%" },
-            { name: "Word Choice & Phrasing", weight: "15%" },
-            { name: "Voice & Perspective", weight: "14%" },
-            { name: "Content & Logic", weight: "13%" },
-            { name: "Structure & Flow", weight: "12%" },
-            { name: "Emotional Texture", weight: "12%" },
-            { name: "Pragmatics & Subtext", weight: "10%" },
-            { name: "Statistical Proxies", weight: "8%" },
-          ].map((s) => (
-            <div key={s.name} style={{ border: "1px solid var(--border)", borderRadius: "10px", padding: "14px 16px", background: "var(--bg-card)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span style={{ fontSize: "14px", fontWeight: 500, color: "var(--text-primary)" }}>{s.name}</span>
-              <span style={{ fontSize: "12px", color: "var(--accent)", fontFamily: "var(--font-mono)", fontWeight: 700, background: "var(--accent-light)", border: "1px solid rgba(10,115,115,0.25)", padding: "2px 8px", borderRadius: "8px", marginLeft: "8px", flexShrink: 0 }}>{s.weight}</span>
+            "Structure & Flow",
+            "Word Choice & Phrasing",
+            "Voice & Perspective",
+            "Content & Logic",
+            "Cognitive Fingerprinting",
+            "Emotional Texture",
+            "Pragmatics & Subtext",
+            "Statistical Proxies",
+          ].map((name) => (
+            <div key={name} style={{ border: "1px solid var(--border)", borderRadius: "10px", padding: "14px 16px", background: "var(--bg-card)" }}>
+              <span style={{ fontSize: "14px", fontWeight: 500, color: "var(--text-primary)" }}>{name}</span>
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Content type */}
+      <div style={{ marginBottom: "40px" }}>
+        <h2 style={{ fontSize: "22px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "14px" }}>Scoring adjusts to the type of content</h2>
+        <p style={{ fontSize: "16px", color: "var(--text-secondary)", marginBottom: "14px" }}>
+          A white paper and a personal blog post should not be judged by the same rules. Good corporate writing is formal and rarely tells personal stories. A good personal essay often does. A detector that ignores this marks careful professional writing as "AI" too often.
+        </p>
+        <p style={{ fontSize: "16px", color: "var(--text-secondary)", marginBottom: "14px" }}>
+          So Content Trace first identifies the type of content, or uses the type you choose. Then it adjusts the analysis:
+        </p>
+        <ul style={{ fontSize: "16px", color: "var(--text-secondary)", paddingLeft: "20px", marginBottom: "16px", display: "flex", flexDirection: "column", gap: "6px" }}>
+          <li>Signals that do not fit the type are left out of the score. For example, personal anecdotes do not count for a company blog or a technical document.</li>
+          <li>The sections that matter most for that type get more weight.</li>
+          <li>The final score is calibrated against real human and AI writing of the same kind, so a typical human-written white paper and a typical human-written essay both land in the human range.</li>
+        </ul>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "14px" }}>
+          {["Personal blog / essay", "Thought leadership", "Company blog", "Corporate / white paper", "Technical", "Academic", "Marketing copy", "Social post", "Email / letter", "General"].map((t) => (
+            <span key={t} style={{ fontSize: "13px", color: "var(--accent)", background: "var(--accent-light)", border: "1px solid rgba(10,115,115,0.25)", borderRadius: "999px", padding: "4px 12px" }}>{t}</span>
+          ))}
+        </div>
+        <p style={{ fontSize: "15px", color: "var(--text-muted)" }}>
+          Every report says which type was used and which signals were left out, so you always know how your text was scored.
+        </p>
       </div>
 
       {/* Human Score */}
       <div style={{ marginBottom: "40px" }}>
         <h2 style={{ fontSize: "22px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "14px" }}>The Human Score</h2>
         <p style={{ fontSize: "16px", color: "var(--text-secondary)", marginBottom: "14px" }}>
-          Rather than labeling text as "AI" or "human" with false confidence, Content Trace gives you a Human Score out of 100. Higher scores indicate stronger human writing signals. Lower scores indicate patterns more consistent with AI generation.
+          Rather than labeling text as "AI" or "human" with false confidence, Content Trace gives you a Human Score out of 100. Higher scores indicate stronger human writing signals. Lower scores indicate patterns more consistent with AI generation. Each report also shows a confidence level, which is lower for short texts.
         </p>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "10px", margin: "20px 0" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "10px", margin: "20px 0" }}>
           {[
-            { range: "65–100", label: "Likely Human", color: "#0a7373", bg: "rgba(10,115,115,0.06)", border: "rgba(10,115,115,0.2)" },
-            { range: "35–64", label: "Ambiguous", color: "#c47a00", bg: "rgba(196,122,0,0.06)", border: "rgba(196,122,0,0.2)" },
-            { range: "0–34", label: "Likely AI", color: "#c43302", bg: "rgba(196,51,2,0.06)", border: "rgba(196,51,2,0.2)" },
+            { range: "75–100", label: "Likely Human", color: "#0a7373", bg: "rgba(10,115,115,0.06)", border: "rgba(10,115,115,0.2)" },
+            { range: "50–74", label: "Leans Human", color: "#0a8a6a", bg: "rgba(10,138,106,0.06)", border: "rgba(10,138,106,0.2)" },
+            { range: "25–49", label: "Leans AI", color: "#c47a00", bg: "rgba(196,122,0,0.06)", border: "rgba(196,122,0,0.2)" },
+            { range: "0–24", label: "Likely AI-Generated", color: "#c43302", bg: "rgba(196,51,2,0.06)", border: "rgba(196,51,2,0.2)" },
           ].map((v) => (
             <div key={v.label} style={{ border: `1px solid ${v.border}`, borderRadius: "10px", padding: "16px", background: v.bg, textAlign: "center" }}>
               <div style={{ fontSize: "18px", fontWeight: 700, fontFamily: "var(--font-mono)", color: v.color, marginBottom: "4px" }}>{v.range}</div>
@@ -89,7 +112,10 @@ export default function AboutPage() {
           ))}
         </div>
         <p style={{ fontSize: "15px", color: "var(--text-muted)" }}>
-          These are probabilistic signals, not verdicts. A score of 72 doesn't mean a text is definitely human-written — it means it exhibits strong human writing characteristics across the 32 signals we measure.
+          These are probabilistic signals, not verdicts. A score of 72 doesn't mean a text is definitely human-written — it means it shows more human than AI writing characteristics for its type of content.
+        </p>
+        <p style={{ fontSize: "15px", color: "var(--text-muted)", marginTop: "12px" }}>
+          One limit we want to be open about: AI text that a person has heavily rewritten, or that was prompted to imitate a casual human style, can score in the human range. No detector catches all of it, and we say so in every report.
         </p>
       </div>
 
