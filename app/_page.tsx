@@ -155,8 +155,8 @@ export default function AnalyzerPage() {
         <a href="/" style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "var(--accent-light)", border: "1px solid rgba(10,115,115,0.3)", borderRadius: "20px", padding: "7px 16px", marginBottom: "24px", textDecoration: "none" }}>
           <Scan size={14} style={{ color: "var(--accent)" }} />
           <span style={{ fontSize: "13px", color: "var(--accent)", fontFamily: "var(--font-mono)", letterSpacing: "0.04em", fontWeight: 500, textAlign: "center" }}>
-            <span className="badge-desktop">Free AI Content Detector by Content Trace</span>
-            <span className="badge-mobile">Free AI Content Detector<br />by Content Trace</span>
+            <span className="badge-desktop">AI Content Detector by Content Trace</span>
+            <span className="badge-mobile">AI Content Detector<br />by Content Trace</span>
           </span>
         </a>
         <h1 style={{ fontSize: "clamp(32px, 7vw, 62px)", fontWeight: 700, color: "var(--text-primary)", lineHeight: 1.1, marginBottom: "10px", letterSpacing: "-0.03em", textWrap: "balance" }}>
@@ -166,7 +166,7 @@ export default function AnalyzerPage() {
           Other tools give you a percentage. ContentTrace shows the exact signals behind it.
         </h2>
         <p style={{ fontSize: "18px", color: "var(--text-secondary)", maxWidth: "640px", margin: "0 auto", lineHeight: "1.7" }}>
-          Content Trace is an AI detection tool that analyzes text across <strong style={{ color: "var(--accent)", fontWeight: 600 }}>32 signals</strong> including writing patterns, sentence structure, and cognitive fingerprinting. Built for educators, writers, marketers, SEO professionals, and content teams.
+          Content Trace is an AI detection tool that explains its results with <strong style={{ color: "var(--accent)", fontWeight: 600 }}>32 signals</strong>, including writing patterns, sentence structure, and cognitive fingerprinting. Built for educators, writers, marketers, SEO professionals, and content teams.
         </p>
       </header>
 
