@@ -5,6 +5,8 @@ import "./globals.css";
 
 const SITE_URL = "https://www.contenttrace.ai";
 const GTM_ID = "GTM-MGW6ZLP9";
+// Load tracking only on the production deployment, not on Vercel preview URLs or local builds.
+const LOAD_TRACKING = process.env.VERCEL_ENV === "production";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -37,7 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
-        <Script
+        {LOAD_TRACKING && <Script
           id="gtm-script"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
@@ -47,7 +49,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','${GTM_ID}');`,
           }}
-        />
+        />}
         <meta name="google-adsense-account" content="ca-pub-4649542076367353" />
         <script
           async
@@ -56,10 +58,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         />
       </head>
       <body style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
-        <noscript>
+        {LOAD_TRACKING && <noscript>
           <iframe src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
             height="0" width="0" style={{ display: "none", visibility: "hidden" }} />
-        </noscript>
+        </noscript>}
         {children}
         <Footer />
       </body>
