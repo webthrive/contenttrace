@@ -9,7 +9,7 @@ import Nav from "@/components/Nav";
 import { Scan, X, ArrowRight, ChevronDown, ChevronUp, Zap } from "lucide-react";
 import { CONTENT_TYPE_OPTIONS } from "@/lib/contentTypes";
 import { fetchUsage, type UsageInfo } from "@/lib/billing/browser";
-import { PLANS } from "@/lib/billing/config";
+import { PLANS, PRO_YEARLY_PER_MONTH } from "@/lib/billing/config";
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 // Testimonials stay hidden until they come from real customers who agreed to be quoted.
@@ -237,7 +237,7 @@ export default function AnalyzerPage() {
           <div role="alert" style={{ border: "1px solid rgba(10,115,115,0.35)", borderRadius: "12px", background: "var(--accent-light)", padding: "18px 20px", marginBottom: "16px" }}>
             <div style={{ fontSize: "16px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "6px" }}>{limitMessage}</div>
             <div style={{ fontSize: "14px", color: "var(--text-secondary)", marginBottom: "12px" }}>
-              Pro is ${PLANS.pro.monthlyPrice} a month for {PLANS.pro.wordsPerMonth.toLocaleString()} words and texts up to {PLANS.pro.charLimit.toLocaleString()} characters. Or buy a one-time Word Pack ({PLANS.pack.words.toLocaleString()} words for ${PLANS.pack.price}).
+              Pro is ${PRO_YEARLY_PER_MONTH} a month billed yearly (${PLANS.pro.yearlyPrice}), or ${PLANS.pro.monthlyPrice} month to month, for {PLANS.pro.wordsPerMonth.toLocaleString()} words a month and texts up to {PLANS.pro.charLimit.toLocaleString()} characters. Or buy a one-time Word Pack ({PLANS.pack.words.toLocaleString()} words for ${PLANS.pack.price}).
             </div>
             <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
               <a href="/pricing" style={{ padding: "10px 16px", borderRadius: "8px", background: "var(--accent)", color: "white", fontSize: "14px", fontWeight: 600, textDecoration: "none" }}>See plans</a>
@@ -430,7 +430,7 @@ export default function AnalyzerPage() {
         <p style={{ textAlign: "center", color: "var(--text-muted)", fontSize: "16px", marginBottom: "32px" }}>Not all AI detectors are built the same.</p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "14px" }}>
           {[
-            { icon: "🆓", title: "Free to Start", desc: `${PLANS.free.analysesPerMonth} free analyses every month. No credit card. Pro from $${PLANS.pro.monthlyPrice}/month when you need more.` },
+            { icon: "🆓", title: "Free to Start", desc: `${PLANS.free.analysesPerMonth} free analyses every month. No credit card. Pro from $${PRO_YEARLY_PER_MONTH}/month (billed yearly) when you need more.` },
             { icon: "🧠", title: "32 Signals", desc: "Far beyond basic perplexity checks — we analyze cognitive fingerprinting, voice, emotion, and more." },
             { icon: "🚫", title: "No Signup Required", desc: "Paste and analyze. Free analyses need no account and no email." },
             { icon: "🔒", title: "Privacy Focused", desc: "Your text is never stored or used to train models. What you paste stays yours." },
@@ -470,7 +470,7 @@ export default function AnalyzerPage() {
         <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           {[
             { q: "How accurate is Content Trace?", a: "Content Trace uses a multi-signal approach across 32 factors to produce a probabilistic Human Score. It is significantly more nuanced than single-metric detectors, but no AI detection tool is 100% accurate. Scores should be interpreted as indicators, not verdicts — particularly for short texts or content that has been heavily edited." },
-            { q: "Is it free?", a: `Yes, for ${PLANS.free.analysesPerMonth} analyses a month of up to ${PLANS.free.charLimit.toLocaleString()} characters each, with no account and no credit card. For more analyses and longer texts (up to ${PLANS.pro.charLimit.toLocaleString()} characters), Pro is $${PLANS.pro.monthlyPrice} a month with no ads, or you can buy a one-time Word Pack. See the Pricing page for details.` },
+            { q: "Is it free?", a: `Yes, for ${PLANS.free.analysesPerMonth} analyses a month of up to ${PLANS.free.charLimit.toLocaleString()} characters each, with no account and no credit card. For more analyses and longer texts (up to ${PLANS.pro.charLimit.toLocaleString()} characters), Pro is $${PRO_YEARLY_PER_MONTH} a month billed yearly ($${PLANS.pro.yearlyPrice}) or $${PLANS.pro.monthlyPrice} month to month, with no ads, or you can buy a one-time Word Pack. See the Pricing page for details.` },
             { q: "Can I use it for academic work?", a: "Educators can use Content Trace to screen student work, and students can use it to review their own writing. However, our disclaimer applies: results should not be used as sole evidence in academic disciplinary proceedings. AI detection is probabilistic, and a low Human Score does not prove AI authorship." },
             { q: "Does Content Trace store my text?", a: "No. Text submitted for analysis is processed in real time and is not stored, logged, or used to train any models. Your content remains private." },
             { q: "What makes Content Trace different from other AI detectors?", a: "Most AI detectors rely on statistical proxies like perplexity and burstiness. Content Trace goes further — analyzing cognitive fingerprinting, emotional texture, voice authenticity, and pragmatic signals that are much harder for AI to replicate. The result is a richer, more explainable score." },

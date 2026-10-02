@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Check } from "lucide-react";
-import { PLANS } from "@/lib/billing/config";
+import { PLANS, PRO_YEARLY_PER_MONTH, PRO_YEARLY_SAVE_PCT } from "@/lib/billing/config";
 import { fetchUsage, startCheckout, type UsageInfo } from "@/lib/billing/browser";
 
 type Billing = "monthly" | "yearly";
@@ -19,7 +19,7 @@ function Feature({ children }: { children: React.ReactNode }) {
 }
 
 export default function PricingPlans() {
-  const [billing, setBilling] = useState<Billing>("monthly");
+  const [billing, setBilling] = useState<Billing>("yearly");
   const [usage, setUsage] = useState<UsageInfo | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -44,19 +44,19 @@ export default function PricingPlans() {
 
   const paymentsOn = usage?.enabled && usage.payments;
   const isPro = usage?.plan === "pro";
-  const yearlyMonthly = (PLANS.pro.yearlyPrice / 12).toFixed(2);
-  const savePct = Math.round((1 - PLANS.pro.yearlyPrice / (PLANS.pro.monthlyPrice * 12)) * 100);
+  const yearlyMonthly = PRO_YEARLY_PER_MONTH;
+  const savePct = PRO_YEARLY_SAVE_PCT;
 
   return (
     <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
       {/* Monthly / yearly switch */}
       <div style={{ display: "flex", justifyContent: "center", marginBottom: "22px" }}>
         <div role="tablist" aria-label="Billing period" style={{ display: "inline-flex", border: "1px solid var(--border)", borderRadius: "999px", padding: "4px", background: "var(--bg-card)" }}>
-          {(["monthly", "yearly"] as Billing[]).map((b) => (
+          {(["yearly", "monthly"] as Billing[]).map((b) => (
             <button key={b} role="tab" aria-selected={billing === b} onClick={() => setBilling(b)}
               style={{ padding: "8px 18px", borderRadius: "999px", border: "none", cursor: "pointer", fontSize: "14px", fontWeight: 600, fontFamily: "var(--font)",
                 background: billing === b ? "var(--accent)" : "transparent", color: billing === b ? "white" : "var(--text-secondary)" }}>
-              {b === "monthly" ? "Monthly" : `Yearly · save ${savePct}%`}
+              {b === "monthly" ? "Monthly" : <>Yearly <span style={{ marginLeft: "6px", fontSize: "11px", fontWeight: 700, letterSpacing: "0.04em", padding: "2px 7px", borderRadius: "999px", background: billing === b ? "rgba(255,255,255,0.22)" : "var(--accent-light)", color: billing === b ? "white" : "var(--accent)" }}>BEST VALUE · SAVE {savePct}%</span></>}
             </button>
           ))}
         </div>
@@ -78,14 +78,15 @@ export default function PricingPlans() {
 
         {/* Pro */}
         <div style={{ ...cardBase, border: "2px solid var(--accent)", position: "relative" }}>
-          <span style={{ position: "absolute", top: "-12px", left: "24px", background: "var(--accent)", color: "white", fontSize: "12px", fontWeight: 700, padding: "3px 10px", borderRadius: "999px", letterSpacing: "0.04em" }}>BEST VALUE</span>
+          <span style={{ position: "absolute", top: "-12px", left: "24px", background: "var(--accent)", color: "white", fontSize: "12px", fontWeight: 700, padding: "3px 10px", borderRadius: "999px", letterSpacing: "0.04em" }}>{billing === "yearly" ? `BEST VALUE · SAVE ${savePct}%` : "MOST FLEXIBLE"}</span>
           <h2 style={{ fontSize: "18px", fontWeight: 700, color: "var(--text-primary)" }}>Pro</h2>
           <div style={{ margin: "10px 0 4px", display: "flex", alignItems: "baseline", gap: "6px" }}>
+            {billing === "yearly" && <span style={{ fontSize: "20px", color: "var(--text-muted)", textDecoration: "line-through" }}>${PLANS.pro.monthlyPrice}</span>}
             <span style={{ fontSize: "38px", fontWeight: 700, color: "var(--text-primary)" }}>${billing === "monthly" ? PLANS.pro.monthlyPrice : yearlyMonthly}</span>
             <span style={{ fontSize: "14px", color: "var(--text-muted)" }}>/ month</span>
           </div>
           <p style={{ fontSize: "14px", color: "var(--text-muted)", marginBottom: "18px" }}>
-            {billing === "monthly" ? "Billed monthly · cancel any time" : `$${PLANS.pro.yearlyPrice} billed once a year`}
+            {billing === "monthly" ? "Billed monthly · cancel any time" : `$${PLANS.pro.yearlyPrice} billed once a year · you save ${savePct}%`}
           </p>
           <ul style={{ listStyle: "none", padding: 0, margin: "0 0 22px", display: "flex", flexDirection: "column", gap: "9px", flex: 1 }}>
             <Feature><strong>{PLANS.pro.wordsPerMonth.toLocaleString()} words</strong> a month</Feature>

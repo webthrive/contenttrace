@@ -12,7 +12,7 @@ export const PLANS = {
     name: "Pro",
     charLimit: 30_000,
     wordsPerMonth: 150_000,
-    monthlyPrice: 9,
+    monthlyPrice: 12,
     yearlyPrice: 79,
   },
   pack: {
@@ -22,6 +22,10 @@ export const PLANS = {
     price: 9,
   },
 } as const;
+
+// Yearly Pro shown as a monthly figure (e.g. $6.58) and the saving against paying monthly.
+export const PRO_YEARLY_PER_MONTH = (PLANS.pro.yearlyPrice / 12).toFixed(2);
+export const PRO_YEARLY_SAVE_PCT = Math.round((1 - PLANS.pro.yearlyPrice / (PLANS.pro.monthlyPrice * 12)) * 100);
 
 // Same network (school, office) can share one IP, so the IP cap is higher than the per-browser cap.
 export const FREE_ANALYSES_PER_IP = 15;
