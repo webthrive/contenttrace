@@ -10,6 +10,8 @@ export const dynamic = "force-dynamic";
 type Kind = "monthly" | "yearly" | "pack";
 
 // Start a Stripe Checkout for Pro (monthly/yearly) or a one-time Word Pack.
+const THANK_YOU = { monthly: "pro-monthly", yearly: "pro-yearly", pack: "word-pack" } as const;
+
 export async function POST(req: Request) {
   if (!billingEnabled() || !stripeEnabled()) {
     return Response.json({ error: "Payments are not available yet." }, { status: 503 });
@@ -36,7 +38,8 @@ export async function POST(req: Request) {
     client_reference_id: user.id,
     metadata: { user_id: user.id, kind },
     allow_promotion_codes: true,
-    success_url: `${siteUrl()}/account?checkout=success`,
+    // One thank-you page per product (used for conversion tracking). Stripe fills in {CHECKOUT_SESSION_ID}.
+    success_url: `${siteUrl()}/thank-you/${THANK_YOU[kind]}?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${siteUrl()}/pricing?checkout=cancel`,
     ...(profile?.stripe_customer_id ? { customer: profile.stripe_customer_id } : user.email ? { customer_email: user.email } : {}),
     ...(process.env.STRIPE_AUTOMATIC_TAX === "true" ? { automatic_tax: { enabled: true } } : {}),
