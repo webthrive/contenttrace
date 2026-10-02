@@ -159,11 +159,11 @@ export default function AnalyzerPage() {
             <span className="badge-mobile">Free AI Content Detector<br />by Content Trace</span>
           </span>
         </a>
-        <h1 style={{ fontSize: "clamp(32px, 7vw, 62px)", fontWeight: 700, color: "var(--text-primary)", lineHeight: 1.1, marginBottom: "10px", letterSpacing: "-0.03em" }}>
-          Deep AI Content Analysis
+        <h1 style={{ fontSize: "clamp(32px, 7vw, 62px)", fontWeight: 700, color: "var(--text-primary)", lineHeight: 1.1, marginBottom: "10px", letterSpacing: "-0.03em", textWrap: "balance" }}>
+          The AI Detector That Explains Its Verdict
         </h1>
-        <h2 style={{ fontSize: "clamp(18px, 4vw, 28px)", fontWeight: 400, color: "#0b0b0b", lineHeight: 1.3, marginBottom: "24px", letterSpacing: "-0.01em" }}>
-          Paste. Analyze. Know.
+        <h2 style={{ fontSize: "clamp(18px, 4vw, 28px)", fontWeight: 400, color: "#0b0b0b", lineHeight: 1.3, marginBottom: "24px", letterSpacing: "-0.01em", textWrap: "balance" }}>
+          Other tools give you a percentage. ContentTrace shows the exact signals behind it.
         </h2>
         <p style={{ fontSize: "18px", color: "var(--text-secondary)", maxWidth: "640px", margin: "0 auto", lineHeight: "1.7" }}>
           Content Trace is an AI detection tool that analyzes text across <strong style={{ color: "var(--accent)", fontWeight: 600 }}>32 signals</strong> including writing patterns, sentence structure, and cognitive fingerprinting. Built for educators, writers, marketers, SEO professionals, and content teams.
