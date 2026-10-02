@@ -166,7 +166,7 @@ export default function AnalyzerPage() {
           Paste. Analyze. Know.
         </h2>
         <p style={{ fontSize: "18px", color: "var(--text-secondary)", maxWidth: "640px", margin: "0 auto", lineHeight: "1.7" }}>
-          Content Trace is an AI detection tool that analyzes text across <strong style={{ color: "var(--accent)", fontWeight: 600 }}>32 signals</strong> including writing patterns, sentence structure, and cognitive fingerprinting. Built for educators, writers, and content professionals.
+          Content Trace is an AI detection tool that analyzes text across <strong style={{ color: "var(--accent)", fontWeight: 600 }}>32 signals</strong> including writing patterns, sentence structure, and cognitive fingerprinting. Built for educators, writers, marketers, SEO professionals, and content teams.
         </p>
       </header>
 
@@ -381,14 +381,6 @@ export default function AnalyzerPage() {
         )}
       </div>
 
-      {/* DISCLAIMER */}
-      <div style={{ maxWidth: "760px", margin: "0 auto 40px" }}>
-        <div style={{ border: "1px solid var(--border)", borderRadius: "10px", padding: "20px 24px", background: "var(--bg-elevated)", fontSize: "14px", color: "var(--text-muted)", lineHeight: "1.75" }}>
-          <strong style={{ color: "var(--text-secondary)", display: "block", marginBottom: "6px" }}>Disclaimer</strong>
-          Content Trace provides probabilistic analysis only and does not constitute a definitive determination of authorship. Results should not be used as evidence in academic, legal, employment, or disciplinary proceedings. AI detection is an imperfect science — scores may be affected by writing style, text length, editing, translation, or subject matter. A high Human Score does not guarantee human authorship, and a low score does not prove AI generation. Content Trace is provided without warranty of any kind. Web Thrive, LLC accepts no liability for decisions made based on analysis results.
-        </div>
-      </div>
-
       {/* HOW IT WORKS */}
       <div style={{ maxWidth: "760px", margin: "0 auto 60px" }}>
         <h2 style={{ fontSize: "clamp(22px, 4vw, 30px)", fontWeight: 700, color: "var(--text-primary)", textAlign: "center", marginBottom: "8px", letterSpacing: "-0.02em" }}>How It Works</h2>
@@ -518,6 +510,14 @@ export default function AnalyzerPage() {
               <span style={{ fontSize: "13px", color: "var(--accent)", fontWeight: 600 }}>Read →</span>
             </a>
           ))}
+        </div>
+      </div>
+
+      {/* DISCLAIMER */}
+      <div style={{ maxWidth: "760px", margin: "0 auto 48px" }}>
+        <div style={{ border: "1px solid var(--border)", borderRadius: "10px", padding: "20px 24px", background: "var(--bg-elevated)", fontSize: "14px", color: "var(--text-muted)", lineHeight: "1.75" }}>
+          <strong style={{ color: "var(--text-secondary)", display: "block", marginBottom: "6px" }}>Disclaimer</strong>
+          Content Trace provides probabilistic analysis only and does not constitute a definitive determination of authorship. Results should not be used as evidence in academic, legal, employment, or disciplinary proceedings. AI detection is an imperfect science — scores may be affected by writing style, text length, editing, translation, or subject matter. A high Human Score does not guarantee human authorship, and a low score does not prove AI generation. Content Trace is provided without warranty of any kind. Web Thrive, LLC accepts no liability for decisions made based on analysis results.
         </div>
       </div>
     </main>
