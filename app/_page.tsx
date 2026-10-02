@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnalysisResult } from "@/types/analysis";
 import ResultsDisplay from "@/components/ResultsDisplay";
+import RecentAnalyses from "@/components/RecentAnalyses";
 import SectionCard from "@/components/SectionCard";
 import Nav from "@/components/Nav";
 import { Scan, X, ArrowRight, ChevronDown, ChevronUp, Zap } from "lucide-react";
@@ -227,6 +228,8 @@ export default function AnalyzerPage() {
             </span>
           </div>
         )}
+
+        {usage?.signedIn && !result && !loading && <RecentAnalyses refreshKey={historyId} />}
 
         {limitMessage && (
           <div role="alert" style={{ border: "1px solid rgba(10,115,115,0.35)", borderRadius: "12px", background: "var(--accent-light)", padding: "18px 20px", marginBottom: "16px" }}>
