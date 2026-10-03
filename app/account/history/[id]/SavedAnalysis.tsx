@@ -1,10 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
 import ResultsDisplay from "@/components/ResultsDisplay";
+import OptimizeResults from "@/components/OptimizeResults";
 import type { AnalysisResult } from "@/types/analysis";
+import type { OptimizationRecord } from "@/types/optimize";
 import { formatDate } from "../HistoryList";
 
-type Saved = { id: string; created_at: string; input_text: string; result: AnalysisResult };
+type Saved = { id: string; created_at: string; input_text: string; result: AnalysisResult & { optimization?: OptimizationRecord } };
 
 export default function SavedAnalysis({ id }: { id: string }) {
   const [data, setData] = useState<Saved | null>(null);
@@ -41,6 +43,25 @@ export default function SavedAnalysis({ id }: { id: string }) {
               {data.input_text}
             </div>
           )}
+          {data.result.optimization && (() => {
+            const o = data.result.optimization;
+            return (
+              <div style={{ marginBottom: "24px" }}>
+                <h2 style={{ fontSize: "20px", fontWeight: 700, color: "var(--text-primary)", margin: "0 0 6px" }}>Optimized version</h2>
+                <p style={{ fontSize: "14px", color: "var(--text-muted)", margin: "0 0 14px" }}>
+                  {o.parentId ? <>Made from <a href={`/account/history/${o.parentId}`} style={{ color: "var(--accent)" }}>this analysis</a>. </> : null}
+                  The full analysis of the new version is below.
+                </p>
+                <OptimizeResults
+                  goal={o.goal} keyword={o.keyword ?? ""}
+                  originalText={o.originalText ?? ""} optimizedText={data.input_text}
+                  changes={o.changes ?? []} inputNeeded={o.inputNeeded ?? []}
+                  beforeScore={o.before?.score ?? 0} afterScore={data.result.aggregateScore}
+                  beforeReadiness={o.before?.readiness ?? null} afterReadiness={o.readinessAfter ?? null}
+                />
+              </div>
+            );
+          })()}
           <ResultsDisplay result={{ ...data.result, text: data.input_text.substring(0, 500) }} />
         </>
       )}

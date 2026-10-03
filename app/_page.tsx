@@ -4,9 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import { AnalysisResult } from "@/types/analysis";
 import ResultsDisplay from "@/components/ResultsDisplay";
 import RecentAnalyses from "@/components/RecentAnalyses";
+import OptimizePanel from "@/components/OptimizePanel";
 import SectionCard from "@/components/SectionCard";
 import Nav from "@/components/Nav";
-import { Scan, X, ArrowRight, ChevronDown, ChevronUp, Zap } from "lucide-react";
+import { Scan, X, ArrowRight, ChevronDown, ChevronUp, Zap, Sparkles } from "lucide-react";
 import { CONTENT_TYPE_OPTIONS } from "@/lib/contentTypes";
 import { fetchUsage, type UsageInfo } from "@/lib/billing/browser";
 import { PLANS, PRO_YEARLY_PER_MONTH } from "@/lib/billing/config";
@@ -202,7 +203,7 @@ export default function AnalyzerPage() {
           Other tools give you a percentage. ContentTrace shows the exact signals behind it.
         </h2>
         <p className="hero-sub" style={{ fontSize: "18px", color: "var(--text-secondary)", maxWidth: "640px", margin: "0 auto", lineHeight: "1.7" }}>
-          Content Trace is an AI detection tool that explains its results with <strong style={{ color: "var(--accent)", fontWeight: 600 }}>32 signals</strong>, including writing patterns, sentence structure, and cognitive fingerprinting. Built for educators, writers, marketers, SEO professionals, and content teams.
+          Content Trace is an AI detection tool that explains its results with <strong style={{ color: "var(--accent)", fontWeight: 600 }}>32 signals</strong>, including writing patterns, sentence structure, and cognitive fingerprinting. Then optimize it in one click for readability, SEO and AI answers, and see every change. Built for educators, writers, marketers, SEO professionals, and content teams.
         </p>
       </header>
 
@@ -328,11 +329,16 @@ export default function AnalyzerPage() {
 
         {result && (
           <>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "18px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px", marginBottom: "18px" }}>
               <span style={{ fontSize: "13px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>Analysis complete</span>
+              <span style={{ display: "flex", gap: "8px" }}>
+              <a href="#optimize" style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "14px", fontWeight: 600, color: "white", background: "var(--accent)", borderRadius: "6px", padding: "8px 14px", textDecoration: "none" }}>
+                <Sparkles size={13} />Optimize
+              </a>
               <button onClick={handleReset} style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "14px", color: "var(--text-secondary)", background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "6px", padding: "8px 14px", cursor: "pointer" }}>
                 <X size={13} />New Analysis
               </button>
+              </span>
             </div>
             {historyId && (
               <div style={{ fontSize: "14px", color: "var(--text-secondary)", border: "1px solid var(--border)", background: "var(--bg-card)", borderRadius: "10px", padding: "10px 14px", marginBottom: "16px" }}>
@@ -345,6 +351,15 @@ export default function AnalyzerPage() {
               </div>
             )}
             <ResultsDisplay result={result} />
+            <OptimizePanel
+              text={text}
+              result={result}
+              historyId={historyId}
+              usage={usage}
+              needsBotCheck={needsBotCheck}
+              getToken={getFreshToken}
+              onUsageChange={() => { fetchUsage().then(setUsage); }}
+            />
           </>
         )}
 
@@ -510,6 +525,8 @@ export default function AnalyzerPage() {
           {[
             { q: "How accurate is Content Trace?", a: "Content Trace uses a multi-signal approach across 32 factors to produce a probabilistic Human Score. It is significantly more nuanced than single-metric detectors, but no AI detection tool is 100% accurate. Scores should be interpreted as indicators, not verdicts — particularly for short texts or content that has been heavily edited." },
             { q: "Is it free?", a: `Yes, for ${PLANS.free.analysesPerMonth} analyses a month of up to ${PLANS.free.charLimit.toLocaleString()} characters each, with no account and no credit card. For more analyses and longer texts (up to ${PLANS.pro.charLimit.toLocaleString()} characters), Pro is $${PRO_YEARLY_PER_MONTH} a month billed yearly ($${PLANS.pro.yearlyPrice}) or $${PLANS.pro.monthlyPrice} month to month, with no ads, or you can buy a one-time Word Pack. See the Pricing page for details.` },
+            { q: "What does the Content Optimizer do?", a: "After an analysis, the optimizer rewrites the weak spots it found for the goal you choose: readability, SEO (descriptive headings, the main point early, your keyword placed naturally) or AI answers (a direct answer up top, question headings and passages that AI Overviews, ChatGPT and Perplexity can quote). Then it scores the new version with the same engine and shows every change, so you can see the Human Score, reading ease and Search & AI-answer readiness before and after." },
+            { q: "Does the optimizer invent facts or guarantee rankings?", a: "No to both. It keeps your facts, numbers and claims. Where a real example, number or source would make the text stronger, it adds a marker like [Add: a real example from your work] for you to fill in. Readiness is a checklist based on what search engines and AI assistants tend to quote. No tool can guarantee rankings or AI citations, so review every change before you publish." },
             { q: "Can I use it for academic work?", a: "Educators can use Content Trace to screen student work, and students can use it to review their own writing. However, our disclaimer applies: results should not be used as sole evidence in academic disciplinary proceedings. AI detection is probabilistic, and a low Human Score does not prove AI authorship." },
             { q: "Does Content Trace store my text?", a: "No. Text submitted for analysis is processed in real time and is not stored, logged, or used to train any models. Your content remains private." },
             { q: "What makes Content Trace different from other AI detectors?", a: "Most AI detectors rely on statistical proxies like perplexity and burstiness. Content Trace goes further — analyzing cognitive fingerprinting, emotional texture, voice authenticity, and pragmatic signals that are much harder for AI to replicate. The result is a richer, more explainable score." },

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Check } from "lucide-react";
-import { PLANS, PRO_YEARLY_PER_MONTH, PRO_YEARLY_SAVE_PCT } from "@/lib/billing/config";
+import { OPTIMIZE_FREE_UNITS, OPTIMIZE_WORD_MULTIPLIER, PLANS, PRO_YEARLY_PER_MONTH, PRO_YEARLY_SAVE_PCT } from "@/lib/billing/config";
 import { fetchUsage, startCheckout, type UsageInfo } from "@/lib/billing/browser";
 
 type Billing = "monthly" | "yearly";
@@ -72,6 +72,7 @@ export default function PricingPlans() {
             <Feature>{PLANS.free.analysesPerMonth} analyses a month</Feature>
             <Feature>Up to {PLANS.free.charLimit.toLocaleString()} characters (about 1,500 words) each</Feature>
             <Feature>Full 32-signal report</Feature>
+            <Feature>Try the Content Optimizer (one run uses {OPTIMIZE_FREE_UNITS} free analyses)</Feature>
           </ul>
           <a href="/" style={{ ...btn, border: "1px solid var(--border)", color: "var(--text-primary)", background: "var(--bg-elevated)" }}>Start analyzing</a>
         </div>
@@ -92,6 +93,7 @@ export default function PricingPlans() {
             <Feature><strong>{PLANS.pro.wordsPerMonth.toLocaleString()} words</strong> a month</Feature>
             <Feature>Up to {PLANS.pro.charLimit.toLocaleString()} characters (about 5,000 words) each</Feature>
             <Feature>Full 32-signal report with content-type adjustment</Feature>
+            <Feature><strong>Content Optimizer</strong> for readability, SEO and AI answers ({OPTIMIZE_WORD_MULTIPLIER}x words per run)</Feature>
             <Feature>No ads</Feature>
           </ul>
           {isPro ? (
@@ -116,6 +118,7 @@ export default function PricingPlans() {
             <Feature><strong>{PLANS.pack.words.toLocaleString()} words</strong> that never expire</Feature>
             <Feature>Up to {PLANS.pack.charLimit.toLocaleString()} characters each</Feature>
             <Feature>Full 32-signal report</Feature>
+            <Feature>Content Optimizer included ({OPTIMIZE_WORD_MULTIPLIER}x words per run)</Feature>
             <Feature>Stacks with Pro and other packs</Feature>
           </ul>
           <button disabled={!paymentsOn || busy !== null} onClick={() => buy("pack")}

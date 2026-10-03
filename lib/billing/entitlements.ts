@@ -83,7 +83,8 @@ export type Reservation =
   | { ok: false; code: "too_long" | "limit"; message: string };
 
 // Reserve usage before the analysis starts. Call release() if the analysis fails.
-export async function reserve(store: BillingStore, id: Identity, text: string, words: number, now = new Date()): Promise<Reservation> {
+// freeUnits: how many free analyses this request uses (an optimize run uses 2: rewrite + re-check).
+export async function reserve(store: BillingStore, id: Identity, text: string, words: number, now = new Date(), freeUnits = 1): Promise<Reservation> {
   const period = currentPeriod(now);
   const status = await getStatus(store, id, now);
 
@@ -114,23 +115,31 @@ export async function reserve(store: BillingStore, id: Identity, text: string, w
     }
   }
 
-  // 3. Free analyses (only for text within the free length limit)
+  // 3. Free analyses (only for text within the free length limit). Each unit counts as one analysis.
   if (text.length <= PLANS.free.charLimit) {
     const subject = freeSubject(id);
-    if (await store.consumeUsage(subject, period, words, PLANS.free.analysesPerMonth, null)) {
-      const ipSubject = `ip:${id.ipHash}`;
-      if (id.userId || (await store.consumeUsage(ipSubject, period, words, FREE_ANALYSES_PER_IP, null))) {
-        return {
-          ok: true,
-          source: "free",
-          release: async () => {
-            await store.releaseUsage(subject, period, words);
-            if (!id.userId) await store.releaseUsage(ipSubject, period, words);
-          },
-        };
+    const ipSubject = `ip:${id.ipHash}`;
+    const taken: string[] = []; // subjects counted so far, to undo on failure
+    const undo = async () => { for (const s of taken.reverse()) await store.releaseUsage(s, period, words); };
+    let ok = true;
+    for (let i = 0; i < Math.max(1, freeUnits) && ok; i++) {
+      ok = await store.consumeUsage(subject, period, words, PLANS.free.analysesPerMonth, null);
+      if (!ok) break;
+      taken.push(subject);
+      if (!id.userId) {
+        ok = await store.consumeUsage(ipSubject, period, words, FREE_ANALYSES_PER_IP, null);
+        if (ok) taken.push(ipSubject);
       }
-      await store.releaseUsage(subject, period, words); // IP cap reached: undo the browser count
     }
+    if (ok) {
+      const done = [...taken];
+      return {
+        ok: true,
+        source: "free",
+        release: async () => { for (const s of done.reverse()) await store.releaseUsage(s, period, words); },
+      };
+    }
+    await undo(); // limit reached part way: undo what was counted
   }
 
   const message =
@@ -138,7 +147,9 @@ export async function reserve(store: BillingStore, id: Identity, text: string, w
       ? "You have used this month's Pro words. Add a Word Pack to keep going, or wait until next month."
       : status.plan === "pack"
         ? "Your Word Pack does not have enough words left for this text. Add another pack or upgrade to Pro."
-        : `You have used your ${PLANS.free.analysesPerMonth} free analyses this month. Upgrade to Pro or buy a Word Pack to keep going.`;
+        : freeUnits > 1
+          ? `Optimizing uses ${freeUnits} of your ${PLANS.free.analysesPerMonth} free checks this month, and you do not have enough left. Upgrade to Pro or buy a Word Pack to keep going.`
+          : `You have used your ${PLANS.free.analysesPerMonth} free analyses this month. Upgrade to Pro or buy a Word Pack to keep going.`;
   return { ok: false, code: "limit", message };
 }
 

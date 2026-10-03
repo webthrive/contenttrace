@@ -23,6 +23,12 @@ export const PLANS = {
   },
 } as const;
 
+// Content Optimizer: one run = a rewrite + a full re-check, so it costs about twice an analysis.
+// Pro and Word Pack: words charged = text words x OPTIMIZE_WORD_MULTIPLIER.
+// Free: one run uses OPTIMIZE_FREE_UNITS of the monthly free analyses.
+export const OPTIMIZE_WORD_MULTIPLIER = 2;
+export const OPTIMIZE_FREE_UNITS = 2;
+
 // Yearly Pro shown as a monthly figure (e.g. $6.58) and the saving against paying monthly.
 export const PRO_YEARLY_PER_MONTH = (PLANS.pro.yearlyPrice / 12).toFixed(2);
 export const PRO_YEARLY_SAVE_PCT = Math.round((1 - PLANS.pro.yearlyPrice / (PLANS.pro.monthlyPrice * 12)) * 100);

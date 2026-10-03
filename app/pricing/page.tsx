@@ -7,7 +7,7 @@ const SITE_URL = "https://www.contenttrace.ai";
 
 export const metadata: Metadata = {
   title: "Pricing",
-  description: `Content Trace is free for ${PLANS.free.analysesPerMonth} analyses a month. Pro is from $${PRO_YEARLY_PER_MONTH}/month billed yearly, for ${PLANS.pro.wordsPerMonth.toLocaleString()} words, longer texts and no ads. Or buy a one-time Word Pack.`,
+  description: `Content Trace is free for ${PLANS.free.analysesPerMonth} analyses a month. Pro is from $${PRO_YEARLY_PER_MONTH}/month billed yearly, for ${PLANS.pro.wordsPerMonth.toLocaleString()} words, the Content Optimizer, longer texts and no ads. Or buy a one-time Word Pack.`,
   alternates: { canonical: `${SITE_URL}/pricing` },
   openGraph: { title: "Content Trace Pricing", url: `${SITE_URL}/pricing`, siteName: "Content Trace", type: "website" },
 };
