@@ -1,6 +1,6 @@
-@import "tailwindcss";
-
+/* Font import must come first: "tailwindcss" expands into rules, and @import after rules is invalid. */
 @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
 
 :root {
   --bg:            #fdfcfa;

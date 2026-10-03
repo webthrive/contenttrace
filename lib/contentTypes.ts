@@ -27,20 +27,22 @@ type SectionName =
   | "Pragmatics & Subtext"
   | "Statistical Proxies";
 
-// Calibration: raw scores differ a lot by genre. Formal human writing scores much lower than
-// personal human writing. Anchors are the median raw scores of known human and known AI samples
-// from the September 2026 evaluation run (137 samples). Displayed score = 25 at the AI anchor,
-// 75 at the human anchor. Re-run the evaluation and update these when the scoring changes.
+// Calibration: raw scores differ by genre. Anchors are the median raw scores of known human and known
+// AI samples, per group, from the October 3, 2026 evaluation (162 samples: 75 human texts written before
+// 2022, 87 replies from Claude Sonnet 5.5, ChatGPT chat-latest and Gemini Flash; run-2026-10-03-03-30).
+// Displayed score = 25 at the AI anchor, 75 at the human anchor. Leave-one-out accuracy 89%
+// (humans 71/75, AI 62/75). Re-run eval/ and update these when prompts, weights, factors, content type
+// detection, or the model change.
 export type CalibrationGroup = "formal" | "business" | "personal" | "general";
 export const CALIBRATION: Record<CalibrationGroup, { ai: number; human: number }> = {
-  formal: { ai: 19.6, human: 42.2 },
-  // Company blogs, thought leadership, marketing: between formal and personal (Oct 2026 run, 19 samples).
-  business: { ai: 30.5, human: 52.7 },
-  personal: { ai: 36.9, human: 74.8 },
-  // General (chat or Q&A replies, and mixed or unclear genre): the mean of the three
-  // measured groups. Provisional until a General test set exists. Before Oct 2026 General used the
-  // formal anchors, which made casual AI text (raw 54+) show as 100.
-  general: { ai: 29.0, human: 56.6 },
+  // Academic, technical, corporate (n = 13 human / 20 AI).
+  formal: { ai: 51.1, human: 67.0 },
+  // Company blogs, thought leadership, marketing (n = 8 / 9: small, re-check with more samples).
+  business: { ai: 45.2, human: 66.4 },
+  // Personal blogs, social posts, emails (n = 26 / 19).
+  personal: { ai: 49.3, human: 74.8 },
+  // Chat and Q&A replies, and mixed or unclear genre (n = 28 / 27).
+  general: { ai: 35.0, human: 70.8 },
 };
 
 // Displayed scores stay inside this range: no detector can be 100% certain either way.
