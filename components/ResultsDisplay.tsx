@@ -81,9 +81,21 @@ export default function ResultsDisplay({ result }: ResultsDisplayProps) {
           )}
         </div>
 
+        {/* Takeaway */}
+        <div style={{ borderTop: `1px solid ${v.border}`, paddingTop: "18px", marginBottom: "14px" }}>
+          <div style={{ fontSize: "11px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: "8px" }}>Our Takeaway</div>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", color: v.color, marginBottom: "6px" }}>
+            {v.icon}
+            <span style={{ fontSize: "17px", fontWeight: 600 }}>{v.headline}</span>
+          </div>
+          <div style={{ fontSize: "15px", color: "var(--text-secondary)", lineHeight: "1.65" }}>{v.body}</div>
+        </div>
+
+        <details style={{ borderTop: `1px solid ${v.border}`, paddingTop: "12px" }}>
+          <summary style={{ cursor: "pointer", fontSize: "14px", fontWeight: 600, color: "var(--accent)", marginBottom: "14px" }}>How this score was calculated</summary>
         {/* Content type adjustment */}
         {result.contentType && result.adjustment && (
-          <div style={{ border: "1px solid var(--border)", borderRadius: "10px", background: "var(--bg-card)", padding: "14px 16px", marginBottom: "20px" }}>
+          <div style={{ border: "1px solid var(--border)", borderRadius: "10px", background: "var(--bg-card)", padding: "14px 16px", marginBottom: "14px" }}>
             <div style={{ fontSize: "11px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: "6px" }}>
               Adjusted for {result.contentType.label}
             </div>
@@ -105,18 +117,8 @@ export default function ResultsDisplay({ result }: ResultsDisplayProps) {
           </div>
         )}
 
-        {/* Takeaway */}
-        <div style={{ borderTop: `1px solid ${v.border}`, paddingTop: "18px", marginBottom: "20px" }}>
-          <div style={{ fontSize: "11px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: "8px" }}>Our Takeaway</div>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", color: v.color, marginBottom: "6px" }}>
-            {v.icon}
-            <span style={{ fontSize: "17px", fontWeight: 600 }}>{v.headline}</span>
-          </div>
-          <div style={{ fontSize: "15px", color: "var(--text-secondary)", lineHeight: "1.65" }}>{v.body}</div>
-        </div>
-
         {/* Scale bar */}
-        <div style={{ borderTop: `1px solid ${v.border}`, paddingTop: "18px" }}>
+        <div style={{ paddingTop: "4px" }}>
           <div style={{ fontSize: "11px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: "10px" }}>Score Scale</div>
           <div style={{ position: "relative", marginBottom: "6px" }}>
             <div style={{ height: "10px", borderRadius: "6px", background: "linear-gradient(to right,#c43302 0%,#c43302 25%,#c47a00 25%,#c47a00 50%,#0a8a6a 50%,#0a8a6a 75%,#0a7373 75%,#0a7373 100%)" }} />
@@ -134,6 +136,7 @@ export default function ResultsDisplay({ result }: ResultsDisplayProps) {
             ))}
           </div>
         </div>
+        </details>
       </div>
 
       {/* Section breakdown */}

@@ -2,7 +2,9 @@
 import { useEffect, useState } from "react";
 import { Trash2 } from "lucide-react";
 
-type Item = { id: string; created_at: string; content_type: string | null; word_count: number; score: number | null; verdict: string | null; preview: string | null };
+type Item = { id: string; created_at: string; content_type: string | null; word_count: number; score: number | null; verdict: string | null; preview: string | null; goal?: string | null; parent_id?: string | null };
+
+const GOAL_NAMES: Record<string, string> = { readability: "Readability", seo: "SEO", aeo: "AI answers" };
 
 const VERDICT_COLOR: Record<string, string> = {
   "Likely Human": "#0a7373",
@@ -42,7 +44,7 @@ export default function HistoryList() {
       <a href="/account" style={{ fontSize: "14px", color: "var(--accent)" }}>← Your account</a>
       <h1 style={{ fontSize: "30px", fontWeight: 700, color: "var(--text-primary)", margin: "12px 0 6px" }}>Your past analyses</h1>
       <p style={{ fontSize: "15px", color: "var(--text-secondary)", marginBottom: "24px", lineHeight: 1.6 }}>
-        Every analysis you run while signed in is saved here. Only you can see them. You can delete any of them at any time.
+        Open any analysis to run the three optimizers on it and compare before and after. Only you can see these. You can delete any of them at any time.
       </p>
 
       {error && <p role="alert" style={{ color: "var(--red)", fontSize: "14px", marginBottom: "16px" }}>{error}</p>}
@@ -66,6 +68,7 @@ export default function HistoryList() {
                 </div>
                 <div style={{ minWidth: 0 }}>
                   <div style={{ fontSize: "14px", fontWeight: 600, color: "var(--text-primary)" }}>
+                    {i.goal && <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--accent)", background: "var(--accent-light)", border: "1px solid rgba(10,115,115,0.3)", borderRadius: "10px", padding: "1px 8px", marginRight: "8px" }}>Optimized · {GOAL_NAMES[i.goal] ?? i.goal}</span>}
                     {i.verdict ?? "Analysis"} <span style={{ fontWeight: 400, color: "var(--text-muted)" }}>· {formatDate(i.created_at)}</span>
                   </div>
                   <div style={{ fontSize: "14px", color: "var(--text-secondary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{i.preview}</div>

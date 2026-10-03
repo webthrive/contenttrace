@@ -1,22 +1,21 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { AnalysisResult } from "@/types/analysis";
 import ResultsDisplay from "@/components/ResultsDisplay";
 import RecentAnalyses from "@/components/RecentAnalyses";
 import OptimizePanel from "@/components/OptimizePanel";
 import SectionCard from "@/components/SectionCard";
+import WorkspaceTabs from "@/components/WorkspaceTabs";
 import Nav from "@/components/Nav";
-import { Scan, X, ArrowRight, ChevronDown, ChevronUp, Zap, Sparkles } from "lucide-react";
+import { X, ArrowRight, ChevronDown, ChevronUp, Zap, Sparkles, Scan } from "lucide-react";
 import { CONTENT_TYPE_OPTIONS } from "@/lib/contentTypes";
 import { fetchUsage, type UsageInfo } from "@/lib/billing/browser";
 import { PLANS, PRO_YEARLY_PER_MONTH } from "@/lib/billing/config";
+import { needsBotCheckFor, useTurnstile } from "@/hooks/useTurnstile";
 
-const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 // Testimonials stay hidden until they come from real customers who agreed to be quoted.
 const SHOW_TESTIMONIALS = false;
-type TurnstileApi = { render: (el: HTMLElement, opts: Record<string, unknown>) => string; reset: (id?: string) => void };
-
 const CHAR_LIMIT = 10000;
 
 const SAMPLE_TEXT = `Artificial intelligence has fundamentally transformed how organizations approach data-driven decision making. By leveraging advanced machine learning algorithms and neural network architectures, businesses can now extract meaningful insights from vast datasets that would have been previously unanalyzable. This paradigm shift represents a significant opportunity for enterprises willing to embrace digital transformation.
@@ -35,7 +34,6 @@ const SECTIONS_INFO = [
   { name: "Pragmatics & Subtext", weight: "10%", desc: "Subtext, irony, register shifts — human writers imply things; AI tends to over-explain everything.", factors: ["Subtext and Implication", "Irony or Dry Humor", "Register Shifts", "Over-Explicitness"] },
   { name: "Statistical Proxies", weight: "Reference", desc: "Vocabulary richness, burstiness, hedging, and entropy, measured in code. Shown for reference only: in our tests they did not separate human and AI writing, so they do not change the score.", factors: ["Vocabulary Richness", "Burstiness Approximation", "Response Calibration", "Entropy Variance"] },
 ];
-
 export default function AnalyzerPage() {
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
@@ -49,67 +47,26 @@ export default function AnalyzerPage() {
   const [detectedType, setDetectedType] = useState<string | null>(null);
   const [usage, setUsage] = useState<UsageInfo | null>(null);
   const [limitMessage, setLimitMessage] = useState<string | null>(null);
-  const [, setTurnstileToken] = useState<string | null>(null);
-  const turnstileRef = useRef<HTMLDivElement>(null);
-  const turnstileId = useRef<string | null>(null);
-  // Latest token and when it arrived. Tokens are single-use and expire after 5 minutes,
-  // and mobile browsers can pause the expiry timer while a tab is in the background.
-  const tokenRef = useRef<{ token: string; at: number } | null>(null);
+  const [view, setView] = useState<"analysis" | "optimize">("analysis");
+  const [optRuns, setOptRuns] = useState(0);
+  const [textOpen, setTextOpen] = useState(false);
 
   const charLimit = usage?.charLimit ?? CHAR_LIMIT;
-  const needsBotCheck = Boolean(TURNSTILE_SITE_KEY && usage?.enabled && usage.plan === "free");
+  const needsBotCheck = needsBotCheckFor(usage);
+  const { ref: turnstileRef, reset: resetTurnstile, getFreshToken } = useTurnstile(needsBotCheck);
+
+  // Signed-in users, and anyone who has started a check, get a focused tool view with no marketing copy.
+  const signedIn = Boolean(usage?.signedIn);
+  const landing = !signedIn && !loading && !result;
 
   useEffect(() => { fetchUsage().then(setUsage); }, []);
-
-  // Cloudflare Turnstile: a quick, usually invisible human check for free analyses.
-  useEffect(() => {
-    if (!needsBotCheck || turnstileId.current) return;
-    const render = () => {
-      const ts = (window as unknown as { turnstile?: TurnstileApi }).turnstile;
-      if (!ts || !turnstileRef.current || turnstileId.current) return;
-      turnstileId.current = ts.render(turnstileRef.current, {
-        sitekey: TURNSTILE_SITE_KEY, appearance: "interaction-only",
-        callback: (t: string) => { tokenRef.current = { token: t, at: Date.now() }; setTurnstileToken(t); },
-        "expired-callback": () => { tokenRef.current = null; setTurnstileToken(null); },
-        "error-callback": () => {
-          tokenRef.current = null; setTurnstileToken(null);
-          setTimeout(() => { const t = (window as unknown as { turnstile?: TurnstileApi }).turnstile; if (t && turnstileId.current) t.reset(turnstileId.current); }, 2000);
-          return true;
-        },
-      });
-    };
-    if ((window as unknown as { turnstile?: TurnstileApi }).turnstile) { render(); return; }
-    const sc = document.createElement("script");
-    sc.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
-    sc.async = true; sc.onload = render;
-    document.head.appendChild(sc);
-  }, [needsBotCheck]);
-
-  const resetTurnstile = () => {
-    const ts = (window as unknown as { turnstile?: TurnstileApi }).turnstile;
-    tokenRef.current = null;
-    if (ts && turnstileId.current) { ts.reset(turnstileId.current); setTurnstileToken(null); }
-  };
-
-  // Return a token that is fresh and not used yet. Gets a new one when needed (waits up to 20 s).
-  const getFreshToken = async (force = false): Promise<string | null> => {
-    const cur = tokenRef.current;
-    if (!force && cur && Date.now() - cur.at < 240_000) { tokenRef.current = null; return cur.token; }
-    resetTurnstile();
-    for (let i = 0; i < 80; i++) {
-      await new Promise((r) => setTimeout(r, 250));
-      const t = tokenRef.current;
-      if (t) { tokenRef.current = null; return t.token; }
-    }
-    return null;
-  };
 
   const charCount = text.length;
   const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
 
   const handleAnalyze = async () => {
     if (!text.trim() || text.length < 50) { setError("Please enter at least 50 characters."); return; }
-    setLoading(true); setError(null); setLimitMessage(null); setResult(null); setStreamingSections([]); setSectionsComplete(0); setDetectedType(null);
+    setLoading(true); setView("analysis"); setTextOpen(false); setError(null); setLimitMessage(null); setResult(null); setStreamingSections([]); setSectionsComplete(0); setDetectedType(null);
     let token: string | null = null;
     if (needsBotCheck) {
       token = await getFreshToken();
@@ -180,98 +137,114 @@ export default function AnalyzerPage() {
     }
   };
 
-  const handleReset = () => { setHistoryId(null); setResult(null); setError(null); setStreamingSections([]); setSectionsComplete(0); };
+  const handleReset = () => { setView("analysis"); setOptRuns(0); setTextOpen(false); setHistoryId(null); setResult(null); setError(null); setStreamingSections([]); setSectionsComplete(0); };
   const loadSample = () => { setText(SAMPLE_TEXT); setResult(null); setError(null); };
+
+  const usageLine = usage?.enabled && !usage.error ? (
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px", fontSize: "13px", color: "var(--text-muted)" }}>
+      <span>
+        {usage.plan === "pro" && usage.proWordsLeft != null && <>Pro · {usage.proWordsLeft.toLocaleString()} words left this month</>}
+        {usage.plan === "pack" && <>Word Pack · {(usage.packWords ?? 0).toLocaleString()} words left</>}
+        {usage.plan === "free" && <>{usage.freeAnalysesLeft} of {usage.freeAnalysesTotal} free analyses left this month</>}
+      </span>
+      <span style={{ display: "flex", gap: "14px" }}>
+        {usage.plan !== "pro" && <a href="/pricing" style={{ color: "var(--accent)", fontWeight: 600 }}>{usage.plan === "free" ? "Go Pro for longer texts" : "Upgrade"}</a>}
+        {usage.signedIn && <a href="/account/history" style={{ color: "var(--text-secondary)" }}>History</a>}
+        <a href={usage.signedIn ? "/account" : "/login?next=/"} style={{ color: "var(--text-secondary)" }}>{usage.signedIn ? "Account" : "Sign in"}</a>
+      </span>
+    </div>
+  ) : null;
 
   return (
     <>
       <Nav current="/" />
       <main style={{ minHeight: "100vh", position: "relative", zIndex: 1, padding: "0 16px" }}>
 
-      <header className="hero" style={{ maxWidth: "760px", margin: "0 auto", padding: "32px 0 28px", textAlign: "center" }}>
-        <a href="/" className="hero-eyebrow" style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "var(--accent-light)", border: "1px solid rgba(10,115,115,0.3)", borderRadius: "20px", padding: "7px 16px", marginBottom: "24px", textDecoration: "none" }}>
-          <Scan size={14} style={{ color: "var(--accent)" }} />
-          <span style={{ fontSize: "13px", color: "var(--accent)", fontFamily: "var(--font-mono)", letterSpacing: "0.04em", fontWeight: 500, textAlign: "center" }}>
-            <span className="badge-desktop">AI Content Detector by Content Trace</span>
-            <span className="badge-mobile">AI Content Detector<br />by Content Trace</span>
-          </span>
-        </a>
-        <h1 className="hero-title" style={{ fontSize: "clamp(32px, 7vw, 62px)", fontWeight: 700, color: "var(--text-primary)", lineHeight: 1.1, marginBottom: "10px", letterSpacing: "-0.03em", textWrap: "balance" }}>
-          The AI Detector That Explains Its Verdict
-        </h1>
-        <h2 className="hero-sub" style={{ fontSize: "clamp(18px, 4vw, 28px)", fontWeight: 400, color: "#0b0b0b", lineHeight: 1.3, marginBottom: "24px", letterSpacing: "-0.01em", textWrap: "balance" }}>
-          Other tools give you a percentage. ContentTrace shows the exact signals behind it.
-        </h2>
-        <p className="hero-sub" style={{ fontSize: "18px", color: "var(--text-secondary)", maxWidth: "640px", margin: "0 auto", lineHeight: "1.7" }}>
-          Content Trace is an AI detection tool that explains its results with <strong style={{ color: "var(--accent)", fontWeight: 600 }}>32 signals</strong>, including writing patterns, sentence structure, and cognitive fingerprinting. Then optimize it in one click for readability, SEO and AI answers, and see every change. Built for educators, writers, marketers, SEO professionals, and content teams.
-        </p>
-      </header>
+      {landing ? (
+        <header className="hero" style={{ maxWidth: "760px", margin: "0 auto", padding: "28px 0 20px", textAlign: "center" }}>
+          <h1 className="hero-title" style={{ fontSize: "clamp(30px, 6vw, 48px)", fontWeight: 700, color: "var(--text-primary)", lineHeight: 1.1, marginBottom: "10px", letterSpacing: "-0.03em", textWrap: "balance" }}>
+            The AI Detector That Explains Its Verdict
+          </h1>
+          <h2 className="hero-sub" style={{ fontSize: "clamp(17px, 3.6vw, 24px)", fontWeight: 400, color: "#0b0b0b", lineHeight: 1.3, letterSpacing: "-0.01em", textWrap: "balance" }}>
+            Other tools give you a percentage. ContentTrace shows the exact signals behind it.
+          </h2>
+        </header>
+      ) : (
+        <header style={{ maxWidth: "760px", margin: "0 auto", padding: "20px 0 14px" }}>
+          <h1 style={{ fontSize: "22px", fontWeight: 700, color: "var(--text-primary)", letterSpacing: "-0.02em", marginBottom: "6px" }}>
+            {result || loading ? "Your analysis" : "Analyze and optimize your text"}
+          </h1>
+          {usageLine}
+        </header>
+      )}
 
       <div style={{ maxWidth: "760px", margin: "0 auto", paddingBottom: "40px" }}>
 
-        {(true) && (
-          <div className="input-card" style={{ border: "1px solid var(--border)", borderRadius: "16px", background: "var(--bg-card)", overflow: "hidden", marginBottom: "20px", boxShadow: "0 2px 12px rgba(1,2,33,0.06)" }}>
-            {!result && <label htmlFor="ct-input" className="input-label">Paste your text to check it for AI</label>}
-            <textarea
-              id="ct-input"
-              className="input-area"
-              value={text}
-              onChange={(e) => { if (!result && !loading) setText(e.target.value.slice(0, charLimit)); }}
-              readOnly={!!result || loading}
-              placeholder="Paste any text here — blog post, email, essay, social content, product description, marketing copy..."
-              style={{ width: "100%", minHeight: result ? "120px" : "240px", padding: "22px", background: "none", border: "none", outline: "none", color: "var(--text-primary)", fontSize: "16px", fontFamily: "var(--font)", lineHeight: "1.75", resize: result ? "none" : "vertical", boxSizing: "border-box", opacity: result ? 0.7 : 1 }}
-            />
-            {!result && (
-              <div style={{ borderTop: "1px solid var(--border)", padding: "10px 18px", display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap", background: "var(--bg-card)" }}>
-                <label style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", color: "var(--text-muted)" }}>
-                  <span>Content type</span>
-                  <select
-                    value={contentType}
-                    onChange={(e) => setContentType(e.target.value)}
-                    disabled={loading}
-                    aria-label="Content type"
-                    style={{ fontSize: "13px", fontFamily: "var(--font)", color: "var(--text-primary)", background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: "6px", padding: "5px 8px", cursor: "pointer", maxWidth: "210px" }}
-                  >
-                    <option value="auto">Auto-detect</option>
-                    {CONTENT_TYPE_OPTIONS.map((o) => (<option key={o.id} value={o.id}>{o.label}</option>))}
-                    <option value="general">General (standard weights)</option>
-                  </select>
-                </label>
-                <span style={{ fontSize: "12px", color: "var(--text-muted)" }}>Adjusts which signals count for this kind of writing.</span>
-              </div>
-            )}
-            {!result && <div style={{ borderTop: "1px solid var(--border)", padding: "14px 18px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "10px", background: "var(--bg-elevated)" }}>
-              <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
-                <span style={{ fontSize: "13px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>{wordCount} words · {charCount.toLocaleString()}/{charLimit.toLocaleString()} chars</span>
-                <button onClick={loadSample} style={{ fontSize: "13px", color: "var(--accent)", background: "none", border: "none", cursor: "pointer", textDecoration: "underline" }}>Load sample</button>
-              </div>
-              <button onClick={handleAnalyze} disabled={loading || charCount < 50} className="analyze-btn"
-                style={{ display: "flex", alignItems: "center", gap: "8px", padding: "12px 24px", background: loading || charCount < 50 ? "var(--bg-elevated)" : "var(--accent)", color: loading || charCount < 50 ? "var(--text-muted)" : "white", border: loading || charCount < 50 ? "1px solid var(--border)" : "none", borderRadius: "8px", fontSize: "15px", fontWeight: 600, cursor: loading || charCount < 50 ? "not-allowed" : "pointer", fontFamily: "var(--font)", boxShadow: loading || charCount < 50 ? "none" : "0 2px 8px rgba(10,115,115,0.3)" }}>
-                {loading
-                  ? (<><span style={{ width: "15px", height: "15px", border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "white", borderRadius: "50%", display: "inline-block" }} className="spin" />Analyzing...</>)
-                  : (<><Scan size={15} />Analyze Text<ArrowRight size={15} /></>)}
+        <div className="input-card" style={{ border: "1px solid var(--border)", borderRadius: "16px", background: "var(--bg-card)", overflow: "hidden", marginBottom: "20px", boxShadow: "0 2px 12px rgba(1,2,33,0.06)" }}>
+          {!result && <label htmlFor="ct-input" className="input-label">Paste your text to check it for AI</label>}
+          {result && (
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "10px", padding: "10px 16px", background: "var(--bg-elevated)", borderBottom: textOpen ? "1px solid var(--border)" : "none" }}>
+              <span style={{ fontSize: "13px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>Analyzed text · {wordCount} words</span>
+              <button onClick={() => setTextOpen((v) => !v)} aria-expanded={textOpen} style={{ fontSize: "13px", fontWeight: 600, color: "var(--accent)", background: "none", border: "none", cursor: "pointer", fontFamily: "var(--font)" }}>
+                {textOpen ? "Hide text" : "Show text"}
               </button>
-            </div>}
-          </div>
-        )}
+            </div>
+          )}
+          {(!result || textOpen) && (
+          <textarea
+            id="ct-input"
+            className="input-area"
+            value={text}
+            onChange={(e) => { if (!result && !loading) setText(e.target.value.slice(0, charLimit)); }}
+            readOnly={!!result || loading}
+            placeholder="Paste any text here — blog post, email, essay, social content, product description, marketing copy..."
+            style={{ width: "100%", minHeight: result ? "120px" : "240px", maxHeight: result ? "300px" : undefined, padding: "22px", background: "none", border: "none", outline: "none", color: "var(--text-primary)", fontSize: "16px", fontFamily: "var(--font)", lineHeight: "1.75", resize: result ? "none" : "vertical", boxSizing: "border-box", opacity: result ? 0.8 : 1 }}
+          />
+          )}
+          {!result && (
+            <div style={{ borderTop: "1px solid var(--border)", padding: "10px 18px", display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap", background: "var(--bg-card)" }}>
+              <label style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", color: "var(--text-muted)" }}>
+                <span>Content type</span>
+                <select
+                  value={contentType}
+                  onChange={(e) => setContentType(e.target.value)}
+                  disabled={loading}
+                  aria-label="Content type"
+                  style={{ fontSize: "13px", fontFamily: "var(--font)", color: "var(--text-primary)", background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: "6px", padding: "5px 8px", cursor: "pointer", maxWidth: "210px" }}
+                >
+                  <option value="auto">Auto-detect</option>
+                  {CONTENT_TYPE_OPTIONS.map((o) => (<option key={o.id} value={o.id}>{o.label}</option>))}
+                  <option value="general">General (standard weights)</option>
+                </select>
+              </label>
+              {landing && <span style={{ fontSize: "12px", color: "var(--text-muted)" }}>Adjusts which signals count for this kind of writing.</span>}
+            </div>
+          )}
+          {!result && <div style={{ borderTop: "1px solid var(--border)", padding: "14px 18px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "10px", background: "var(--bg-elevated)" }}>
+            <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
+              <span style={{ fontSize: "13px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>{wordCount} words · {charCount.toLocaleString()}/{charLimit.toLocaleString()} chars</span>
+              <button onClick={loadSample} style={{ fontSize: "13px", color: "var(--accent)", background: "none", border: "none", cursor: "pointer", textDecoration: "underline" }}>Load sample</button>
+            </div>
+            <button onClick={handleAnalyze} disabled={loading || charCount < 50} className="analyze-btn"
+              style={{ display: "flex", alignItems: "center", gap: "8px", padding: "12px 24px", background: loading || charCount < 50 ? "var(--bg-elevated)" : "var(--accent)", color: loading || charCount < 50 ? "var(--text-muted)" : "white", border: loading || charCount < 50 ? "1px solid var(--border)" : "none", borderRadius: "8px", fontSize: "15px", fontWeight: 600, cursor: loading || charCount < 50 ? "not-allowed" : "pointer", fontFamily: "var(--font)", boxShadow: loading || charCount < 50 ? "none" : "0 2px 8px rgba(10,115,115,0.3)" }}>
+              {loading
+                ? (<><span style={{ width: "15px", height: "15px", border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "white", borderRadius: "50%", display: "inline-block" }} className="spin" />Analyzing...</>)
+                : (<><Scan size={15} />Analyze Text<ArrowRight size={15} /></>)}
+            </button>
+          </div>}
+        </div>
 
         {needsBotCheck && <div ref={turnstileRef} style={{ display: "flex", justifyContent: "center", marginBottom: "12px" }} />}
 
-        {usage?.enabled && !usage.error && !result && (
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px", fontSize: "13px", color: "var(--text-muted)", margin: "-8px 2px 16px" }}>
-            <span>
-              {usage.plan === "pro" && usage.proWordsLeft != null && <>Pro · {usage.proWordsLeft.toLocaleString()} words left this month</>}
-              {usage.plan === "pack" && <>Word Pack · {(usage.packWords ?? 0).toLocaleString()} words left</>}
-              {usage.plan === "free" && <>{usage.freeAnalysesLeft} of {usage.freeAnalysesTotal} free analyses left this month</>}
-            </span>
-            <span style={{ display: "flex", gap: "14px" }}>
-              {usage.plan !== "pro" && <a href="/pricing" style={{ color: "var(--accent)", fontWeight: 600 }}>{usage.plan === "free" ? "Go Pro for longer texts" : "Upgrade"}</a>}
-              <a href={usage.signedIn ? "/account" : "/login?next=/"} style={{ color: "var(--text-secondary)" }}>{usage.signedIn ? "Account" : "Sign in"}</a>
-            </span>
-          </div>
-        )}
+        {landing && usageLine && <div style={{ margin: "-8px 2px 16px" }}>{usageLine}</div>}
 
         {usage?.signedIn && !result && !loading && <RecentAnalyses refreshKey={historyId} />}
+
+        {landing && (
+          <p className="hero-sub" style={{ fontSize: "16px", color: "var(--text-secondary)", maxWidth: "640px", margin: "0 auto 8px", lineHeight: "1.7", textAlign: "center" }}>
+            Content Trace is an AI detection tool that explains its results with <strong style={{ color: "var(--accent)", fontWeight: 600 }}>32 signals</strong>, including writing patterns, sentence structure, and cognitive fingerprinting. Then optimize it in one click for readability, SEO and AI answers, and see every change. Built for educators, writers, marketers, SEO professionals, and content teams.
+          </p>
+        )}
 
         {limitMessage && (
           <div role="alert" style={{ border: "1px solid rgba(10,115,115,0.35)", borderRadius: "12px", background: "var(--accent-light)", padding: "18px 20px", marginBottom: "16px" }}>
@@ -292,6 +265,7 @@ export default function AnalyzerPage() {
             <button onClick={() => setError(null)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--red)" }}><X size={15} /></button>
           </div>
         )}
+
 
         {loading && (
           <div style={{ marginBottom: "16px" }}>
@@ -329,41 +303,60 @@ export default function AnalyzerPage() {
 
         {result && (
           <>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px", marginBottom: "18px" }}>
-              <span style={{ fontSize: "13px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>Analysis complete</span>
-              <span style={{ display: "flex", gap: "8px" }}>
-              <a href="#optimize" style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "14px", fontWeight: 600, color: "white", background: "var(--accent)", borderRadius: "6px", padding: "8px 14px", textDecoration: "none" }}>
-                <Sparkles size={13} />Optimize
-              </a>
-              <button onClick={handleReset} style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "14px", color: "var(--text-secondary)", background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "6px", padding: "8px 14px", cursor: "pointer" }}>
-                <X size={13} />New Analysis
-              </button>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px", marginBottom: "12px" }}>
+              <div>
+                <div style={{ fontSize: "12px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>Analysis complete</div>
+                <div style={{ fontSize: "22px", fontWeight: 700, color: "var(--text-primary)" }}>
+                  Human Score {Math.round(result.aggregateScore)} <span style={{ fontSize: "15px", fontWeight: 500, color: "var(--text-secondary)" }}>· {result.verdict}</span>
+                </div>
+              </div>
+              <span style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                {view === "analysis" && (
+                  <button onClick={() => setView("optimize")} style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "14px", fontWeight: 600, color: "white", background: "var(--accent)", border: "none", borderRadius: "8px", padding: "10px 16px", cursor: "pointer", fontFamily: "var(--font)" }}>
+                    <Sparkles size={14} />Optimize this text
+                  </button>
+                )}
+                <button onClick={handleReset} style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "14px", color: "var(--text-secondary)", background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "8px", padding: "10px 14px", cursor: "pointer", fontFamily: "var(--font)" }}>
+                  <X size={13} />New analysis
+                </button>
               </span>
             </div>
             {historyId && (
-              <div style={{ fontSize: "14px", color: "var(--text-secondary)", border: "1px solid var(--border)", background: "var(--bg-card)", borderRadius: "10px", padding: "10px 14px", marginBottom: "16px" }}>
+              <div style={{ fontSize: "13px", color: "var(--text-muted)", marginBottom: "14px" }}>
                 Saved to your history. <a href={`/account/history/${historyId}`} style={{ color: "var(--accent)", fontWeight: 600 }}>Open it any time</a> · <a href="/account/history" style={{ color: "var(--accent)" }}>All past analyses</a>
               </div>
             )}
             {!historyId && usage?.enabled && !usage.signedIn && (
-              <div style={{ fontSize: "14px", color: "var(--text-secondary)", border: "1px solid var(--border)", background: "var(--bg-card)", borderRadius: "10px", padding: "10px 14px", marginBottom: "16px" }}>
+              <div style={{ fontSize: "13px", color: "var(--text-muted)", marginBottom: "14px" }}>
                 This result is not saved. <a href="/login?next=/account/history" style={{ color: "var(--accent)", fontWeight: 600 }}>Sign in</a> to save future results to your history.
               </div>
             )}
-            <ResultsDisplay result={result} />
-            <OptimizePanel
-              text={text}
-              result={result}
-              historyId={historyId}
-              usage={usage}
-              needsBotCheck={needsBotCheck}
-              getToken={getFreshToken}
-              onUsageChange={() => { fetchUsage().then(setUsage); }}
+
+            <WorkspaceTabs
+              tabs={[{ id: "analysis", label: "Analysis" }, { id: "optimize", label: "Optimize & compare", badge: optRuns }]}
+              active={view}
+              onChange={setView}
             />
+
+            <div style={{ display: view === "analysis" ? "block" : "none" }}>
+              <ResultsDisplay result={result} />
+            </div>
+            <div style={{ display: view === "optimize" ? "block" : "none" }}>
+              <OptimizePanel
+                text={text}
+                result={result}
+                historyId={historyId}
+                usage={usage}
+                needsBotCheck={needsBotCheck}
+                getToken={getFreshToken}
+                onUsageChange={() => { fetchUsage().then(setUsage); }}
+                onRunsChange={setOptRuns}
+              />
+            </div>
           </>
         )}
 
-        {!result && !loading && (
+        {landing && (
           <div style={{ marginTop: "32px" }}>
             <div className="stats-tiles" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "10px", marginBottom: "20px" }}>
               {[{ value: "8", label: "Sections" }, { value: "32", label: "Signals" }, { value: "100", label: "Point Scale" }].map((s) => (
@@ -435,6 +428,8 @@ export default function AnalyzerPage() {
         )}
       </div>
 
+      {landing && (
+      <>
       {/* HOW IT WORKS */}
       <div style={{ maxWidth: "760px", margin: "0 auto 60px" }}>
         <h2 style={{ fontSize: "clamp(22px, 4vw, 30px)", fontWeight: 700, color: "var(--text-primary)", textAlign: "center", marginBottom: "8px", letterSpacing: "-0.02em" }}>How It Works</h2>
@@ -487,7 +482,7 @@ export default function AnalyzerPage() {
             { icon: "🆓", title: "Free to Start", desc: `${PLANS.free.analysesPerMonth} free analyses every month. No credit card. Pro from $${PRO_YEARLY_PER_MONTH}/month (billed yearly) when you need more.` },
             { icon: "🧠", title: "32 Signals", desc: "Far beyond basic perplexity checks — we analyze cognitive fingerprinting, voice, emotion, and more." },
             { icon: "🚫", title: "No Signup Required", desc: "Paste and analyze. Free analyses need no account and no email." },
-            { icon: "🔒", title: "Privacy Focused", desc: "Your text is never stored or used to train models. What you paste stays yours." },
+            { icon: "🔒", title: "Privacy Focused", desc: "Signed out, your text is never stored. Signed in, results go to your private history and you can delete them any time. Never used to train models." },
           ].map((item) => (
             <div key={item.title} style={{ border: "1px solid var(--border)", borderRadius: "14px", padding: "24px 18px", background: "var(--bg-card)", textAlign: "center", boxShadow: "0 1px 6px rgba(1,2,33,0.05)" }}>
               <div style={{ fontSize: "28px", marginBottom: "10px" }}>{item.icon}</div>
@@ -528,7 +523,7 @@ export default function AnalyzerPage() {
             { q: "What does the Content Optimizer do?", a: "After an analysis, the optimizer rewrites the weak spots it found for the goal you choose: readability, SEO (descriptive headings, the main point early, your keyword placed naturally) or AI answers (a direct answer up top, question headings and passages that AI Overviews, ChatGPT and Perplexity can quote). Then it scores the new version with the same engine and shows every change, so you can see the Human Score, reading ease and Search & AI-answer readiness before and after." },
             { q: "Does the optimizer invent facts or guarantee rankings?", a: "No to both. It keeps your facts, numbers and claims. Where a real example, number or source would make the text stronger, it adds a marker like [Add: a real example from your work] for you to fill in. Readiness is a checklist based on what search engines and AI assistants tend to quote. No tool can guarantee rankings or AI citations, so review every change before you publish." },
             { q: "Can I use it for academic work?", a: "Educators can use Content Trace to screen student work, and students can use it to review their own writing. However, our disclaimer applies: results should not be used as sole evidence in academic disciplinary proceedings. AI detection is probabilistic, and a low Human Score does not prove AI authorship." },
-            { q: "Does Content Trace store my text?", a: "No. Text submitted for analysis is processed in real time and is not stored, logged, or used to train any models. Your content remains private." },
+            { q: "Does Content Trace store my text?", a: "Only if you sign in. Signed out, your text is processed in real time and is not stored, logged, or used to train any models. When you are signed in, each analysis and optimization is saved to your private history so you can come back to it. Only you can see it, and you can delete any item at any time. We never use your text to train models." },
             { q: "What makes Content Trace different from other AI detectors?", a: "Most AI detectors rely on statistical proxies like perplexity and burstiness. Content Trace goes further — analyzing cognitive fingerprinting, emotional texture, voice authenticity, and pragmatic signals that are much harder for AI to replicate. The result is a richer, more explainable score." },
           ].map((item, i) => (
             <div key={i} style={{ border: "1px solid var(--border)", borderRadius: "12px", padding: "22px 24px", background: "var(--bg-card)", boxShadow: "0 1px 6px rgba(1,2,33,0.05)" }}>
@@ -576,6 +571,14 @@ export default function AnalyzerPage() {
           Content Trace provides probabilistic analysis only and does not constitute a definitive determination of authorship. Results should not be used as evidence in academic, legal, employment, or disciplinary proceedings. AI detection is an imperfect science — scores may be affected by writing style, text length, editing, translation, or subject matter. A high Human Score does not guarantee human authorship, and a low score does not prove AI generation. Content Trace is provided without warranty of any kind. Web Thrive, LLC accepts no liability for decisions made based on analysis results.
         </div>
       </div>
+      </>
+      )}
+
+      {!landing && (
+        <p style={{ maxWidth: "760px", margin: "0 auto 40px", fontSize: "13px", color: "var(--text-muted)", textAlign: "center", lineHeight: 1.7 }}>
+          Scores are probabilistic and are not proof of authorship. <a href="/disclaimer" style={{ color: "var(--accent)" }}>Disclaimer</a> · <a href="/privacy" style={{ color: "var(--accent)" }}>Privacy</a> · <a href="/pricing" style={{ color: "var(--accent)" }}>Plans</a>
+        </p>
+      )}
     </main>
     </>
   );
