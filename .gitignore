@@ -2,3 +2,7 @@ node_modules/
 .next/
 .env*
 .vercel/
+
+# Eval data and results (third-party text; kept in the Drive folder)
+eval/data/
+eval/results/
