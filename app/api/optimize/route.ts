@@ -85,6 +85,8 @@ export async function POST(req: NextRequest) {
             contentLabel: CONTENT_PROFILES[typeId].label,
             weaknesses: weakestFactors(result),
             onProgress: (done, total) => send({ type: "progress", done, total }),
+            // A repair pass takes about 20 seconds; start one only if it can finish before the deadline.
+            repairUntil: Date.now() + DEADLINE_MS - 22_000,
           }),
           deadline,
         ]);

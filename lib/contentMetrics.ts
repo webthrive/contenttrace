@@ -55,6 +55,9 @@ function isHeading(line: string, prevBlank: boolean, nextBlank: boolean): boolea
   return prevBlank && nextBlank && n > 0 && n <= 12 && !/[.,;:]$/.test(t) && !/^[-*•]|^\d+[.)]/.test(t);
 }
 
+const STOP = new Set(["what", "when", "where", "which", "does", "with", "that", "this", "from", "your", "have", "they", "there", "their", "about", "into", "than", "then", "them", "were", "will", "would", "should", "could"]);
+const stem = (w: string) => w.replace(/(ing|es|s)$/, "");
+
 const LIST_RE = /^\s*(?:[-*•]|\d+[.)])\s+\S/;
 
 export function contentMetrics(text: string, keyword?: string): ContentMetrics {
@@ -88,12 +91,19 @@ export function contentMetrics(text: string, keyword?: string): ContentMetrics {
   const term = keyword?.trim();
   if (term) {
     const esc = term.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "\\s+");
-    const re = new RegExp(`(^|[^a-z0-9])${esc}([^a-z0-9]|$)`, "i");
     const reAll = new RegExp(`(^|[^a-z0-9])${esc}(?=[^a-z0-9]|$)`, "gi");
+    // Short keywords must appear as a phrase. A question (4+ words) counts when most of its
+    // meaningful words appear, because a heading rarely repeats a question word for word.
+    const key = wordList(term.toLowerCase()).filter((w) => w.length > 3 && !STOP.has(w));
+    const has = (s: string) => {
+      if (wordList(term).length < 4 || key.length < 2) return new RegExp(`(^|[^a-z0-9])${esc}([^a-z0-9]|$)`, "i").test(s);
+      const ws = new Set(wordList(s.toLowerCase()).map(stem));
+      return key.filter((w) => ws.has(stem(w))).length / key.length >= 0.7;
+    };
     kw = {
       term,
-      inFirst100Words: re.test(allWords.slice(0, 100).join(" ")),
-      inHeading: headingLines.some((h) => re.test(h)),
+      inFirst100Words: has(allWords.slice(0, 100).join(" ")),
+      inHeading: headingLines.some(has),
       count: (text.match(reAll) ?? []).length,
     };
   }
