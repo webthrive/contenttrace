@@ -19,7 +19,7 @@ type Props = {
   onUsageChange: () => void;
 };
 
-type Rewrite = { rewritten: string; changes: OptimizeChange[]; inputNeeded: OptimizeInputNeeded[]; readinessBefore: Readiness | null };
+type Rewrite = { rewritten: string; changes: OptimizeChange[]; inputNeeded: OptimizeInputNeeded[]; warnings?: string[]; readinessBefore: Readiness | null };
 
 // Content Optimizer: rewrite for a goal, then re-check the rewrite with the same engine.
 export default function OptimizePanel({ text, result, historyId, usage, needsBotCheck, getToken, onUsageChange }: Props) {
@@ -56,6 +56,7 @@ export default function OptimizePanel({ text, result, historyId, usage, needsBot
             originalText: text,
             changes: out.changes,
             inputNeeded: out.inputNeeded,
+            warnings: out.warnings ?? [],
             before: { score: result.aggregateScore, verdict: result.verdict, readiness: out.readinessBefore },
           },
         }),
@@ -180,7 +181,7 @@ export default function OptimizePanel({ text, result, historyId, usage, needsBot
           <OptimizeResults
             goal={runGoal} keyword={runKeyword}
             originalText={text} optimizedText={rw.rewritten}
-            changes={rw.changes} inputNeeded={rw.inputNeeded}
+            changes={rw.changes} inputNeeded={rw.inputNeeded} warnings={rw.warnings ?? []}
             beforeScore={result.aggregateScore} afterScore={after.score}
             beforeReadiness={rw.readinessBefore} afterReadiness={after.readiness}
             checking={phase === "checking"} checkError={checkError}

@@ -55,7 +55,7 @@ export default function SavedAnalysis({ id }: { id: string }) {
                 <OptimizeResults
                   goal={o.goal} keyword={o.keyword ?? ""}
                   originalText={o.originalText ?? ""} optimizedText={data.input_text}
-                  changes={o.changes ?? []} inputNeeded={o.inputNeeded ?? []}
+                  changes={o.changes ?? []} inputNeeded={o.inputNeeded ?? []} warnings={o.warnings ?? []}
                   beforeScore={o.before?.score ?? 0} afterScore={data.result.aggregateScore}
                   beforeReadiness={o.before?.readiness ?? null} afterReadiness={o.readinessAfter ?? null}
                 />

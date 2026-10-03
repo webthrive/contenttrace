@@ -13,6 +13,7 @@ export type OptimizeResultsProps = {
   optimizedText: string;
   changes: OptimizeChange[];
   inputNeeded: OptimizeInputNeeded[];
+  warnings?: string[]; // fact guard: names, numbers or quotes that differ from the original
   beforeScore: number;
   afterScore: number | null; // null while the re-check runs
   beforeReadiness: Readiness | null;
@@ -135,6 +136,18 @@ export default function OptimizeResults(p: OptimizeResultsProps) {
               })}
             </div>
           )}
+        </div>
+      )}
+
+      {(p.warnings?.length ?? 0) > 0 && (
+        <div role="alert" style={{ ...card, padding: "16px 18px", borderColor: "rgba(196,51,2,0.35)", background: "var(--red-bg)" }}>
+          <div style={{ fontSize: "15px", fontWeight: 600, color: "var(--red)", marginBottom: "6px" }}>Check these before you publish</div>
+          <p style={{ fontSize: "13px", color: "var(--text-secondary)", margin: "0 0 8px", lineHeight: 1.6 }}>
+            Our fact check found details in the new version that we could not match to your original. Confirm them or change them back.
+          </p>
+          <ul style={{ margin: 0, paddingLeft: "18px", display: "flex", flexDirection: "column", gap: "4px" }}>
+            {p.warnings!.map((w, i) => <li key={i} style={{ fontSize: "14px", color: "var(--text-secondary)" }}>{w}</li>)}
+          </ul>
         </div>
       )}
 

@@ -13,6 +13,7 @@ export type OptimizationRecord = {
   originalText: string;
   changes: OptimizeChange[];
   inputNeeded: OptimizeInputNeeded[];
+  warnings?: string[];
   before: { score: number; verdict: string; readiness: Readiness | null };
   readinessAfter: Readiness | null;
 };
