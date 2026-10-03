@@ -132,8 +132,10 @@ function namesAndNumbers(text: string): { names: Set<string>; numbers: Set<strin
   return { names, numbers };
 }
 
+// Direct quotes: 40+ characters on one line, opening after a space or line start, ending with
+// punctuation inside the closing mark ("...," or "..."). Text between two scare quotes does not count.
 const quotesOf = (text: string) =>
-  [...norm(text).matchAll(/"([^"]{40,})"/g)].map((m) => m[1].replace(/\s+/g, " ").trim());
+  [...norm(text).matchAll(/(?<=^|[\s(])"([^"\n]{40,}?[.,?!])"/gm)].map((m) => m[1].replace(/\s+/g, " ").trim());
 
 export function factIssues(original: string, rewritten: string): string[] {
   const o = norm(original);
