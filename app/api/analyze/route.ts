@@ -48,7 +48,22 @@ Rules:
 - Give exactly 2 observations per factor. Each observation is one short sentence (max 25 words).
 - Do not reward or punish length. Do not guess the author's identity.
 - If "Measured facts" are provided, your scores must agree with them.
-- Return your answer only through the record_section_scores tool.`;
+- Return your answer only through the record_section_scores tool.
+
+Current AI assistants (2025-2026 models) rarely use old tells such as "delve" or "in conclusion". They avoid
+heavy hedging and they use contractions, so a casual tone is NOT evidence of a human author. Look for these
+newer patterns and lower the related factor scores when you find them:
+- Chat formatting: a "Here's..." or "Great question" opener, bold key phrases, short headings, tidy bullet
+  lists, and a closing offer to do more ("Want me to...?", "Let me know if..."). -> Predictable List Structures,
+  AI Filler Phrases, Over-Explicitness.
+- Contrast formulas: "It's not X, it's Y", "not just X, but Y". -> AI Filler Phrases, Generic vs Specific Language.
+- Rule of three: repeated groups of three items or three parallel short sentences. -> Predictable List Structures.
+- Frequent em dashes used for rhythm. -> Sentence Length Variation, AI Filler Phrases.
+- Balanced, safe conclusions that weigh both sides and do not commit. -> Opinion Strength, Distinct Point of View.
+- Smooth, complete coverage with no tangent, no error, no detail only an insider would know. -> Depth vs
+  Surface Treatment, Insider/Niche Knowledge, Thinking Out Loud.
+- Empathy phrases with no specific detail ("That sounds really hard"). -> Genuine vs Performed Empathy.
+One pattern alone is weak evidence (people use em dashes and lists too). Several together are strong evidence.`;
 
 const TOOL: Anthropic.Tool = {
   name: "record_section_scores",
@@ -199,7 +214,7 @@ async function detectContentType(text: string): Promise<{ id: ContentTypeId; rea
 }
 
 async function analyzeSection(def: SectionDef, text: string, brief: string): Promise<RawFactor[]> {
-  const context = def.name === "Structure & Flow" || def.name === "Word Choice & Phrasing" ? `${brief}\n\n` : "";
+  const context = ["Structure & Flow", "Word Choice & Phrasing", "Pragmatics & Subtext"].includes(def.name) ? `${brief}\n\n` : "";
 
   const msg = await client.messages.create({
     model: MODEL,

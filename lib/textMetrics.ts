@@ -15,7 +15,22 @@ export type TextMetrics = {
   hedgesPer100: number;
   contractionsPer100: number;
   transitionsPer100: number;
+  // Formatting and phrasing habits of current AI chat assistants (counts, not scores).
+  emDashesPer100: number;
+  listLines: number;
+  headingLines: number;
+  boldMarkers: number;
+  notXButY: number;
+  assistantOpeners: number;
+  closingOffer: boolean;
 };
+
+// "Here's ...", "Great question", "Sure!" and similar assistant-style openers (at a line start).
+const OPENER_RE = /(^|\n)\s*(here'?s|here is|great question|sure[!,.]|absolutely[!,.]|certainly[!,.]|of course[!,.]|happy to help|good question)/gi;
+// "It's not X, it's Y" / "not just X, but Y" / "isn't about X, it's about Y".
+const NOT_X_BUT_Y_RE = /\b(not (just|only|merely|simply)\b[^.!?\n]{1,80}\bbut\b|(isn't|is not|aren't|are not|wasn't|was not)\b[^.!?\n]{1,60}[,;—–-]\s*(it's|it is|they're|they are|that's|this is)\b|\bit's not\b[^.!?\n]{1,60}[,;—–-]\s*it's\b)/gi;
+// A closing offer to do more: "Want me to ...?", "Let me know if ...", "Would you like ...?"
+const CLOSING_OFFER_RE = /(want me to|would you like( me)? to|shall i|should i|let me know if|i can also|happy to (help|adjust|expand)|if you'd like,? i can)[^\n]*$/i;
 
 const HEDGES = [
   "may", "might", "perhaps", "possibly", "arguably", "generally", "typically",
@@ -100,6 +115,9 @@ export function computeMetrics(text: string): TextMetrics {
   const lower = text.toLowerCase();
   // Contractions only (not possessive 's): n't, 're, 've, 'll, 'd, 'm, plus common 's forms.
   const contractions = (lower.match(/\b([a-z]+n't|[a-z]+'(re|ve|ll|d|m)|(it|that|there|what|he|she|let|here|who)'s)\b/g) ?? []).length;
+  const normalized = text.replace(/[’‘]/g, "'");
+  const lines = normalized.split("\n").map((l) => l.trim()).filter(Boolean);
+  const lastLines = lines.slice(-2).join(" ");
 
   return {
     wordCount: tokens.length,
@@ -113,6 +131,14 @@ export function computeMetrics(text: string): TextMetrics {
     hedgesPer100: (countPhrases(lower, HEDGES) / wc) * 100,
     contractionsPer100: (contractions / wc) * 100,
     transitionsPer100: (countPhrases(lower, TRANSITIONS) / wc) * 100,
+    emDashesPer100: (((normalized.match(/—|\s–\s|\s--\s/g) ?? []).length) / wc) * 100,
+    listLines: lines.filter((l) => /^([-*•]|\d+[.)])\s+/.test(l)).length,
+    // Markdown headings, or short title-like lines (no end punctuation) followed by more text.
+    headingLines: lines.filter((l, i) => /^#{1,6}\s/.test(l) || (i < lines.length - 1 && words(l).length > 0 && words(l).length <= 7 && !/[.!?:,;]$/.test(l) && !/^([-*•]|\d+[.)])\s/.test(l))).length,
+    boldMarkers: (normalized.match(/\*\*[^*\n]+\*\*/g) ?? []).length,
+    notXButY: (normalized.match(NOT_X_BUT_Y_RE) ?? []).length,
+    assistantOpeners: (normalized.match(OPENER_RE) ?? []).length,
+    closingOffer: CLOSING_OFFER_RE.test(lastLines),
   };
 }
 
@@ -181,5 +207,10 @@ export function metricsBrief(m: TextMetrics): string {
     `- Contractions: ${m.contractionsPer100.toFixed(1)} per 100 words`,
     `- Transition phrases (moreover, furthermore, however...): ${m.transitionsPer100.toFixed(1)} per 100 words`,
     `- Hedging phrases: ${m.hedgesPer100.toFixed(1)} per 100 words`,
+    `- Em dashes: ${m.emDashesPer100.toFixed(1)} per 100 words`,
+    `- List lines: ${m.listLines}; heading-like lines: ${m.headingLines}; bold phrases: ${m.boldMarkers}`,
+    `- "Not X, but Y" constructions: ${m.notXButY}`,
+    `- Assistant-style openers ("Here's", "Great question", "Sure!"): ${m.assistantOpeners}`,
+    `- Ends with an offer to do more ("Want me to...?", "Let me know if..."): ${m.closingOffer ? "yes" : "no"}`,
   ].join("\n");
 }

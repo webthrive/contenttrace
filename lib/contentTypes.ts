@@ -31,18 +31,26 @@ type SectionName =
 // personal human writing. Anchors are the median raw scores of known human and known AI samples
 // from the September 2026 evaluation run (137 samples). Displayed score = 25 at the AI anchor,
 // 75 at the human anchor. Re-run the evaluation and update these when the scoring changes.
-export type CalibrationGroup = "formal" | "business" | "personal";
+export type CalibrationGroup = "formal" | "business" | "personal" | "general";
 export const CALIBRATION: Record<CalibrationGroup, { ai: number; human: number }> = {
   formal: { ai: 19.6, human: 42.2 },
   // Company blogs, thought leadership, marketing: between formal and personal (Oct 2026 run, 19 samples).
   business: { ai: 30.5, human: 52.7 },
   personal: { ai: 36.9, human: 74.8 },
+  // General (mixed or unclear genre, for example a chat assistant reply): the mean of the three
+  // measured groups. Provisional until a General test set exists. Before Oct 2026 General used the
+  // formal anchors, which made casual AI text (raw 54+) show as 100.
+  general: { ai: 29.0, human: 56.6 },
 };
+
+// Displayed scores stay inside this range: no detector can be 100% certain either way.
+export const SCORE_FLOOR = 2;
+export const SCORE_CEILING = 98;
 
 export function calibrate(raw: number, group: CalibrationGroup): number {
   const a = CALIBRATION[group];
   const v = 25 + (50 * (raw - a.ai)) / (a.human - a.ai);
-  return Math.max(0, Math.min(100, v));
+  return Math.max(SCORE_FLOOR, Math.min(SCORE_CEILING, v));
 }
 
 export type ContentProfile = {
@@ -71,7 +79,7 @@ const w = (o: Partial<Record<SectionName, number>>) => ({ ...BASE, ...o });
 export const CONTENT_PROFILES: Record<ContentTypeId, ContentProfile> = {
   general: {
     id: "general",
-    group: "formal",
+    group: "general",
     label: "General",
     description: "Mixed or unclear genre. Use only if no other type fits.",
     note: "Standard weights. No signals are excluded.",
