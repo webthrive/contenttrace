@@ -48,9 +48,12 @@ export default function AnalyzerPage() {
   const [detectedType, setDetectedType] = useState<string | null>(null);
   const [usage, setUsage] = useState<UsageInfo | null>(null);
   const [limitMessage, setLimitMessage] = useState<string | null>(null);
-  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [, setTurnstileToken] = useState<string | null>(null);
   const turnstileRef = useRef<HTMLDivElement>(null);
   const turnstileId = useRef<string | null>(null);
+  // Latest token and when it arrived. Tokens are single-use and expire after 5 minutes,
+  // and mobile browsers can pause the expiry timer while a tab is in the background.
+  const tokenRef = useRef<{ token: string; at: number } | null>(null);
 
   const charLimit = usage?.charLimit ?? CHAR_LIMIT;
   const needsBotCheck = Boolean(TURNSTILE_SITE_KEY && usage?.enabled && usage.plan === "free");
@@ -65,8 +68,13 @@ export default function AnalyzerPage() {
       if (!ts || !turnstileRef.current || turnstileId.current) return;
       turnstileId.current = ts.render(turnstileRef.current, {
         sitekey: TURNSTILE_SITE_KEY, appearance: "interaction-only",
-        callback: (t: string) => setTurnstileToken(t),
-        "expired-callback": () => setTurnstileToken(null),
+        callback: (t: string) => { tokenRef.current = { token: t, at: Date.now() }; setTurnstileToken(t); },
+        "expired-callback": () => { tokenRef.current = null; setTurnstileToken(null); },
+        "error-callback": () => {
+          tokenRef.current = null; setTurnstileToken(null);
+          setTimeout(() => { const t = (window as unknown as { turnstile?: TurnstileApi }).turnstile; if (t && turnstileId.current) t.reset(turnstileId.current); }, 2000);
+          return true;
+        },
       });
     };
     if ((window as unknown as { turnstile?: TurnstileApi }).turnstile) { render(); return; }
@@ -78,7 +86,21 @@ export default function AnalyzerPage() {
 
   const resetTurnstile = () => {
     const ts = (window as unknown as { turnstile?: TurnstileApi }).turnstile;
+    tokenRef.current = null;
     if (ts && turnstileId.current) { ts.reset(turnstileId.current); setTurnstileToken(null); }
+  };
+
+  // Return a token that is fresh and not used yet. Gets a new one when needed (waits up to 20 s).
+  const getFreshToken = async (force = false): Promise<string | null> => {
+    const cur = tokenRef.current;
+    if (!force && cur && Date.now() - cur.at < 240_000) { tokenRef.current = null; return cur.token; }
+    resetTurnstile();
+    for (let i = 0; i < 80; i++) {
+      await new Promise((r) => setTimeout(r, 250));
+      const t = tokenRef.current;
+      if (t) { tokenRef.current = null; return t.token; }
+    }
+    return null;
   };
 
   const charCount = text.length;
@@ -86,11 +108,25 @@ export default function AnalyzerPage() {
 
   const handleAnalyze = async () => {
     if (!text.trim() || text.length < 50) { setError("Please enter at least 50 characters."); return; }
-    if (needsBotCheck && !turnstileToken) { setError("Please wait a moment while we run a quick human check, then try again."); return; }
     setLoading(true); setError(null); setLimitMessage(null); setResult(null); setStreamingSections([]); setSectionsComplete(0); setDetectedType(null);
+    let token: string | null = null;
+    if (needsBotCheck) {
+      token = await getFreshToken();
+      if (!token) { setError("The quick human check did not finish. Please try again in a moment."); setLoading(false); return; }
+    }
     let finished = false; // true once a "complete" or "error" event arrives
     try {
-      const res = await fetch("/api/analyze", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text, contentType, turnstileToken }) });
+      const send = (t: string | null) => fetch("/api/analyze", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text, contentType, turnstileToken: t }) });
+      let res = await send(token);
+      // A token can still be rejected (expired or already used). Get a new one and retry once.
+      if (res.status === 403 && needsBotCheck) {
+        let code: string | undefined;
+        try { code = (await res.clone().json())?.code; } catch { /* not JSON */ }
+        if (code === "bot_check") {
+          const retryToken = await getFreshToken(true);
+          if (retryToken) res = await send(retryToken);
+        }
+      }
       if (!res.ok) {
         // The server can return an HTML error page (500/504), so do not assume JSON.
         let message = "Analysis failed. Please try again.";

@@ -37,14 +37,15 @@ export async function verifyTurnstile(token: unknown): Promise<boolean> {
   if (!secret) return true;
   if (typeof token !== "string" || !token) return false;
   try {
-    const h = await headers();
+    // No "remoteip": on mobile networks (for example iCloud Private Relay or IPv4/IPv6 switching)
+    // the IP that solved the check can differ from the IP that calls this API.
     const body = new URLSearchParams({ secret, response: token });
-    const ip = h.get("x-forwarded-for")?.split(",")[0]?.trim();
-    if (ip) body.set("remoteip", ip);
     const r = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", { method: "POST", body });
-    const j = (await r.json()) as { success?: boolean };
+    const j = (await r.json()) as { success?: boolean; "error-codes"?: string[]; hostname?: string };
+    if (!j.success) console.warn("Turnstile check failed:", (j["error-codes"] ?? []).join(","), j.hostname ?? "");
     return Boolean(j.success);
-  } catch {
+  } catch (err) {
+    console.warn("Turnstile check error:", err instanceof Error ? err.message : "unknown");
     return false;
   }
 }
