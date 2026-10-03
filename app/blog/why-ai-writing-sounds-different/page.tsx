@@ -57,10 +57,10 @@ export default function Article2() {
 
           {/* Stat banner */}
           <a href="/" style={{ textDecoration: "none" }}>
-          <div style={{ background: "var(--bg-card)", cursor: "pointer", border: "1px solid var(--border)", borderRadius: "12px", padding: "16px 24px", display: "flex", alignItems: "center", gap: "20px", margin: "32px 0" }}>
+          <div style={{ background: "var(--bg-card)", cursor: "pointer", border: "1px solid var(--border)", borderRadius: "12px", padding: "16px 24px", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "12px 20px", margin: "32px 0" }}>
             <div style={{ fontSize: "42px", fontWeight: 700, color: "#c47a00", fontFamily: "var(--font-mono)", lineHeight: 1, flexShrink: 0 }}>8</div>
             <div style={{ width: "1px", background: "var(--border)", height: "48px", flexShrink: 0 }}></div>
-            <div style={{ flex: 1 }}>
+            <div style={{ flex: "1 1 180px", minWidth: 0 }}>
               <strong style={{ fontSize: "15px", fontWeight: 600, display: "block", marginBottom: "3px" }}>Distinct cognitive patterns Content Trace measures for human authenticity</strong>
               <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.55, margin: 0 }}>Voice, perspective, emotional texture, pragmatics - signals that require an actual mind, not just pattern completion.</p>
             </div>

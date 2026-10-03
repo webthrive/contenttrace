@@ -57,10 +57,10 @@ export default function Article1() {
 
           {/* Stat banner */}
           <a href="/" style={{ textDecoration: "none" }}>
-          <div style={{ background: "var(--bg-card)", cursor: "pointer", border: "1px solid var(--border)", borderRadius: "12px", padding: "16px 24px", display: "flex", alignItems: "center", gap: "20px", margin: "32px 0" }}>
+          <div style={{ background: "var(--bg-card)", cursor: "pointer", border: "1px solid var(--border)", borderRadius: "12px", padding: "16px 24px", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "12px 20px", margin: "32px 0" }}>
             <div style={{ fontSize: "42px", fontWeight: 700, color: "var(--accent)", fontFamily: "var(--font-mono)", lineHeight: 1, flexShrink: 0 }}>32</div>
             <div style={{ width: "1px", background: "var(--border)", height: "48px", flexShrink: 0 }}></div>
-            <div style={{ flex: 1 }}>
+            <div style={{ flex: "1 1 180px", minWidth: 0 }}>
               <strong style={{ fontSize: "15px", fontWeight: 600, display: "block", marginBottom: "3px" }}>Individual signals Content Trace analyzes per submission</strong>
               <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.55, margin: 0 }}>Across 8 weighted sections - from cognitive fingerprinting (16%) to statistical proxies (8%).</p>
             </div>

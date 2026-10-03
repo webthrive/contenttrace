@@ -187,21 +187,21 @@ export default function AnalyzerPage() {
       <Nav current="/" />
       <main style={{ minHeight: "100vh", position: "relative", zIndex: 1, padding: "0 16px" }}>
 
-      <header style={{ maxWidth: "760px", margin: "0 auto", padding: "32px 0 28px", textAlign: "center" }}>
-        <a href="/" style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "var(--accent-light)", border: "1px solid rgba(10,115,115,0.3)", borderRadius: "20px", padding: "7px 16px", marginBottom: "24px", textDecoration: "none" }}>
+      <header className="hero" style={{ maxWidth: "760px", margin: "0 auto", padding: "32px 0 28px", textAlign: "center" }}>
+        <a href="/" className="hero-eyebrow" style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "var(--accent-light)", border: "1px solid rgba(10,115,115,0.3)", borderRadius: "20px", padding: "7px 16px", marginBottom: "24px", textDecoration: "none" }}>
           <Scan size={14} style={{ color: "var(--accent)" }} />
           <span style={{ fontSize: "13px", color: "var(--accent)", fontFamily: "var(--font-mono)", letterSpacing: "0.04em", fontWeight: 500, textAlign: "center" }}>
             <span className="badge-desktop">AI Content Detector by Content Trace</span>
             <span className="badge-mobile">AI Content Detector<br />by Content Trace</span>
           </span>
         </a>
-        <h1 style={{ fontSize: "clamp(32px, 7vw, 62px)", fontWeight: 700, color: "var(--text-primary)", lineHeight: 1.1, marginBottom: "10px", letterSpacing: "-0.03em", textWrap: "balance" }}>
+        <h1 className="hero-title" style={{ fontSize: "clamp(32px, 7vw, 62px)", fontWeight: 700, color: "var(--text-primary)", lineHeight: 1.1, marginBottom: "10px", letterSpacing: "-0.03em", textWrap: "balance" }}>
           The AI Detector That Explains Its Verdict
         </h1>
-        <h2 style={{ fontSize: "clamp(18px, 4vw, 28px)", fontWeight: 400, color: "#0b0b0b", lineHeight: 1.3, marginBottom: "24px", letterSpacing: "-0.01em", textWrap: "balance" }}>
+        <h2 className="hero-sub" style={{ fontSize: "clamp(18px, 4vw, 28px)", fontWeight: 400, color: "#0b0b0b", lineHeight: 1.3, marginBottom: "24px", letterSpacing: "-0.01em", textWrap: "balance" }}>
           Other tools give you a percentage. ContentTrace shows the exact signals behind it.
         </h2>
-        <p style={{ fontSize: "18px", color: "var(--text-secondary)", maxWidth: "640px", margin: "0 auto", lineHeight: "1.7" }}>
+        <p className="hero-sub" style={{ fontSize: "18px", color: "var(--text-secondary)", maxWidth: "640px", margin: "0 auto", lineHeight: "1.7" }}>
           Content Trace is an AI detection tool that explains its results with <strong style={{ color: "var(--accent)", fontWeight: 600 }}>32 signals</strong>, including writing patterns, sentence structure, and cognitive fingerprinting. Built for educators, writers, marketers, SEO professionals, and content teams.
         </p>
       </header>
@@ -209,8 +209,11 @@ export default function AnalyzerPage() {
       <div style={{ maxWidth: "760px", margin: "0 auto", paddingBottom: "40px" }}>
 
         {(true) && (
-          <div style={{ border: "1px solid var(--border)", borderRadius: "16px", background: "var(--bg-card)", overflow: "hidden", marginBottom: "20px", boxShadow: "0 2px 12px rgba(1,2,33,0.06)" }}>
+          <div className="input-card" style={{ border: "1px solid var(--border)", borderRadius: "16px", background: "var(--bg-card)", overflow: "hidden", marginBottom: "20px", boxShadow: "0 2px 12px rgba(1,2,33,0.06)" }}>
+            {!result && <label htmlFor="ct-input" className="input-label">Paste your text to check it for AI</label>}
             <textarea
+              id="ct-input"
+              className="input-area"
               value={text}
               onChange={(e) => { if (!result && !loading) setText(e.target.value.slice(0, charLimit)); }}
               readOnly={!!result || loading}
@@ -241,7 +244,7 @@ export default function AnalyzerPage() {
                 <span style={{ fontSize: "13px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>{wordCount} words · {charCount.toLocaleString()}/{charLimit.toLocaleString()} chars</span>
                 <button onClick={loadSample} style={{ fontSize: "13px", color: "var(--accent)", background: "none", border: "none", cursor: "pointer", textDecoration: "underline" }}>Load sample</button>
               </div>
-              <button onClick={handleAnalyze} disabled={loading || charCount < 50}
+              <button onClick={handleAnalyze} disabled={loading || charCount < 50} className="analyze-btn"
                 style={{ display: "flex", alignItems: "center", gap: "8px", padding: "12px 24px", background: loading || charCount < 50 ? "var(--bg-elevated)" : "var(--accent)", color: loading || charCount < 50 ? "var(--text-muted)" : "white", border: loading || charCount < 50 ? "1px solid var(--border)" : "none", borderRadius: "8px", fontSize: "15px", fontWeight: 600, cursor: loading || charCount < 50 ? "not-allowed" : "pointer", fontFamily: "var(--font)", boxShadow: loading || charCount < 50 ? "none" : "0 2px 8px rgba(10,115,115,0.3)" }}>
                 {loading
                   ? (<><span style={{ width: "15px", height: "15px", border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "white", borderRadius: "50%", display: "inline-block" }} className="spin" />Analyzing...</>)
@@ -347,11 +350,11 @@ export default function AnalyzerPage() {
 
         {!result && !loading && (
           <div style={{ marginTop: "32px" }}>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: "10px", marginBottom: "20px" }}>
-              {[{ value: "8", label: "Sections" }, { value: "32", label: "Signals" }, { value: "100", label: "Point Scale" }, { value: String(PLANS.free.analysesPerMonth), label: "Free each month" }].map((s) => (
-                <div key={s.label} style={{ border: "1px solid var(--border)", borderRadius: "12px", padding: "20px 12px", background: "var(--bg-card)", textAlign: "center", boxShadow: "0 1px 6px rgba(1,2,33,0.05)" }}>
+            <div className="stats-tiles" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "10px", marginBottom: "20px" }}>
+              {[{ value: "8", label: "Sections" }, { value: "32", label: "Signals" }, { value: "100", label: "Point Scale" }].map((s) => (
+                <div key={s.label} className="stat-tile" style={{ border: "1px solid var(--border)", borderRadius: "12px", padding: "20px 12px", background: "var(--bg-card)", textAlign: "center", boxShadow: "0 1px 6px rgba(1,2,33,0.05)" }}>
                   <div style={{ fontSize: "32px", fontWeight: 700, color: "var(--accent)", marginBottom: "6px" }}>{s.value}</div>
-                  <div style={{ fontSize: "15px", color: "var(--text-muted)" }}>{s.label}</div>
+                  <div className="stat-label" style={{ fontSize: "15px", color: "var(--text-muted)", whiteSpace: "nowrap" }}>{s.label}</div>
                 </div>
               ))}
             </div>
@@ -365,7 +368,7 @@ export default function AnalyzerPage() {
               <div style={{ display: "flex", justifyContent: "space-between", fontSize: "10px", color: "var(--text-muted)", fontFamily: "var(--font-mono)", marginBottom: "10px" }}>
                 <span>0</span><span>25</span><span>50</span><span>75</span><span>100</span>
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "6px" }}>
+              <div className="scale-zones-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "6px" }}>
                 {[
                   { label: "Likely AI",    range: "0 – 24",   color: "#c43302", bg: "rgba(196,51,2,0.08)",   border: "rgba(196,51,2,0.2)" },
                   { label: "Leans AI",     range: "25 – 49",  color: "#c47a00", bg: "rgba(196,122,0,0.08)",  border: "rgba(196,122,0,0.2)" },

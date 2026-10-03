@@ -55,10 +55,10 @@ export default function PostAIDetectionEducation() {
           <p style={p}>My read: it's making things worse in some important ways. Not because detection is useless, but because the tools are being deployed with a confidence level they were never built to support. And the students paying the price aren't always the ones cheating.</p>
 
           <a href="/" style={{ textDecoration: "none" }}>
-            <div style={{ background: "var(--bg-card)", cursor: "pointer", border: "1px solid var(--border)", borderRadius: "12px", padding: "16px 24px", display: "flex", alignItems: "center", gap: "20px", margin: "32px 0" }}>
+            <div style={{ background: "var(--bg-card)", cursor: "pointer", border: "1px solid var(--border)", borderRadius: "12px", padding: "16px 24px", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "12px 20px", margin: "32px 0" }}>
               <div style={{ fontSize: "42px", fontWeight: 700, color: "var(--accent)", fontFamily: "var(--font-mono)", lineHeight: 1, flexShrink: 0 }}>8</div>
               <div style={{ width: "1px", background: "var(--border)", height: "48px", flexShrink: 0 }}></div>
-              <div style={{ flex: 1 }}>
+              <div style={{ flex: "1 1 180px", minWidth: 0 }}>
                 <strong style={{ fontSize: "15px", fontWeight: 600, display: "block", marginBottom: "3px" }}>Signal categories Content Trace scores independently</strong>
                 <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.55, margin: 0 }}>A category breakdown gives instructors a starting point for a real conversation — not a verdict to hand down.</p>
               </div>

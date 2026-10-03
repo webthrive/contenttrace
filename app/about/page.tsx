@@ -133,7 +133,7 @@ export default function AboutPage() {
             { who: "Marketers", why: "Ensure AI-assisted content has been humanized effectively" },
             { who: "Hiring managers", why: "Spot-check whether written applications feel genuine" },
           ].map((item) => (
-            <li key={item.who} style={{ display: "flex", gap: "12px", padding: "12px 16px", background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: "10px" }}>
+            <li key={item.who} style={{ display: "flex", flexWrap: "wrap", gap: "4px 12px", padding: "12px 16px", background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: "10px" }}>
               <span style={{ fontSize: "15px", fontWeight: 600, color: "var(--text-primary)", minWidth: "180px" }}>{item.who}</span>
               <span style={{ fontSize: "15px", color: "var(--text-secondary)" }}>{item.why}</span>
             </li>

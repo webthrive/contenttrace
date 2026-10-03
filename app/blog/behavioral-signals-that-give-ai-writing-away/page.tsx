@@ -55,10 +55,10 @@ export default function PostBehavioralSignals() {
           <p style={p}>These 8 patterns are what I focus on when I want to know whether something was actually written by a person thinking through a problem in real time. They're harder to fake because they're not about the surface features of the text — they're about evidence of a mind at work. And they're the signals that paraphrasing tools, synonym-swappers, and "write like a human" prompts can't reliably manufacture.</p>
 
           <a href="/" style={{ textDecoration: "none" }}>
-            <div style={{ background: "var(--bg-card)", cursor: "pointer", border: "1px solid var(--border)", borderRadius: "12px", padding: "16px 24px", display: "flex", alignItems: "center", gap: "20px", margin: "32px 0" }}>
+            <div style={{ background: "var(--bg-card)", cursor: "pointer", border: "1px solid var(--border)", borderRadius: "12px", padding: "16px 24px", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "12px 20px", margin: "32px 0" }}>
               <div style={{ fontSize: "42px", fontWeight: 700, color: "var(--accent)", fontFamily: "var(--font-mono)", lineHeight: 1, flexShrink: 0 }}>16%</div>
               <div style={{ width: "1px", background: "var(--border)", height: "48px", flexShrink: 0 }}></div>
-              <div style={{ flex: 1 }}>
+              <div style={{ flex: "1 1 180px", minWidth: 0 }}>
                 <strong style={{ fontSize: "15px", fontWeight: 600, display: "block", marginBottom: "3px" }}>Cognitive Fingerprinting's weight in Content Trace scoring</strong>
                 <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.55, margin: 0 }}>The single highest-weighted category — because opinion drift, self-correction, and visible reasoning are the hardest signals to manufacture.</p>
               </div>
