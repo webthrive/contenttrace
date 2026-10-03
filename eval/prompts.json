@@ -45,6 +45,17 @@
     { "id": "article-05", "category": "article", "expected_type": "corporate", "variant": "plain",
       "prompt": "Write a news article reporting that a British property company announced a 14 percent increase in pretax profit for the half year, with comments from the CEO and an analyst." },
 
+    { "id": "formal-01", "category": "formal", "expected_type": "technical", "variant": "plain",
+      "prompt": "Write a Python Enhancement Proposal (PEP) that proposes adding an optional strict keyword parameter to the built-in zip() so it raises an error when the iterables have different lengths. Include Abstract, Motivation, Rationale, Specification and Backwards Compatibility sections." },
+    { "id": "formal-02", "category": "formal", "expected_type": "technical", "variant": "plain",
+      "prompt": "Write the documentation page for a new Python warning category, EncodingWarning, which is emitted when the encoding argument to open() is omitted and the locale-specific default encoding is used. Explain why it exists, how to enable it, and how to fix code that triggers it." },
+    { "id": "formal-03", "category": "formal", "expected_type": "academic", "variant": "plain",
+      "prompt": "Write a 150-220 word abstract for a physics paper titled 'Polymer Quantum Mechanics and its Continuum Limit'." },
+    { "id": "formal-04", "category": "formal", "expected_type": "academic", "variant": "plain",
+      "prompt": "Write a 150-220 word abstract for a biology paper about the multisite phosphorylation-dephosphorylation cycle in cell signaling and when it can show bistability." },
+    { "id": "formal-05", "category": "formal", "expected_type": "corporate", "variant": "plain",
+      "prompt": "Write a news article reporting that H&R Block posted a big quarterly loss because of losses at its CompuServe online service, with comments from analysts." },
+
     { "id": "human-01", "category": "chat", "expected_type": "general", "variant": "humanized",
       "prompt": "Explain why the jelly in a doughnut sometimes leaks out the side. Answer like a normal person on a forum would, casual, no headings or bullet points, don't sound like an AI." },
     { "id": "human-02", "category": "email", "expected_type": "email", "variant": "humanized",

@@ -20,7 +20,7 @@ export default function SectionCard({ section }: SectionCardProps) {
   const pct = na ? 0 : Math.max(section.score, 4);
   const scoredCount = section.factors.filter((f) => f.applicable !== false).length;
   const factorLabel = na
-    ? "not scored for this type"
+    ? "not counted"
     : scoredCount < section.factors.length
       ? `${scoredCount} of ${section.factors.length} factors`
       : `${section.factors.length} factors`;

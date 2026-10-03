@@ -8,9 +8,10 @@ import { getIdentity, verifyTurnstile } from "@/lib/billing/identity";
 import { supabaseAdmin } from "@/lib/billing/supabase";
 import { CONTENT_PROFILES, CONTENT_TYPE_IDS, ContentProfile, ContentTypeId, calibrate, isContentTypeId } from "@/lib/contentTypes";
 
-// Measured and shown, but not counted: the September 2026 evaluation showed these do not
-// separate human from AI text (Vocabulary Richness pointed the wrong way).
-const INFORMATIONAL_FACTORS = ["Vocabulary Richness", "Response Calibration", "Entropy Variance"];
+// Measured and shown, but not counted: the September and October 2026 evaluations showed these do not
+// separate human from AI text (Vocabulary Richness and Burstiness pointed the wrong way). With all four
+// not counted, the Statistical Proxies section is shown for reference and has no weight.
+const INFORMATIONAL_FACTORS = ["Vocabulary Richness", "Burstiness Approximation", "Response Calibration", "Entropy Variance"];
 
 // Sections run in parallel, so a full analysis normally finishes in well under this limit.
 export const maxDuration = 60;
@@ -204,7 +205,7 @@ async function detectContentType(text: string): Promise<{ id: ContentTypeId; rea
     messages: [
       {
         role: "user",
-        content: `Classify the genre of this text. Judge the form and purpose, not whether AI wrote it.\n\nTypes:\n${list}\n\nText:\n---\n${text.slice(0, 4000)}\n---`,
+        content: `Classify the genre of this text. Judge the form and purpose, not whether AI wrote it. If the text answers or explains something a person asked (a chat reply or a Q&A answer), choose general, even when the topic is technical.\n\nTypes:\n${list}\n\nText:\n---\n${text.slice(0, 4000)}\n---`,
       },
     ],
   });

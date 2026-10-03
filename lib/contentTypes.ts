@@ -37,7 +37,7 @@ export const CALIBRATION: Record<CalibrationGroup, { ai: number; human: number }
   // Company blogs, thought leadership, marketing: between formal and personal (Oct 2026 run, 19 samples).
   business: { ai: 30.5, human: 52.7 },
   personal: { ai: 36.9, human: 74.8 },
-  // General (mixed or unclear genre, for example a chat assistant reply): the mean of the three
+  // General (chat or Q&A replies, and mixed or unclear genre): the mean of the three
   // measured groups. Provisional until a General test set exists. Before Oct 2026 General used the
   // formal anchors, which made casual AI text (raw 54+) show as 100.
   general: { ai: 29.0, human: 56.6 },
@@ -81,7 +81,7 @@ export const CONTENT_PROFILES: Record<ContentTypeId, ContentProfile> = {
     id: "general",
     group: "general",
     label: "General",
-    description: "Mixed or unclear genre. Use only if no other type fits.",
+    description: "A reply that answers or explains something someone asked, as in a chat with an AI assistant or a Q&A answer (even on a technical topic). Also mixed or unclear genre.",
     note: "Standard weights. No signals are excluded.",
     weights: BASE,
     naFactors: [],
@@ -126,7 +126,7 @@ export const CONTENT_PROFILES: Record<ContentTypeId, ContentProfile> = {
     id: "technical",
     group: "formal",
     label: "Technical / documentation",
-    description: "Documentation, how-to guide, FAQ, specification, tutorial, or technical explainer.",
+    description: "Standalone documentation, how-to guide, FAQ, specification, or tutorial written for a product, project, or reference site. Not a reply to someone's question in a chat or forum (use general).",
     note: "Documentation is written to be neutral and exact. Personal voice, opinions, and emotion are not expected, so we do not count them. Accuracy, specificity, and phrasing carry more weight.",
     weights: w({ "Structure & Flow": 0.14, "Word Choice & Phrasing": 0.22, "Voice & Perspective": 0.05, "Content & Logic": 0.28, "Cognitive Fingerprinting": 0.06, "Emotional Texture": 0, "Pragmatics & Subtext": 0.07, "Statistical Proxies": 0.18 }),
     naFactors: ["Personal Anecdotes Present", "Emotional Authenticity", "Opinion Strength", "Opinion Drift / Self-Correction", "Thinking Out Loud", "Cognitive Bias Presence", "Irony or Dry Humor"],
@@ -153,7 +153,7 @@ export const CONTENT_PROFILES: Record<ContentTypeId, ContentProfile> = {
     id: "social",
     group: "personal",
     label: "Social post",
-    description: "Short social media post (LinkedIn, X, Facebook, Reddit comment) or forum reply.",
+    description: "Social media post (LinkedIn, X, Facebook) or a short casual comment. A comment that mainly explains an answer to a question is general.",
     note: "Social posts are short and informal. Paragraph structure and complete arguments are not expected. Voice and tone carry more weight.",
     weights: w({ "Structure & Flow": 0.08, "Word Choice & Phrasing": 0.16, "Voice & Perspective": 0.18, "Content & Logic": 0.08, "Cognitive Fingerprinting": 0.14, "Emotional Texture": 0.16, "Pragmatics & Subtext": 0.14, "Statistical Proxies": 0.06 }),
     naFactors: ["Paragraph Length Consistency", "Argument Completeness"],

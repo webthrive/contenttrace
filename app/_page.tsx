@@ -32,7 +32,7 @@ const SECTIONS_INFO = [
   { name: "Structure & Flow", weight: "12%", desc: "How sentences and paragraphs are organized. AI tends toward uniform rhythm and predictable patterns.", factors: ["Sentence Length Variation", "Transitional Phrase Overuse", "Predictable List Structures", "Paragraph Length Consistency"] },
   { name: "Emotional Texture", weight: "12%", desc: "Whether emotion feels genuine or performed, and whether vulnerability is present in the writing.", factors: ["Genuine vs Performed Empathy", "Vulnerability Present", "Emotional Range", "Specificity of Feeling"] },
   { name: "Pragmatics & Subtext", weight: "10%", desc: "Subtext, irony, register shifts — human writers imply things; AI tends to over-explain everything.", factors: ["Subtext and Implication", "Irony or Dry Humor", "Register Shifts", "Over-Explicitness"] },
-  { name: "Statistical Proxies", weight: "8%", desc: "Approximations of vocabulary richness, burstiness, and entropy — the signals used in academic detection.", factors: ["Vocabulary Richness", "Burstiness Approximation", "Response Calibration", "Entropy Variance"] },
+  { name: "Statistical Proxies", weight: "Reference", desc: "Vocabulary richness, burstiness, hedging, and entropy, measured in code. Shown for reference only: in our tests they did not separate human and AI writing, so they do not change the score.", factors: ["Vocabulary Richness", "Burstiness Approximation", "Response Calibration", "Entropy Variance"] },
 ];
 
 export default function AnalyzerPage() {

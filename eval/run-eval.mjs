@@ -24,6 +24,7 @@ const LIMIT = Number(arg("limit", 0));
 const TYPE_MODE = arg("type", "auto");
 const PLAIN = Boolean(arg("plain", false));
 const WORKERS = Number(arg("workers", 2));
+const MAX_CHARS = 9800;
 const stamp = new Date().toISOString().replace(/[:T]/g, "-").slice(0, 16);
 const OUT = path.resolve(String(arg("out", path.join(RESULTS_DIR, `run-${stamp}${PLAIN ? "-plain" : ""}.jsonl`))));
 
@@ -99,7 +100,16 @@ async function main() {
   let n = 0;
   const t0 = Date.now();
   await pool(samples, WORKERS, async (s) => {
-    const text = PLAIN ? plain(s.text) : s.text;
+    // The local site runs without plans, so the free limit (10,000 characters) applies. Cut long
+    // samples at a paragraph break, like a user who pastes the first part.
+    let text = PLAIN ? plain(s.text) : s.text;
+    let truncated = false;
+    if (text.length > MAX_CHARS) {
+      const cut = text.slice(0, MAX_CHARS);
+      const p = cut.lastIndexOf("\n\n");
+      text = (p > 2000 ? cut.slice(0, p) : cut).trim();
+      truncated = true;
+    }
     let result, error;
     for (let attempt = 1; attempt <= 4; attempt++) {
       try {
@@ -123,6 +133,7 @@ async function main() {
       model: s.model ?? null,
       words: s.words,
       plain: PLAIN,
+      truncated,
       type_mode: TYPE_MODE,
     };
     if (error) {

@@ -7,15 +7,15 @@ These scripts test the real analyzer (`app/api/analyze`) on known human and know
 
 | File | Purpose |
 |---|---|
-| `prompts.json` | 24 prompts (5 chat, 5 email, 5 post, 5 article, plus 4 "humanized"). Sent to Claude, ChatGPT and Gemini. |
+| `prompts.json` | 29 prompts (5 chat, 5 email, 5 post, 5 article, 5 formal, plus 4 "humanized"). Sent to Claude, ChatGPT and Gemini. |
 | `generate-ai.mjs` | Makes the AI samples through the three APIs. You type the keys. |
 | `run-eval.mjs` | Sends every sample to the analyzer on your Mac and saves the scores. |
 | `summarize.mjs` | Accuracy, AUC, per-factor signal, wrong calls, and proposed anchors (with a leave-one-out check). |
-| `data/human-samples.jsonl` | 60 human samples. Not in git (third-party text). Kept in the Drive folder. |
+| `data/human-samples.jsonl` | 75 human samples. Not in git (third-party text). Kept in the Drive folder. |
 
 Data and results stay out of git. Set `CT_EVAL_DIR` to the `eval` folder in the Drive folder, so Claude can read the results.
 
-## Human samples (60, all written before 2022)
+## Human samples (75, all written before 2022)
 
 | Category | n | Source | Dates |
 |---|---|---|---|
@@ -28,13 +28,16 @@ Data and results stay out of git. Set `CT_EVAL_DIR` to the `eval` folder in the 
 | Articles | 4 | Andrej Karpathy blog (long posts cut at a paragraph near 8,000 characters) | 2014-2020 |
 | Articles | 2 | Rust project blog | 2019-2020 |
 | Articles | 4 | Reuters news (RCV1), via the Ghostbuster dataset | 1996-1997 |
+| Formal | 5 | Python Enhancement Proposals (technical), file versions from the 31 Dec 2021 commit | 2019-2020 |
+| Formal | 5 | arXiv abstracts (academic), via the M4 benchmark | 2007 |
+| Formal | 5 | Reuters news (corporate), via the Ghostbuster dataset | 1996-1997 |
 
 Each row has `source`, `url`, `date` and `expected_type`. Markdown from blog sources is kept (headings, lists, bold),
 because AI replies also come with markdown. Use `--plain` to test text copied from a web page instead.
 
-## AI samples (72)
+## AI samples (87)
 
-24 prompts x 3 providers. No system prompt, default settings. Topics mirror the human set (same content types).
+29 prompts x 3 providers. No system prompt, default settings. Topics mirror the human set (same content types).
 Models: Claude = newest Sonnet on your key; ChatGPT = `chat-latest` (the ChatGPT model); Gemini = `gemini-flash-latest`.
 Change with `CLAUDE_MODEL`, `OPENAI_MODEL`, `GEMINI_MODEL`. See all IDs: `node eval/generate-ai.mjs --list-models`.
 
@@ -63,7 +66,7 @@ The 4 "humanized" prompts ask the model to sound human. They are reported apart 
    ANTHROPIC_API_KEY=sk-ant-... ANTHROPIC_MODEL=claude-sonnet-4-6 npm run dev
    ```
 
-5. Terminal B (do step 1 again first): score all samples (about 30 minutes, about $15 for 132 samples):
+5. Terminal B (do step 1 again first): score all samples (about 15-30 minutes, about $15-20 for 162 samples):
 
    ```bash
    node eval/run-eval.mjs
@@ -78,6 +81,7 @@ The 4 "humanized" prompts ask the model to sound human. They are reported apart 
 ## Notes
 
 - Raw scores are grouped by the content type the analyzer detects (as for real users). `--type expected` sends the known type instead.
+- Samples longer than 9,800 characters are cut at a paragraph break (the local site uses the free 10,000-character limit).
 - Proposed anchors = median raw score of human and AI samples per group. A group needs 5+ samples on each side, or the anchors stay as they are.
 - The leave-one-out accuracy scores each sample with anchors built from the other samples. It is a fairer number than in-sample accuracy.
 - Do not publish accuracy numbers from this set as marketing claims. It is small and it is our own test set.
