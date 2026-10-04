@@ -4,7 +4,7 @@ import { Trash2 } from "lucide-react";
 
 type Item = { id: string; created_at: string; content_type: string | null; word_count: number; score: number | null; verdict: string | null; preview: string | null; goal?: string | null; parent_id?: string | null };
 
-const GOAL_NAMES: Record<string, string> = { readability: "Readability", seo: "SEO", aeo: "AI answers" };
+const GOAL_NAMES: Record<string, string> = { readability: "Humanize", seo: "SEO", aeo: "AI answers" };
 
 const VERDICT_COLOR: Record<string, string> = {
   "Likely Human": "#0a7373",

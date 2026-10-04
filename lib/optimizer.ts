@@ -23,8 +23,8 @@ const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY, timeout: 3
 // Rewrite
 
 const GOAL_BRIEF: Record<Goal, string> = {
-  readability:
-    "Goal: easier to read. Use shorter sentences, plain words, active voice and one idea per paragraph. Cut filler. Do not add headings unless the text is long and has none.",
+  readability: // shown to users as "Humanize"
+    "Goal: make the text read like a skilled person wrote it, and make it easier to read. Use plain words, active voice and one idea per paragraph. Vary sentence length on purpose. Use contractions where the register allows. Cut AI filler, stock phrases and padding. Do not add headings unless the text is long and has none.",
   seo:
     "Goal: easier to read AND easier for search engines to understand. Use shorter sentences, plain words and active voice. Use descriptive headings that say what each section covers. Put the main point early. If a target keyword is given, use it naturally in the first 100 words and in at least one heading, and use close variants. Never stuff the keyword.",
   aeo:

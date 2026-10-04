@@ -93,7 +93,7 @@ export default function PricingPlans() {
             <Feature><strong>{PLANS.pro.wordsPerMonth.toLocaleString()} words</strong> a month</Feature>
             <Feature>Up to {PLANS.pro.charLimit.toLocaleString()} characters (about 5,000 words) each</Feature>
             <Feature>Full 32-signal report with content-type adjustment</Feature>
-            <Feature><strong>Content Optimizer</strong> for readability, SEO and AI answers ({OPTIMIZE_WORD_MULTIPLIER}x words per run)</Feature>
+            <Feature><strong>Content Optimizer</strong>: Humanize, SEO and AI answers ({OPTIMIZE_WORD_MULTIPLIER}x words per run)</Feature>
             <Feature>No ads</Feature>
           </ul>
           {isPro ? (

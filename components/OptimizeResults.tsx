@@ -127,15 +127,28 @@ export default function OptimizeResults(p: OptimizeResultsProps) {
   return (
     <div className="fade-in" style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "12px" }}>
+        {p.goal === "readability" ? <>
+        <ScoreCard title="Reading ease" before={mBefore.readingEase} after={mAfter.readingEase}
+          beforeNote={`${readingEaseLabel(mBefore.readingEase)}, grade ${mBefore.gradeLevel}`} afterNote={`${readingEaseLabel(mAfter.readingEase)}, grade ${mAfter.gradeLevel}`}
+          hint="Flesch Reading Ease. 60+ is plain English for most readers." />
+        <ScoreCard title="Human Score" before={Math.round(p.beforeScore)} after={p.afterScore == null ? null : Math.round(p.afterScore)} pending={p.checking}
+          hint="Our 32-signal analysis of how natural the writing reads." />
+        </> : <>
         <ScoreCard title="Human Score" before={Math.round(p.beforeScore)} after={p.afterScore == null ? null : Math.round(p.afterScore)} pending={p.checking}
           hint="Our 32-signal analysis of how natural the writing reads." />
         <ScoreCard title="Reading ease" before={mBefore.readingEase} after={mAfter.readingEase}
           beforeNote={`${readingEaseLabel(mBefore.readingEase)}, grade ${mBefore.gradeLevel}`} afterNote={`${readingEaseLabel(mAfter.readingEase)}, grade ${mAfter.gradeLevel}`}
           hint="Flesch Reading Ease. 60+ is plain English for most readers." />
+        </>}
         <ScoreCard title="Search & AI-answer readiness" before={p.beforeReadiness?.score ?? null} after={p.afterReadiness?.score ?? null} pending={p.checking}
           hint="Our checklist for content that search engines and AI assistants can quote. Not a ranking forecast." />
       </div>
 
+      {p.goal === "readability" && (
+        <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: 1.6, margin: 0, background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "10px", padding: "10px 14px" }}>
+          Humanize edits wording only. It never invents stories, opinions or facts, so the Human Score may move only a little. Reading ease usually improves most, and the real details you add at the [Add: ...] markers help most.
+        </p>
+      )}
       {p.checkError && <div role="alert" style={{ fontSize: "14px", color: "var(--red)" }}>{p.checkError}</div>}
 
       {(p.warnings?.length ?? 0) > 0 && (

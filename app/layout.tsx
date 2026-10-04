@@ -11,11 +11,11 @@ const LOAD_TRACKING = process.env.VERCEL_ENV === "production";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Content Trace — Free AI Content Detector",
+    default: "Content Trace: AI Detector, Humanizer and Content Optimizer",
     template: "%s | Content Trace",
   },
-  description: "Free AI text detector. Analyze any content across 8 sections and 32 signals — structure, voice, cognitive fingerprinting, emotional texture, and more. Get a Human Score out of 100.",
-  keywords: ["free AI content detector","AI text detector","AI writing detector","detect AI generated text","GPT detector","ChatGPT detector","human vs AI text","AI content checker","content authenticity tool","Content Trace"],
+  description: "Free AI content detector that explains its score with 32 signals. Then humanize your text, optimize it for SEO or for AI answers, and compare every change before and after.",
+  keywords: ["free AI content detector","AI humanizer","humanize AI text","AI content optimizer","SEO content optimizer","answer engine optimization","AI text detector","AI writing detector","detect AI generated text","GPT detector","ChatGPT detector","human vs AI text","AI content checker","content authenticity tool","Content Trace"],
   authors: [{ name: "Web Thrive, LLC" }],
   creator: "Web Thrive, LLC",
   publisher: "Web Thrive, LLC",
@@ -23,14 +23,14 @@ export const metadata: Metadata = {
   alternates: { canonical: SITE_URL },
   openGraph: {
     type: "website", url: SITE_URL, siteName: "Content Trace",
-    title: "Content Trace — Free AI Content Detector",
-    description: "Free AI text detector. 8 sections, 32 signals, Human Score out of 100. No account required.",
+    title: "Content Trace: AI Detector, Humanizer and Content Optimizer",
+    description: "Check text for AI with 32 explained signals. Then Humanize, SEO or AI answers, with every change shown before and after.",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Content Trace — Free AI Content Detector",
-    description: "Free AI text detector. 8 sections, 32 signals, Human Score out of 100. No account required.",
+    title: "Content Trace: AI Detector, Humanizer and Content Optimizer",
+    description: "Check text for AI with 32 explained signals. Then Humanize, SEO or AI answers, with every change shown before and after.",
     creator: "@contenttrace",
   },
 };

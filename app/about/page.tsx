@@ -5,11 +5,11 @@ const SITE_URL = "https://www.contenttrace.ai";
 
 export const metadata: Metadata = {
   title: "About",
-  description: "Content Trace is an AI content detector that explains its score: 32 signals, scoring adjusted for the type of content, and a Human Score you can read and understand.",
+  description: "Content Trace is an AI content detector that explains its score with 32 signals, then helps you fix the weak spots with three optimizers: Humanize, SEO and AI answers.",
   alternates: { canonical: `${SITE_URL}/about` },
   openGraph: {
     title: "About Content Trace",
-    description: "AI content detection that explains why, and adjusts for the type of writing.",
+    description: "AI detection that explains why, plus Humanize, SEO and AI-answer optimizers that show every change.",
     url: `${SITE_URL}/about`,
     siteName: "Content Trace",
     type: "website",
@@ -30,13 +30,13 @@ export default function AboutPage() {
       <div style={{ marginBottom: "40px" }}>
         <h2 style={{ fontSize: "22px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "14px" }}>Why we built this</h2>
         <p style={{ fontSize: "16px", color: "var(--text-secondary)", marginBottom: "14px" }}>
-          AI writing tools have become part of everyday work. That's not inherently a problem — but it has created a real need for transparency. Teachers want to know if a student wrote their own essay. Editors want to know if a pitch is authentic. Publishers want to know if the voice they're buying is real.
+          AI writing tools are now part of everyday work. Most teams start with an AI draft, and that's fine. The problem is what comes next: drafts that sound generic, read like every other page, and get passed over by readers, search engines and AI assistants. At the same time, teachers, editors and publishers still want to know what they're reading.
         </p>
         <p style={{ fontSize: "16px", color: "var(--text-secondary)", marginBottom: "14px" }}>
-          Most AI detectors give you a single score and a verdict with no explanation. We thought that wasn't good enough. Content Trace was built to go deeper — to show you <em>why</em> something scores the way it does, not just <em>what</em> the verdict is.
+          Most AI detectors give you one score and a verdict with no explanation, and then leave you on your own. Content Trace shows you <em>why</em> something scores the way it does. Then it helps you fix it, with three optimizers that rewrite the weak spots and show every change before and after.
         </p>
         <p style={{ fontSize: "16px", color: "var(--text-secondary)" }}>
-          We also wanted it to be accessible. Anyone can run a few full analyses every month for free, with no account. Pro and one-time Word Packs are there for people who check longer texts or check them often.
+          We also wanted it to be easy to try. Anyone can run a few full analyses every month for free, with no account. Pro and one-time Word Packs are there for people who check and optimize longer texts, or do it often.
         </p>
       </div>
 
@@ -44,7 +44,7 @@ export default function AboutPage() {
       <div style={{ marginBottom: "40px" }}>
         <h2 style={{ fontSize: "22px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "14px" }}>How it works</h2>
         <p style={{ fontSize: "16px", color: "var(--text-secondary)", marginBottom: "14px" }}>
-          Content Trace analyzes text across 8 sections and 32 individual signals — from sentence rhythm and word choice to reasoning patterns and emotional texture. Each signal is scored on its own and explained in plain language, so you can see exactly what drives the result.
+          Content Trace analyzes text across 8 sections and 32 individual signals, from sentence rhythm and word choice to reasoning patterns and emotional texture. Each signal is scored on its own and explained in plain language, so you can see exactly what drives the result.
         </p>
         <p style={{ fontSize: "16px", color: "var(--text-secondary)", marginBottom: "20px" }}>
           Most signals are read by Claude, Anthropic's AI model, which reviews the writing the way a trained editor would. A few are measured directly from the text, such as how much sentence length varies. The analysis settings are fixed, so the same text gets the same or a very close score each time.
@@ -66,6 +66,32 @@ export default function AboutPage() {
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Optimizers */}
+      <div style={{ marginBottom: "40px" }}>
+        <h2 style={{ fontSize: "22px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "14px" }}>Then optimize it: three goals</h2>
+        <p style={{ fontSize: "16px", color: "var(--text-secondary)", marginBottom: "16px" }}>
+          After an analysis, you pick a goal. The optimizer rewrites the weak spots the analysis found, then scores the new version with the same engine. You compare the two versions side by side, with the Human Score, reading ease and Search & AI-answer readiness before and after. You can run all three goals on the same text.
+        </p>
+        <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "16px" }}>
+          {[
+            { name: "Humanize", what: "Makes AI drafts read like a person wrote them. Plain words, varied sentences, no AI filler or stock phrases." },
+            { name: "SEO", what: "Humanize, plus descriptive headings, the main point early, and your target keyword placed naturally." },
+            { name: "AI answers (AEO)", what: "Humanize, plus a direct answer up top, question-style headings and self-contained passages that Google AI Overviews, ChatGPT and Perplexity can quote." },
+          ].map((o) => (
+            <div key={o.name} style={{ padding: "14px 16px", background: "var(--bg-card)", border: "1px solid rgba(10,115,115,0.3)", borderRadius: "10px" }}>
+              <div style={{ fontSize: "16px", fontWeight: 700, color: "var(--accent)", marginBottom: "4px" }}>{o.name}</div>
+              <div style={{ fontSize: "15px", color: "var(--text-secondary)" }}>{o.what}</div>
+            </div>
+          ))}
+        </div>
+        <p style={{ fontSize: "16px", color: "var(--text-secondary)", marginBottom: "14px" }}>
+          The optimizer is an editor, not an author. It keeps your facts, numbers, names and quotes. It does not add opinions, feelings or stories you did not write. A fact check compares the new version with your original and flags any name, number or quote that changed. Where a real example or source would make the text stronger, it adds a marker like [Add: a real example from your work] for you to fill in.
+        </p>
+        <p style={{ fontSize: "15px", color: "var(--text-muted)" }}>
+          Because we do not invent details to game the score, the Human Score may move only a little. Reading ease and readiness usually improve most. No tool can guarantee rankings or AI citations, so review every change before you publish.
+        </p>
       </div>
 
       {/* Content type */}
@@ -112,7 +138,7 @@ export default function AboutPage() {
           ))}
         </div>
         <p style={{ fontSize: "15px", color: "var(--text-muted)" }}>
-          These are probabilistic signals, not verdicts. A score of 72 doesn't mean a text is definitely human-written — it means it shows more human than AI writing characteristics for its type of content.
+          These are probabilistic signals, not verdicts. A score of 72 doesn't mean a text is definitely human-written. It means it shows more human than AI writing characteristics for its type of content.
         </p>
         <p style={{ fontSize: "15px", color: "var(--text-muted)", marginTop: "12px" }}>
           One limit we want to be open about: AI text that a person has heavily rewritten, or that was prompted to imitate a casual human style, can score in the human range. No detector catches all of it, and we say so in every report.
@@ -123,15 +149,15 @@ export default function AboutPage() {
       <div style={{ marginBottom: "40px" }}>
         <h2 style={{ fontSize: "22px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "14px" }}>Who it's for</h2>
         <p style={{ fontSize: "16px", color: "var(--text-secondary)", marginBottom: "14px" }}>
-          Content Trace is useful for anyone who cares about content authenticity:
+          Content Trace is for anyone who writes with AI, or reviews writing that might be:
         </p>
         <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px" }}>
           {[
-            { who: "Writers & content creators", why: "Check your own work before publishing or submitting" },
-            { who: "Editors & publishers", why: "Quickly assess whether a submission feels authentically human" },
+            { who: "Content & SEO teams", why: "Humanize AI drafts and tune them for search and AI answers" },
+            { who: "Marketers", why: "Turn AI first drafts into copy that sounds like your brand" },
+            { who: "Writers & creators", why: "Check your own work and tighten it before you publish" },
+            { who: "Editors & publishers", why: "See which signals stand out in a submission" },
             { who: "Teachers & academics", why: "A supplementary signal when reviewing student work" },
-            { who: "Marketers", why: "Ensure AI-assisted content has been humanized effectively" },
-            { who: "Hiring managers", why: "Spot-check whether written applications feel genuine" },
           ].map((item) => (
             <li key={item.who} style={{ display: "flex", flexWrap: "wrap", gap: "4px 12px", padding: "12px 16px", background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: "10px" }}>
               <span style={{ fontSize: "15px", fontWeight: 600, color: "var(--text-primary)", minWidth: "180px" }}>{item.who}</span>
@@ -156,7 +182,7 @@ export default function AboutPage() {
       {/* Disclaimer */}
       <div style={{ border: "1px solid var(--border)", borderRadius: "10px", padding: "20px 24px", background: "var(--bg-elevated)", fontSize: "14px", color: "var(--text-muted)", lineHeight: "1.75" }}>
         <strong style={{ color: "var(--text-secondary)", display: "block", marginBottom: "6px" }}>A note on accuracy</strong>
-        Content Trace provides probabilistic analysis only. Results should not be used as definitive evidence in academic, legal, employment, or disciplinary proceedings. AI detection is an imperfect science and no tool — including this one — is 100% accurate.
+        Content Trace provides probabilistic analysis only. Results should not be used as definitive evidence in academic, legal, employment, or disciplinary proceedings. AI detection is an imperfect science, and no tool, including this one, is 100% accurate.
       </div>
     </main>
     </>
