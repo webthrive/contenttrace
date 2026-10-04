@@ -88,9 +88,10 @@ const REWRITE_TOOL: Anthropic.Tool = {
 
 const countWords = (s: string) => (s.trim() ? s.trim().split(/\s+/).length : 0);
 
-// Long texts are rewritten in parallel parts of about 600 words, split at paragraph breaks,
-// so a 5,000-word text finishes about as fast as a short one. Texts up to 900 words stay whole.
-export function splitIntoParts(text: string, target = 600, singleMax = 900): string[] {
+// Long texts are rewritten in parallel parts of about 350 words, split at paragraph breaks,
+// so a 5,000-word text finishes about as fast as a short one. Texts up to 450 words stay whole.
+// Small parts keep each model call short enough to finish well inside the function time limit.
+export function splitIntoParts(text: string, target = 350, singleMax = 450): string[] {
   if (countWords(text) <= singleMax) return [text];
   const paras = text.split(/(\n\s*\n)/); // keep the separators
   const parts: string[] = [];
@@ -173,10 +174,13 @@ type PartResult = { rewritten: string; changes: Change[]; inputNeeded: InputNeed
 
 type PartOpts = {
   part: string; index: number; total: number; opening: string; outline: string; goal: Goal; keyword: string; contentLabel: string; weaknesses: Weakness[];
-  canRepair: () => boolean;
+  deadline: number; // absolute time (ms) by which this part must be finished
 };
 
-async function callRewrite(content: string): Promise<PartResult> {
+const left = (deadline: number) => deadline - Date.now();
+const MARGIN_MS = 1_500;
+
+async function callRewrite(content: string, timeoutMs: number): Promise<PartResult> {
   const msg = await client.messages.create({
     model: MODEL,
     max_tokens: 6000,
@@ -185,7 +189,7 @@ async function callRewrite(content: string): Promise<PartResult> {
     tools: [REWRITE_TOOL],
     tool_choice: { type: "tool", name: REWRITE_TOOL.name },
     messages: [{ role: "user", content }],
-  });
+  }, { timeout: Math.max(1_000, timeoutMs), maxRetries: 0 });
   const block = msg.content.find((b) => b.type === "tool_use");
   if (!block || block.type !== "tool_use") throw new Error("No rewrite returned");
   const input = block.input as Partial<PartResult>;
@@ -211,6 +215,8 @@ async function rewritePart(opts: PartOpts): Promise<PartResult & { warnings: str
       ? `This is part ${index + 1} of ${total} of a longer text. Rewrite only this part.${
           outline ? `\nHeadings of the full text, for consistency (keep the same heading levels and numbering style):\n${outline}` : ""
         }${
+          total > 2 ? `\nUse at most 1 [Add: ...] marker and list at most 5 changes for this part.` : ""
+        }${
           index > 0 ? `\nIt is not the start of the text, so do not add an opening answer, introduction or conclusion.\nOpening of the full text, for context only (do not rewrite it):\n"""${opening}"""` : ""
         }`
       : "";
@@ -219,13 +225,22 @@ async function rewritePart(opts: PartOpts): Promise<PartResult & { warnings: str
   const prompt = [GOAL_BRIEF[goal], target, `Content type: ${contentLabel}.`, weak, position, `Text to rewrite:\n"""\n${part}\n"""`]
     .filter(Boolean)
     .join("\n\n");
-  let out = await callRewrite(prompt);
+  // First call, with one retry only if there is still time for a full second attempt.
+  let out: PartResult;
+  try {
+    out = await callRewrite(prompt, left(opts.deadline) - MARGIN_MS);
+  } catch (err) {
+    if (left(opts.deadline) < 25_000) throw err;
+    out = await callRewrite(prompt, left(opts.deadline) - MARGIN_MS);
+  }
   let issues = factIssues(part, out.rewritten);
-  // One repair pass when the guard finds added names or numbers, or changed quotes (if time allows).
-  if (issues.length && opts.canRepair()) {
+  // One repair pass when the guard finds added names or numbers, or changed quotes.
+  // It runs only when there is time for it; if it does not finish, the first rewrite is kept with warnings.
+  if (issues.length && left(opts.deadline) > 20_000) {
     try {
       const fixed = await callRewrite(
-        `${prompt}\n\nYour previous rewrite broke the rules. Problems found:\n${issues.map((i) => `- ${i}`).join("\n")}\n\nPrevious rewrite:\n"""\n${out.rewritten}\n"""\n\nReturn a corrected rewrite of the original text. Remove anything not in the original and restore quotes word for word.`
+        `${prompt}\n\nYour previous rewrite broke the rules. Problems found:\n${issues.map((i) => `- ${i}`).join("\n")}\n\nPrevious rewrite:\n"""\n${out.rewritten}\n"""\n\nReturn a corrected rewrite of the original text. Remove anything not in the original and restore quotes word for word.`,
+        left(opts.deadline) - MARGIN_MS
       );
       const fixedIssues = factIssues(part, fixed.rewritten);
       if (fixedIssues.length <= issues.length) { out = fixed; issues = fixedIssues; }
@@ -236,23 +251,34 @@ async function rewritePart(opts: PartOpts): Promise<PartResult & { warnings: str
 
 export async function rewrite(
   text: string,
-  opts: { goal: Goal; keyword: string; contentLabel: string; weaknesses: Weakness[]; onProgress?: (done: number, total: number) => void; repairUntil?: number }
+  opts: { goal: Goal; keyword: string; contentLabel: string; weaknesses: Weakness[]; onProgress?: (done: number, total: number) => void; deadline: number }
 ): Promise<PartResult & { warnings: string[] }> {
   const parts = splitIntoParts(text);
   const opening = parts[0].slice(0, 600);
   const headings = text.split("\n").filter((l) => /^#{1,6}\s/.test(l.trim()));
   const outline = parts.length > 1 ? headings.slice(0, 40).join("\n") : "";
-  const canRepair = () => Date.now() < (opts.repairUntil ?? Infinity);
   let done = 0;
   opts.onProgress?.(0, parts.length);
+  // A part that fails or runs out of time keeps its original wording, so the user still gets a result.
+  let failed = 0;
   const results = await Promise.all(
     parts.map((part, index) =>
-      rewritePart({ ...opts, part, index, total: parts.length, opening, outline, canRepair }).then((r) => {
-        opts.onProgress?.(++done, parts.length);
-        return r;
-      })
+      rewritePart({ ...opts, part, index, total: parts.length, opening, outline })
+        .catch((err): PartResult & { warnings: string[] } => {
+          failed++;
+          console.error(`Optimizer part ${index + 1}/${parts.length} failed:`, err instanceof Error ? err.message : err);
+          return {
+            rewritten: part, changes: [], inputNeeded: [],
+            warnings: [`Part ${index + 1} of ${parts.length} could not be optimized in time, so its original wording is kept. Run the optimizer again to retry.`],
+          };
+        })
+        .then((r) => {
+          opts.onProgress?.(++done, parts.length);
+          return r;
+        })
     )
   );
+  if (failed === parts.length) throw new Error("all parts failed");
   return {
     rewritten: results.map((r) => r.rewritten).join("\n\n"),
     changes: results.flatMap((r) => r.changes),

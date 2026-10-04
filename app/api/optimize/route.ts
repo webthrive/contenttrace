@@ -10,7 +10,8 @@ import { isGoal, judgeReadiness, rewrite, signRecheck, subjectOf, textHash, weak
 
 // Rewrites run in parallel parts, so a run normally finishes in 15-30 seconds.
 export const maxDuration = 60;
-const DEADLINE_MS = 55_000;
+const DEADLINE_MS = 56_000; // backstop; the rewrite itself aims to finish by REWRITE_MS
+const REWRITE_MS = 50_000;
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -85,8 +86,8 @@ export async function POST(req: NextRequest) {
             contentLabel: CONTENT_PROFILES[typeId].label,
             weaknesses: weakestFactors(result),
             onProgress: (done, total) => send({ type: "progress", done, total }),
-            // A repair pass takes up to about 25 seconds; start one only if it can finish before the deadline.
-            repairUntil: Date.now() + DEADLINE_MS - 25_000,
+            // Every model call is sized to finish before this time; slow parts keep their original wording.
+            deadline: Date.now() + REWRITE_MS,
           }),
           deadline,
         ]);
@@ -101,8 +102,8 @@ export async function POST(req: NextRequest) {
           type: "error",
           message: busy
             ? "High demand right now. Please wait a minute and try again."
-            : err instanceof Error && err.message === "deadline"
-              ? "This text took too long to optimize. Please try a shorter section."
+            : err instanceof Error && (err.message === "deadline" || err.message === "all parts failed")
+              ? "This text took too long to optimize. Please try again, or optimize a shorter section."
               : "The optimizer is unavailable. Please try again in a moment.",
         });
       } finally {

@@ -35,7 +35,22 @@ type Run = {
   checkError: string | null;
 };
 
+// Live status of a goal while it runs (or after it failed).
+type Status =
+  | { phase: "queued" }
+  | { phase: "rewriting"; done: number; total: number }
+  | { phase: "checking" }
+  | { phase: "error"; message: string };
+
 const GOALS = Object.keys(GOAL_LABELS) as OptimizeGoal[];
+
+function Bar({ pct, pulse }: { pct: number; pulse?: boolean }) {
+  return (
+    <div style={{ height: "6px", borderRadius: "4px", background: "var(--bg-elevated)", overflow: "hidden", marginTop: "8px" }}>
+      <div className={pulse ? "pulse" : undefined} style={{ height: "100%", width: `${Math.max(6, Math.min(100, pct))}%`, background: "var(--accent)", borderRadius: "4px", transition: "width 0.4s ease" }} />
+    </div>
+  );
+}
 
 // Content Optimizer: rewrite for a goal, then re-check the rewrite with the same engine.
 // You can run all three goals on the same text and switch between the before/after results.
@@ -44,10 +59,10 @@ export default function OptimizePanel({ text, result, historyId, usage, needsBot
   const [keyword, setKeyword] = useState("");
   const [runs, setRuns] = useState<Partial<Record<OptimizeGoal, Run>>>({});
   const [active, setActive] = useState<OptimizeGoal | null>(null);
-  const [running, setRunning] = useState<{ goal: OptimizeGoal; phase: "rewriting" | "checking"; progress: { done: number; total: number } | null } | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [status, setStatus] = useState<Partial<Record<OptimizeGoal, Status>>>({});
   const [limit, setLimit] = useState<string | null>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
+  const scrolled = useRef(false);
 
   const doneCount = Object.keys(runs).length;
   useEffect(() => { onRunsChange?.(doneCount); }, [doneCount, onRunsChange]);
@@ -56,8 +71,10 @@ export default function OptimizePanel({ text, result, historyId, usage, needsBot
   const costOf = (n: number) =>
     !usage?.enabled ? "" :
     usage.plan === "free" ? `Uses ${OPTIMIZE_FREE_UNITS * n} of your free checks (${usage.freeAnalysesLeft ?? 0} left)` :
-    `Uses about ${(words * OPTIMIZE_WORD_MULTIPLIER * n).toLocaleString()} words (rewrite + re-check${n > 1 ? ", all three" : ""})`;
+    `Uses about ${(words * OPTIMIZE_WORD_MULTIPLIER * n).toLocaleString()} words (rewrite + re-check${n > 1 ? `, ${n} goals` : ""})`;
 
+  const setGoalStatus = (g: OptimizeGoal, s: Status | null) =>
+    setStatus((m) => { const next = { ...m }; if (s) next[g] = s; else delete next[g]; return next; });
   const patchRun = (g: OptimizeGoal, p: Partial<Run>) => setRuns((r) => (r[g] ? { ...r, [g]: { ...r[g]!, ...p } } : r));
 
   const recheck = async (g: OptimizeGoal, out: Rewrite, token: string) => {
@@ -96,10 +113,10 @@ export default function OptimizePanel({ text, result, historyId, usage, needsBot
     patchRun(g, { checking: false });
   };
 
-  // Returns false when the run stopped (error or plan limit), so "Run all 3" can stop too.
-  const runGoal = async (g: OptimizeGoal, kw: string): Promise<boolean> => {
-    setError(null); setLimit(null);
-    setRunning({ goal: g, phase: "rewriting", progress: null });
+  // Runs one goal from start to finish and keeps its status card up to date.
+  // Returns "limit" when the plan limit stops it, so "Run all" can tell the user once.
+  const runGoal = async (g: OptimizeGoal, kw: string): Promise<"ok" | "error" | "limit"> => {
+    setGoalStatus(g, { phase: "rewriting", done: 0, total: 1 });
     try {
       let token: string | null = null;
       if (needsBotCheck) {
@@ -118,47 +135,54 @@ export default function OptimizePanel({ text, result, historyId, usage, needsBot
       }
       if (!res.ok) {
         const { message, code } = await errorOf(res, "The optimizer failed. Please try again.");
-        if (code === "limit" || code === "too_long") { setLimit(message); setRunning(null); return false; }
+        if (code === "limit" || code === "too_long") { setLimit(message); setGoalStatus(g, null); return "limit"; }
         throw new Error(message);
       }
       let out: (Rewrite & { recheckToken: string }) | null = null;
       await readEvents(res, (e) => {
-        if (e.type === "progress") setRunning({ goal: g, phase: "rewriting", progress: { done: Number(e.done), total: Number(e.total) } });
+        if (e.type === "progress") setGoalStatus(g, { phase: "rewriting", done: Number(e.done), total: Math.max(1, Number(e.total)) });
         else if (e.type === "complete") out = e as unknown as Rewrite & { recheckToken: string };
         else if (e.type === "error") throw new Error(String(e.message));
       });
       if (!out) throw new Error("The optimizer did not finish. Please try again.");
       const o = out as Rewrite & { recheckToken: string };
       setRuns((r) => ({ ...r, [g]: { goal: g, keyword: kw, rw: o, afterScore: null, afterReadiness: null, afterHistoryId: null, checking: true, checkError: null } }));
-      setActive(g);
-      setRunning({ goal: g, phase: "checking", progress: null });
+      setActive((a) => a ?? g); // show the first result that finishes; the others wait in the pills
+      setGoalStatus(g, { phase: "checking" });
       onUsageChange();
-      setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
+      if (!scrolled.current) {
+        scrolled.current = true;
+        setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
+      }
       await recheck(g, o, o.recheckToken);
-      setRunning(null);
-      return true;
+      setGoalStatus(g, null);
+      return "ok";
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
-      setRunning(null);
-      return false;
+      setGoalStatus(g, { phase: "error", message: err instanceof Error ? err.message : "Something went wrong. Please try again." });
+      return "error";
     }
   };
 
+  const startOne = () => {
+    setLimit(null);
+    scrolled.current = false;
+    runGoal(goal, goal === "readability" ? "" : keyword.trim());
+  };
+
+  // All goals that have no result yet, at the same time. Each card shows its own status.
   const runAll = async () => {
+    setLimit(null);
+    scrolled.current = false;
     const kw = keyword.trim();
-    for (const g of GOALS) {
-      if (!(await runGoal(g, g === "readability" ? "" : kw))) break;
-    }
+    const todo = GOALS.filter((g) => !runs[g]);
+    todo.forEach((g) => setGoalStatus(g, { phase: "queued" }));
+    await Promise.all(todo.map((g) => runGoal(g, g === "readability" ? "" : kw)));
   };
 
-  const busy = running !== null;
+  const busy = Object.values(status).some((s) => s && s.phase !== "error");
   const run = active ? runs[active] : undefined;
+  const todoCount = GOALS.filter((g) => !runs[g]).length;
   const canRunAll = Boolean(usage?.signedIn && usage.plan !== "free");
-  const btnLabel = running
-    ? running.phase === "rewriting"
-      ? `${GOAL_LABELS[running.goal].short}: ${running.progress && running.progress.total > 1 ? `part ${Math.min(running.progress.done + 1, running.progress.total)} of ${running.progress.total}` : "rewriting"}…`
-      : `${GOAL_LABELS[running.goal].short}: re-checking…`
-    : runs[goal] ? `Run ${GOAL_LABELS[goal].short} again` : `Run ${GOAL_LABELS[goal].short}`;
 
   return (
     <section id="optimize" style={{ scrollMarginTop: "80px" }}>
@@ -168,28 +192,32 @@ export default function OptimizePanel({ text, result, historyId, usage, needsBot
           <h2 style={{ fontSize: "19px", fontWeight: 700, color: "var(--text-primary)", margin: 0, letterSpacing: "-0.01em" }}>Optimize this text</h2>
         </div>
         <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.55, margin: "0 0 14px" }}>
-          Pick a goal and run it. Each result shows your text before and after, with the scores. Run all three goals and switch between them.
+          Pick a goal and run it, or run all three. Each result shows your text before and after, with the scores.
         </p>
 
         <div role="radiogroup" aria-label="Optimization goal" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "10px", marginBottom: "14px" }}>
           {GOALS.map((g) => {
             const r = runs[g];
-            const here = running?.goal === g;
+            const st = status[g];
             const sel = goal === g;
-            const status = here
-              ? (running!.phase === "rewriting" ? "Rewriting…" : "Re-checking…")
-              : r
-                ? (r.afterScore != null ? `Done. Human Score ${Math.round(result.aggregateScore)} → ${Math.round(r.afterScore)}` : r.checking ? "Done. Scoring…" : "Done")
-                : null;
+            let line: React.ReactNode = <span style={{ color: "var(--text-muted)" }}>{GOAL_LABELS[g].desc}</span>;
+            let bar: React.ReactNode = null;
+            if (st?.phase === "queued") { line = <span style={{ color: "var(--accent)", fontWeight: 600 }}>Waiting to start…</span>; bar = <Bar pct={4} />; }
+            else if (st?.phase === "rewriting") { line = <span style={{ color: "var(--accent)", fontWeight: 600 }}>Step 1 of 2: rewriting…</span>; bar = <Bar pct={10 + (st.done / st.total) * 60} pulse />; }
+            else if (st?.phase === "checking") { line = <span style={{ color: "var(--accent)", fontWeight: 600 }}>Step 2 of 2: scoring the new version…</span>; bar = <Bar pct={85} pulse />; }
+            else if (st?.phase === "error") { line = <span style={{ color: "var(--red)", fontWeight: 600 }}>Failed: {st.message}</span>; }
+            else if (r) line = <span style={{ color: "var(--accent)", fontWeight: 600 }}>{r.afterScore != null ? `Human Score ${Math.round(result.aggregateScore)} → ${Math.round(r.afterScore)}. Click to view.` : "Scoring…"}</span>;
+            const badge = st?.phase === "error" ? { t: "FAILED", bg: "var(--red)" } : st ? { t: "RUNNING", bg: "var(--amber)" } : r ? { t: "DONE", bg: "var(--accent)" } : null;
             return (
-              <button key={g} role="radio" aria-checked={sel} onClick={() => { setGoal(g); if (r) setActive(g); }} disabled={busy}
-                style={{ textAlign: "left", padding: "12px 14px", borderRadius: "10px", cursor: busy ? "default" : "pointer", fontFamily: "var(--font)",
+              <button key={g} role="radio" aria-checked={sel} onClick={() => { setGoal(g); if (r) setActive(g); }}
+                style={{ textAlign: "left", padding: "12px 14px", borderRadius: "10px", cursor: "pointer", fontFamily: "var(--font)",
                   border: sel ? "2px solid var(--accent)" : "1px solid var(--border)", background: sel ? "var(--accent-light)" : "var(--bg-card)" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "8px", marginBottom: "3px" }}>
                   <span style={{ fontSize: "15px", fontWeight: 600, color: sel ? "var(--accent)" : "var(--text-primary)" }}>{GOAL_LABELS[g].label}</span>
-                  {r && <span style={{ fontSize: "11px", fontWeight: 700, color: "white", background: "var(--accent)", borderRadius: "8px", padding: "1px 7px" }}>DONE</span>}
+                  {badge && <span style={{ fontSize: "11px", fontWeight: 700, color: "white", background: badge.bg, borderRadius: "8px", padding: "1px 7px" }}>{badge.t}</span>}
                 </div>
-                <div style={{ fontSize: "12px", color: status ? "var(--accent)" : "var(--text-muted)", fontWeight: status ? 600 : 400, lineHeight: 1.45 }}>{status ?? GOAL_LABELS[g].desc}</div>
+                <div style={{ fontSize: "12px", lineHeight: 1.45 }}>{line}</div>
+                {bar}
               </button>
             );
           })}
@@ -209,28 +237,29 @@ export default function OptimizePanel({ text, result, historyId, usage, needsBot
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px", flexWrap: "wrap" }}>
           <span style={{ fontSize: "13px", color: "var(--text-muted)" }}>{costOf(1)}</span>
           <span style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-            {canRunAll && !busy && doneCount < GOALS.length && (
-              <button onClick={runAll} title={costOf(GOALS.length)}
+            {canRunAll && !busy && todoCount > 1 && (
+              <button onClick={runAll} title={costOf(todoCount)}
                 style={{ padding: "12px 16px", fontSize: "14px", fontWeight: 600, fontFamily: "var(--font)", borderRadius: "10px", cursor: "pointer", color: "var(--accent)", background: "var(--bg-card)", border: "1px solid var(--accent)" }}>
-                Run all 3
+                {todoCount === GOALS.length ? "Run all 3" : `Run the other ${todoCount}`}
               </button>
             )}
-            <button onClick={() => runGoal(goal, goal === "readability" ? "" : keyword.trim())} disabled={busy}
+            <button onClick={startOne} disabled={busy}
               style={{ display: "flex", alignItems: "center", gap: "8px", padding: "12px 22px", fontSize: "15px", fontWeight: 600, fontFamily: "var(--font)", borderRadius: "10px", cursor: busy ? "default" : "pointer",
                 background: busy ? "var(--bg-elevated)" : "var(--accent)", color: busy ? "var(--text-muted)" : "white", border: busy ? "1px solid var(--border)" : "none" }}>
               {busy
-                ? <><span style={{ width: "15px", height: "15px", border: "2px solid rgba(0,0,0,0.15)", borderTopColor: "var(--accent)", borderRadius: "50%", display: "inline-block" }} className="spin" />{btnLabel}</>
-                : <><Sparkles size={15} />{btnLabel}</>}
+                ? <><span style={{ width: "15px", height: "15px", border: "2px solid rgba(0,0,0,0.15)", borderTopColor: "var(--accent)", borderRadius: "50%", display: "inline-block" }} className="spin" />Optimizing…</>
+                : <><Sparkles size={15} />{runs[goal] || status[goal]?.phase === "error" ? `Run ${GOAL_LABELS[goal].short} again` : `Run ${GOAL_LABELS[goal].short}`}</>}
             </button>
           </span>
         </div>
+
+        {busy && <p style={{ fontSize: "12px", color: "var(--text-muted)", margin: "10px 0 0" }}>Each goal takes about 20 to 50 seconds. You can stay on this page while it runs.</p>}
 
         {limit && (
           <div role="alert" style={{ marginTop: "12px", fontSize: "14px", color: "var(--text-secondary)" }}>
             {limit} <a href="/pricing" style={{ color: "var(--accent)", fontWeight: 600 }}>See plans</a>
           </div>
         )}
-        {error && <div role="alert" style={{ marginTop: "12px", fontSize: "14px", color: "var(--red)" }}>{error}</div>}
       </div>
 
       <div ref={resultsRef} style={{ scrollMarginTop: "70px" }}>
