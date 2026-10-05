@@ -19,6 +19,8 @@ type Props = {
   onUsageChange: () => void;
   onRunsChange?: (count: number) => void; // how many goals have a finished result
   onSaved?: () => void; // a re-checked version was saved to history
+  defaultGoal?: OptimizeGoal;
+  autoRun?: OptimizeGoal; // run this goal once, as soon as the panel opens (landing pages)
 };
 
 type Rewrite = { rewritten: string; changes: OptimizeChange[]; inputNeeded: OptimizeInputNeeded[]; warnings?: string[]; readinessBefore: Readiness | null };
@@ -54,8 +56,8 @@ function Bar({ pct, pulse }: { pct: number; pulse?: boolean }) {
 
 // Content Optimizer: rewrite for a goal, then re-check the rewrite with the same engine.
 // You can run all three goals on the same text and switch between the before/after results.
-export default function OptimizePanel({ text, result, historyId, usage, needsBotCheck, getToken, onUsageChange, onRunsChange, onSaved }: Props) {
-  const [goal, setGoal] = useState<OptimizeGoal>("aeo");
+export default function OptimizePanel({ text, result, historyId, usage, needsBotCheck, getToken, onUsageChange, onRunsChange, onSaved, defaultGoal = "aeo", autoRun }: Props) {
+  const [goal, setGoal] = useState<OptimizeGoal>(defaultGoal);
   const [keyword, setKeyword] = useState("");
   const [runs, setRuns] = useState<Partial<Record<OptimizeGoal, Run>>>({});
   const [active, setActive] = useState<OptimizeGoal | null>(null);
@@ -63,6 +65,7 @@ export default function OptimizePanel({ text, result, historyId, usage, needsBot
   const [limit, setLimit] = useState<string | null>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
   const scrolled = useRef(false);
+  const autoStarted = useRef(false);
 
   const doneCount = Object.keys(runs).length;
   useEffect(() => { onRunsChange?.(doneCount); }, [doneCount, onRunsChange]);
@@ -178,6 +181,14 @@ export default function OptimizePanel({ text, result, historyId, usage, needsBot
     todo.forEach((g) => setGoalStatus(g, { phase: "queued" }));
     await Promise.all(todo.map((g) => runGoal(g, g === "readability" ? "" : kw)));
   };
+
+  // Landing pages promise a one-click result, so the chosen goal starts as soon as the check finishes.
+  useEffect(() => {
+    if (!autoRun || autoStarted.current) return;
+    autoStarted.current = true;
+    runGoal(autoRun, "");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoRun]);
 
   const busy = Object.values(status).some((s) => s && s.phase !== "error");
   const run = active ? runs[active] : undefined;
