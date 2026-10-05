@@ -7,7 +7,7 @@ import WorkspaceTabs from "@/components/WorkspaceTabs";
 import type { AnalysisResult } from "@/types/analysis";
 import { GOAL_LABELS, type OptimizationRecord } from "@/types/optimize";
 import { fetchUsage, type UsageInfo } from "@/lib/billing/browser";
-import { needsBotCheckFor, useTurnstile } from "@/hooks/useTurnstile";
+import { TURNSTILE_BOX, needsBotCheckFor, useTurnstile } from "@/hooks/useTurnstile";
 import { formatDate } from "../HistoryList";
 
 type Saved = { id: string; created_at: string; input_text: string; result: AnalysisResult & { optimization?: OptimizationRecord } };
@@ -111,7 +111,7 @@ export default function SavedAnalysis({ id }: { id: string }) {
       <a href="/account/history" style={{ fontSize: "14px", color: "var(--accent)" }}>← All past analyses</a>
       {error && <p role="alert" style={{ color: "var(--red)", fontSize: "15px", marginTop: "20px" }}>{error}</p>}
       {!data && !error && <p style={{ color: "var(--text-muted)", marginTop: "20px" }}>Loading…</p>}
-      {needsBotCheck && <div ref={turnstileRef} style={{ display: "flex", justifyContent: "center", margin: "8px 0" }} />}
+      {needsBotCheck && <div ref={turnstileRef} style={TURNSTILE_BOX} />}
       {data && (
         <>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px", flexWrap: "wrap", margin: "14px 0 14px" }}>

@@ -12,7 +12,7 @@ import { X, ArrowRight, Zap, Sparkles, Scan } from "lucide-react";
 import { CONTENT_TYPE_OPTIONS } from "@/lib/contentTypes";
 import { fetchUsage, type UsageInfo } from "@/lib/billing/browser";
 import { PLANS, PRO_YEARLY_PER_MONTH } from "@/lib/billing/config";
-import { needsBotCheckFor, useTurnstile } from "@/hooks/useTurnstile";
+import { TURNSTILE_BOX, clearHumanPass, getHumanPass, needsBotCheckFor, setHumanPass, useTurnstile } from "@/hooks/useTurnstile";
 import LandingSections, { OptimizerCards } from "@/components/LandingSections";
 import { LANDING_COPY, type LandingVariant } from "@/lib/landingCopy";
 
@@ -58,20 +58,23 @@ export default function AnalyzerPage({ variant = "home" }: { variant?: LandingVa
   const handleAnalyze = async () => {
     if (!text.trim() || text.length < 50) { setError("Please enter at least 50 characters."); return; }
     setLoading(true); setView("analysis"); setTextOpen(false); setError(null); setLimitMessage(null); setResult(null); setStreamingSections([]); setSectionsComplete(0); setDetectedType(null);
+    // A human pass from an earlier check skips Turnstile. Otherwise get a fresh token.
+    const humanPass = needsBotCheck ? getHumanPass() : null;
     let token: string | null = null;
-    if (needsBotCheck) {
+    if (needsBotCheck && !humanPass) {
       token = await getFreshToken();
       if (!token) { setError("The quick human check did not finish. Please try again in a moment."); setLoading(false); return; }
     }
     let finished = false; // true once a "complete" or "error" event arrives
     try {
-      const send = (t: string | null) => fetch("/api/analyze", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text, contentType, turnstileToken: t }) });
+      const send = (t: string | null) => fetch("/api/analyze", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text, contentType, turnstileToken: t, humanPass: t ? undefined : humanPass }) });
       let res = await send(token);
       // A token can still be rejected (expired or already used). Get a new one and retry once.
       if (res.status === 403 && needsBotCheck) {
         let code: string | undefined;
         try { code = (await res.clone().json())?.code; } catch { /* not JSON */ }
         if (code === "bot_check") {
+          clearHumanPass();
           const retryToken = await getFreshToken(true);
           if (retryToken) res = await send(retryToken);
         }
@@ -107,6 +110,7 @@ export default function AnalyzerPage({ variant = "home" }: { variant?: LandingVa
               setResult({ ...event.result, text: text.substring(0, 500) });
               setView(copy.afterAnalysis);
               setHistoryId(typeof event.historyId === "string" ? event.historyId : null);
+              setHumanPass(event.humanPass);
               setStreamingSections(event.result.sections);
               setLoading(false);
             } else if (event.type === "error") {
@@ -226,7 +230,7 @@ export default function AnalyzerPage({ variant = "home" }: { variant?: LandingVa
           </div>}
         </div>
 
-        {needsBotCheck && <div ref={turnstileRef} style={{ display: "flex", justifyContent: "center", marginBottom: "12px" }} />}
+        {needsBotCheck && <div ref={turnstileRef} style={TURNSTILE_BOX} />}
 
         {landing && copy.ctaNote && <p style={{ fontSize: "13px", color: "var(--text-muted)", margin: "-8px 2px 8px" }}>{copy.ctaNote}</p>}
         {landing && usageLine && <div style={{ margin: "-8px 2px 16px" }}>{usageLine}</div>}

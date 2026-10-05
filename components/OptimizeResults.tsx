@@ -163,6 +163,40 @@ export default function OptimizeResults(p: OptimizeResultsProps) {
         </div>
       )}
 
+      {p.afterReadiness && (() => {
+        // Lowest scores first: these are the improvements only the writer can make (real examples, sources, data).
+        const checks = [...p.afterReadiness.checks].sort((x, y) => x.score - y.score);
+        const low = checks.filter((c) => c.score < 7).length;
+        const shown = showChecks ? checks : checks.filter((c) => c.score < 7).slice(0, 3);
+        return (
+          <div style={{ ...card, padding: "16px 18px" }}>
+            <button onClick={() => setShowChecks((v) => !v)} aria-expanded={showChecks}
+              style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "10px", background: "none", border: "none", cursor: "pointer", padding: 0, fontFamily: "var(--font)", textAlign: "left" }}>
+              <span>
+                <span style={{ display: "block", fontSize: "16px", fontWeight: 700, color: "var(--text-primary)" }}>How to improve it further{low ? ` (${low} to work on)` : ""}</span>
+                <span style={{ display: "block", fontSize: "13px", color: "var(--text-muted)", marginTop: "2px" }}>Search & AI-answer readiness checklist. We can only rework what is in your text; these need your input.</span>
+              </span>
+              <span style={{ fontSize: "13px", fontWeight: 600, color: "var(--accent)", whiteSpace: "nowrap" }}>{showChecks ? "Show less" : `Show all ${checks.length}`}</span>
+            </button>
+            {shown.length > 0 && (
+              <div style={{ marginTop: "12px", display: "flex", flexDirection: "column", gap: "10px" }}>
+                {shown.map((c) => {
+                  const b = readinessByLabel.get(c.label);
+                  const weak = c.score < 7;
+                  return (
+                    <div key={c.label} style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: "4px 12px", fontSize: "14px", borderTop: "1px solid var(--border-light)", paddingTop: "8px" }}>
+                      <span style={{ fontWeight: 600, color: weak ? "var(--amber)" : "var(--text-primary)" }}>{weak ? "● " : "✓ "}{c.label}</span>
+                      <span style={{ fontFamily: "var(--font-mono)", color: "var(--text-secondary)", whiteSpace: "nowrap" }}>{b != null ? `${b} → ` : ""}{c.score}/10</span>
+                      <span style={{ gridColumn: "1 / -1", color: "var(--text-muted)", fontSize: "13px" }}>{c.note}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        );
+      })()}
+
       <div style={{ ...card, padding: "16px 18px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "10px", flexWrap: "wrap", marginBottom: "14px" }}>
           <div role="tablist" style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
@@ -261,28 +295,6 @@ export default function OptimizeResults(p: OptimizeResultsProps) {
               </li>
             ))}
           </ul>
-        </div>
-      )}
-
-      {p.afterReadiness && (
-        <div style={{ ...card, padding: "14px 18px" }}>
-          <button onClick={() => setShowChecks((v) => !v)} style={{ fontSize: "14px", fontWeight: 600, color: "var(--accent)", background: "none", border: "none", cursor: "pointer", padding: 0, fontFamily: "var(--font)" }}>
-            {showChecks ? "Hide" : "Show"} the readiness checklist
-          </button>
-          {showChecks && (
-            <div style={{ marginTop: "12px", display: "flex", flexDirection: "column", gap: "10px" }}>
-              {p.afterReadiness.checks.map((c) => {
-                const b = readinessByLabel.get(c.label);
-                return (
-                  <div key={c.label} style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: "4px 12px", fontSize: "14px", borderTop: "1px solid var(--border-light)", paddingTop: "8px" }}>
-                    <span style={{ fontWeight: 600, color: "var(--text-primary)" }}>{c.label}</span>
-                    <span style={{ fontFamily: "var(--font-mono)", color: "var(--text-secondary)", whiteSpace: "nowrap" }}>{b != null ? `${b} → ` : ""}{c.score}/10</span>
-                    <span style={{ gridColumn: "1 / -1", color: "var(--text-muted)", fontSize: "13px" }}>{c.note}</span>
-                  </div>
-                );
-              })}
-            </div>
-          )}
         </div>
       )}
 

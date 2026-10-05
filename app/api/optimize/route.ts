@@ -6,7 +6,7 @@ import { getStatus, reserve, supabaseStore, type Reservation } from "@/lib/billi
 import { getIdentity, verifyTurnstile } from "@/lib/billing/identity";
 import { supabaseAdmin } from "@/lib/billing/supabase";
 import { CONTENT_PROFILES, isContentTypeId } from "@/lib/contentTypes";
-import { isGoal, judgeReadiness, rewrite, signRecheck, subjectOf, textHash, weakestFactors, type Readiness } from "@/lib/optimizer";
+import { isGoal, judgeReadiness, rewrite, signHumanPass, signRecheck, subjectOf, textHash, verifyHumanPass, weakestFactors, type Readiness } from "@/lib/optimizer";
 
 // Rewrites run in parallel parts, so a run normally finishes in 15-30 seconds.
 export const maxDuration = 60;
@@ -39,14 +39,18 @@ export async function POST(req: NextRequest) {
 
   let reservation: Reservation | null = null;
   let subject = "";
+  let newHumanPass: string | null = null; // free visitors who pass the check get a 30-minute pass
   try {
     const identity = await getIdentity();
     subject = subjectOf(identity);
     if (billingEnabled()) {
       const store = supabaseStore(supabaseAdmin());
       const status = await getStatus(store, identity);
-      if (status.plan === "free" && !(await verifyTurnstile(turnstileToken))) {
-        return Response.json({ error: "Please complete the quick human check and try again.", code: "bot_check" }, { status: 403 });
+      if (status.plan === "free" && !verifyHumanPass(body.humanPass, subject)) {
+        if (!(await verifyTurnstile(turnstileToken))) {
+          return Response.json({ error: "Please complete the quick human check and try again.", code: "bot_check" }, { status: 403 });
+        }
+        newHumanPass = signHumanPass(subject);
       }
       reservation = await reserve(store, identity, text, countWords(text) * OPTIMIZE_WORD_MULTIPLIER, new Date(), OPTIMIZE_FREE_UNITS);
       if (!reservation.ok) {
@@ -93,7 +97,7 @@ export async function POST(req: NextRequest) {
         ]);
         const before = await Promise.race([readinessBefore, new Promise<null>((r) => setTimeout(() => r(null), 5_000))]);
         const recheckToken = signRecheck({ h: textHash(out.rewritten), sub: subject, p: parentId, g: goal, k: keyword });
-        send({ type: "complete", ...out, readinessBefore: before, recheckToken });
+        send({ type: "complete", ...out, readinessBefore: before, recheckToken, ...(newHumanPass ? { humanPass: newHumanPass } : {}) });
       } catch (err) {
         logError("Optimize failed:", err);
         await releaseUsage(); // failed runs do not count against the user's limit

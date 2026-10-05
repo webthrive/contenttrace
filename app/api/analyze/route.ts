@@ -5,7 +5,7 @@ import { getStatus, reserve, supabaseStore, type Reservation } from "@/lib/billi
 import { getIdentity, verifyTurnstile } from "@/lib/billing/identity";
 import { supabaseAdmin } from "@/lib/billing/supabase";
 import { AnalysisFailure, analyzeText, type AnalysisOutput } from "@/lib/analyzer";
-import { judgeReadiness, subjectOf, verifyRecheck, type Readiness, type RecheckPayload } from "@/lib/optimizer";
+import { judgeReadiness, signHumanPass, subjectOf, verifyHumanPass, verifyRecheck, type Readiness, type RecheckPayload } from "@/lib/optimizer";
 
 // Sections run in parallel, so a full analysis normally finishes in well under this limit.
 export const maxDuration = 60;
@@ -54,8 +54,9 @@ export async function POST(req: NextRequest) {
   let turnstileToken: unknown;
   let recheckToken: unknown;
   let optimization: unknown;
+  let humanPass: unknown;
   try {
-    ({ text, contentType: requestedType, turnstileToken, recheckToken, optimization } = await req.json());
+    ({ text, contentType: requestedType, turnstileToken, recheckToken, optimization, humanPass } = await req.json());
   } catch {
     return Response.json({ error: "Invalid request." }, { status: 400 });
   }
@@ -74,6 +75,7 @@ export async function POST(req: NextRequest) {
   let historyUserId: string | null = null; // signed-in users get their results saved
   let recheck: RecheckPayload | null = null; // set when this run scores an optimizer rewrite (already paid for)
   let releaseRecheck: (() => Promise<void>) | null = null; // lets the user retry a failed re-check
+  let newHumanPass: string | null = null; // free visitors who pass the check get a 30-minute pass
   if (billingEnabled()) {
     try {
       const store = supabaseStore(supabaseAdmin());
@@ -89,8 +91,14 @@ export async function POST(req: NextRequest) {
         releaseRecheck = () => store.releaseUsage(subject, currentPeriod(), 0);
       } else {
         const status = await getStatus(store, identity);
-        if (status.plan === "free" && !(await verifyTurnstile(turnstileToken))) {
-          return Response.json({ error: "Please complete the quick human check and try again.", code: "bot_check" }, { status: 403 });
+        if (status.plan === "free") {
+          const sub = subjectOf(identity);
+          if (!verifyHumanPass(humanPass, sub)) {
+            if (!(await verifyTurnstile(turnstileToken))) {
+              return Response.json({ error: "Please complete the quick human check and try again.", code: "bot_check" }, { status: 403 });
+            }
+            newHumanPass = signHumanPass(sub);
+          }
         }
         reservation = await reserve(store, identity, text, countWords(text));
         if (!reservation.ok) {
@@ -129,7 +137,7 @@ export async function POST(req: NextRequest) {
         if (readiness) send({ type: "readiness", readiness });
         const opt = recheck ? cleanOptimization(optimization, recheck, readiness) : undefined;
         const historyId = historyUserId ? await saveAnalysis(historyUserId, text, opt ? { ...result, optimization: opt } : result) : null;
-        send({ type: "complete", result, historyId });
+        send({ type: "complete", result, historyId, ...(newHumanPass ? { humanPass: newHumanPass } : {}) });
       } catch (err) {
         logError("Anthropic API error:", err instanceof AnalysisFailure ? err.causes : err);
         await releaseUsage(); // failed analyses do not count against the user's limit

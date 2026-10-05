@@ -2,11 +2,41 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { UsageInfo } from "@/lib/billing/browser";
+import type React from "react";
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
 type TurnstileApi = { render: (el: HTMLElement, opts: Record<string, unknown>) => string; reset: (id?: string) => void };
 const api = () => (window as unknown as { turnstile?: TurnstileApi }).turnstile;
+
+// After one passed check, the server returns a "human pass" that lets this visitor skip the check
+// for 30 minutes. Kept in memory and in sessionStorage (so it survives moving between pages).
+const PASS_KEY = "ct_human_pass";
+let pass: { token: string; exp: number } | null = null;
+
+export function getHumanPass(): string | null {
+  if (!pass) {
+    try { const raw = sessionStorage.getItem(PASS_KEY); if (raw) pass = JSON.parse(raw); } catch { /* storage blocked */ }
+  }
+  if (pass && pass.exp > Date.now()) return pass.token;
+  pass = null;
+  return null;
+}
+
+export function setHumanPass(token: unknown) {
+  if (typeof token !== "string" || !token) return;
+  pass = { token, exp: Date.now() + 25 * 60_000 }; // a little shorter than the server's 30 minutes
+  try { sessionStorage.setItem(PASS_KEY, JSON.stringify(pass)); } catch { /* storage blocked */ }
+}
+
+export function clearHumanPass() {
+  pass = null;
+  try { sessionStorage.removeItem(PASS_KEY); } catch { /* storage blocked */ }
+}
+
+// Where the Turnstile widget sits: fixed at the bottom of the screen, so a visitor sees it
+// wherever they are on the page if Cloudflare asks for a click. It is invisible otherwise.
+export const TURNSTILE_BOX: React.CSSProperties = { position: "fixed", bottom: "16px", left: "50%", transform: "translateX(-50%)", zIndex: 1000 };
 
 // Free-plan requests need a Cloudflare Turnstile token. Paid plans never do.
 export function needsBotCheckFor(usage: UsageInfo | null): boolean {

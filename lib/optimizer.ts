@@ -433,5 +433,29 @@ export function verifyRecheck(token: unknown, text: string, sub: string): Rechec
   }
 }
 
+// Human pass: after a free visitor passes the Turnstile check once, later requests in the next
+// 30 minutes skip it. Bound to the same visitor. Plan limits still apply to every request.
+const HUMAN_PASS_MS = 30 * 60_000;
+
+export function signHumanPass(sub: string): string {
+  const body = Buffer.from(JSON.stringify({ t: "hp", sub, exp: Date.now() + HUMAN_PASS_MS })).toString("base64url");
+  return `${body}.${createHmac("sha256", signingKey()).update(body).digest("base64url")}`;
+}
+
+export function verifyHumanPass(token: unknown, sub: string): boolean {
+  if (typeof token !== "string" || !token.includes(".")) return false;
+  const [body, sig] = token.split(".");
+  const expected = createHmac("sha256", signingKey()).update(body).digest("base64url");
+  const a = Buffer.from(sig);
+  const b = Buffer.from(expected);
+  if (a.length !== b.length || !timingSafeEqual(a, b)) return false;
+  try {
+    const p = JSON.parse(Buffer.from(body, "base64url").toString()) as { t?: string; sub?: string; exp?: number };
+    return p.t === "hp" && p.sub === sub && typeof p.exp === "number" && p.exp > Date.now();
+  } catch {
+    return false;
+  }
+}
+
 // The visitor a token belongs to: the signed-in user, or the anonymous browser ID.
 export const subjectOf = (id: { userId: string | null; anonId: string }) => (id.userId ? `u:${id.userId}` : `a:${id.anonId}`);

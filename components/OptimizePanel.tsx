@@ -8,6 +8,7 @@ import { OPTIMIZE_FREE_UNITS, OPTIMIZE_WORD_MULTIPLIER } from "@/lib/billing/con
 import { errorOf, readEvents } from "@/lib/sse";
 import { GOAL_LABELS, type OptimizeChange, type OptimizeGoal, type OptimizeInputNeeded, type Readiness } from "@/types/optimize";
 import OptimizeResults from "./OptimizeResults";
+import { clearHumanPass, getHumanPass, setHumanPass } from "@/hooks/useTurnstile";
 
 type Props = {
   text: string; // full original text
@@ -120,19 +121,23 @@ export default function OptimizePanel({ text, result, historyId, usage, needsBot
   // Returns "limit" when the plan limit stops it, so "Run all" can tell the user once.
   const runGoal = async (g: OptimizeGoal, kw: string): Promise<"ok" | "error" | "limit"> => {
     setGoalStatus(g, { phase: "rewriting", done: 0, total: 1 });
+    setActive((cur) => cur ?? g);
     try {
+      // A human pass from an earlier check skips Turnstile. Otherwise get a fresh token.
+      const humanPass = needsBotCheck ? getHumanPass() : null;
       let token: string | null = null;
-      if (needsBotCheck) {
+      if (needsBotCheck && !humanPass) {
         token = await getToken();
-        if (!token) throw new Error("The quick human check did not finish. Please try again in a moment.");
+        if (!token) throw new Error("The quick human check did not finish. If a check box appeared at the bottom of the screen, tick it and run again.");
       }
       const send = (t: string | null) => fetch("/api/optimize", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text, goal: g, keyword: kw, contentType: result.contentType?.id, result, parentId: historyId, turnstileToken: t }),
+        body: JSON.stringify({ text, goal: g, keyword: kw, contentType: result.contentType?.id, result, parentId: historyId, turnstileToken: t, humanPass: t ? undefined : humanPass }),
       });
       let res = await send(token);
       if (res.status === 403 && needsBotCheck && (await errorOf(res.clone(), "")).code === "bot_check") {
+        clearHumanPass();
         const retry = await getToken(true);
         if (retry) res = await send(retry);
       }
@@ -148,9 +153,10 @@ export default function OptimizePanel({ text, result, historyId, usage, needsBot
         else if (e.type === "error") throw new Error(String(e.message));
       });
       if (!out) throw new Error("The optimizer did not finish. Please try again.");
-      const o = out as Rewrite & { recheckToken: string };
+      const o = out as Rewrite & { recheckToken: string; humanPass?: string };
+      setHumanPass(o.humanPass);
       setRuns((r) => ({ ...r, [g]: { goal: g, keyword: kw, rw: o, afterScore: null, afterReadiness: null, afterHistoryId: null, checking: true, checkError: null } }));
-      setActive((a) => a ?? g); // show the first result that finishes; the others wait in the pills
+      setActive((a) => (a && runs[a] ? a : g)); // show the first result that finishes; the others wait in their tabs
       setGoalStatus(g, { phase: "checking" });
       onUsageChange();
       if (!scrolled.current) {
@@ -274,34 +280,62 @@ export default function OptimizePanel({ text, result, historyId, usage, needsBot
       </div>
 
       <div ref={resultsRef} style={{ scrollMarginTop: "70px" }}>
-        {run && active && (
+        {active && (doneCount > 0 || busy) && (
           <>
-            <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "10px", flexWrap: "wrap", marginBottom: "12px" }}>
-              <h2 style={{ fontSize: "20px", fontWeight: 700, color: "var(--text-primary)", margin: 0 }}>Before and after: {GOAL_LABELS[active].label}</h2>
-              {doneCount > 1 && (
-                <span style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
-                  {GOALS.filter((g) => runs[g]).map((g) => (
-                    <button key={g} onClick={() => setActive(g)} aria-pressed={active === g}
-                      style={{ fontSize: "13px", fontWeight: active === g ? 700 : 500, fontFamily: "var(--font)", padding: "5px 12px", borderRadius: "16px", cursor: "pointer",
-                        color: active === g ? "white" : "var(--text-secondary)", background: active === g ? "var(--accent)" : "var(--bg-card)", border: active === g ? "1px solid var(--accent)" : "1px solid var(--border)" }}>
-                      {GOAL_LABELS[g].short}
-                    </button>
-                  ))}
-                </span>
-              )}
+            <h2 style={{ fontSize: "20px", fontWeight: 700, color: "var(--text-primary)", margin: "0 0 10px" }}>Before and after</h2>
+            {/* One tab per goal, always visible, so it is clear where each result lives. */}
+            <div role="tablist" aria-label="Results by goal" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "6px", marginBottom: "16px" }}>
+              {GOALS.map((g) => {
+                const r = runs[g];
+                const st = status[g];
+                const on = active === g;
+                const sub = st?.phase === "error" ? "Failed" : st ? "Running…" : r ? (r.afterScore != null ? `Score ${Math.round(result.aggregateScore)} → ${Math.round(r.afterScore)}` : "Scoring…") : "Not run yet";
+                return (
+                  <button key={g} role="tab" aria-selected={on} onClick={() => { setActive(g); setGoal(g); }}
+                    style={{ textAlign: "left", padding: "10px 12px", borderRadius: "10px", cursor: "pointer", fontFamily: "var(--font)", minWidth: 0,
+                      border: on ? "2px solid var(--accent)" : "1px solid var(--border)", background: on ? "var(--accent)" : r ? "var(--bg-card)" : "var(--bg-elevated)" }}>
+                    <div style={{ fontSize: "15px", fontWeight: 700, color: on ? "white" : r ? "var(--text-primary)" : "var(--text-muted)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{GOAL_LABELS[g].short}</div>
+                    <div style={{ fontSize: "12px", color: on ? "rgba(255,255,255,0.85)" : st?.phase === "error" ? "var(--red)" : "var(--text-muted)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{sub}</div>
+                  </button>
+                );
+              })}
             </div>
-            <OptimizeResults
-              key={active}
-              goal={run.goal} keyword={run.keyword}
-              originalText={text} optimizedText={run.rw.rewritten}
-              changes={run.rw.changes} inputNeeded={run.rw.inputNeeded} warnings={run.rw.warnings ?? []}
-              beforeScore={result.aggregateScore} afterScore={run.afterScore}
-              beforeReadiness={run.rw.readinessBefore} afterReadiness={run.afterReadiness}
-              checking={run.checking} checkError={run.checkError}
-            />
-            {run.afterHistoryId && (
-              <div style={{ fontSize: "14px", color: "var(--text-secondary)", marginTop: "12px" }}>
-                Saved to your history. <a href={`/account/history/${run.afterHistoryId}`} style={{ color: "var(--accent)", fontWeight: 600 }}>See the full analysis of the new version</a>
+
+            {run ? (
+              <>
+                <OptimizeResults
+                  key={active}
+                  goal={run.goal} keyword={run.keyword}
+                  originalText={text} optimizedText={run.rw.rewritten}
+                  changes={run.rw.changes} inputNeeded={run.rw.inputNeeded} warnings={run.rw.warnings ?? []}
+                  beforeScore={result.aggregateScore} afterScore={run.afterScore}
+                  beforeReadiness={run.rw.readinessBefore} afterReadiness={run.afterReadiness}
+                  checking={run.checking} checkError={run.checkError}
+                />
+                {run.afterHistoryId && (
+                  <div style={{ fontSize: "14px", color: "var(--text-secondary)", marginTop: "12px" }}>
+                    Saved to your history. <a href={`/account/history/${run.afterHistoryId}`} style={{ color: "var(--accent)", fontWeight: 600 }}>See the full analysis of the new version</a>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div style={{ border: "1px dashed var(--border)", borderRadius: "14px", padding: "28px 20px", textAlign: "center", background: "var(--bg-card)" }}>
+                {status[active] && status[active]!.phase !== "error" ? (
+                  <p style={{ fontSize: "15px", color: "var(--text-secondary)", margin: 0 }}>{GOAL_LABELS[active].label} is running. The before and after will show here.</p>
+                ) : (
+                  <>
+                    <p style={{ fontSize: "15px", color: "var(--text-secondary)", margin: "0 0 14px" }}>
+                      {status[active]?.phase === "error" ? `${GOAL_LABELS[active].label} did not finish. ` : `${GOAL_LABELS[active].label} has not run on this text yet. `}
+                      {GOAL_LABELS[active].desc}
+                    </p>
+                    <button onClick={() => { setGoal(active); runGoal(active, active === "readability" ? "" : keyword.trim()); }} disabled={busy}
+                      style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "11px 20px", fontSize: "15px", fontWeight: 600, fontFamily: "var(--font)", borderRadius: "10px", cursor: busy ? "default" : "pointer",
+                        background: busy ? "var(--bg-elevated)" : "var(--accent)", color: busy ? "var(--text-muted)" : "white", border: busy ? "1px solid var(--border)" : "none" }}>
+                      <Sparkles size={15} />Run {GOAL_LABELS[active].short}
+                    </button>
+                    {active !== "readability" && <p style={{ fontSize: "12px", color: "var(--text-muted)", margin: "10px 0 0" }}>Optional: add a {active === "aeo" ? "target question" : "keyword"} in the box above first.</p>}
+                  </>
+                )}
               </div>
             )}
           </>
