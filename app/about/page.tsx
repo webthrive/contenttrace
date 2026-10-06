@@ -76,7 +76,7 @@ export default function AboutPage() {
         </p>
         <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "16px" }}>
           {[
-            { name: "Humanize", what: "Makes AI drafts read like a person wrote them. Plain words, varied sentences, no AI filler or stock phrases." },
+            { name: "Humanize", what: "Turns generic AI drafts into clear, original writing in your voice. Plain words, varied sentences, no AI filler, and markers where your own examples belong." },
             { name: "SEO", what: "Humanize, plus descriptive headings, the main point early, and your target keyword placed naturally." },
             { name: "AI answers (AEO)", what: "Humanize, plus a direct answer up top, question-style headings and self-contained passages that Google AI Overviews, ChatGPT and Perplexity can quote." },
           ].map((o) => (

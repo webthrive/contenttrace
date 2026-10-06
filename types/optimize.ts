@@ -20,7 +20,7 @@ export type OptimizationRecord = {
 };
 
 export const GOAL_LABELS: Record<OptimizeGoal, { label: string; short: string; desc: string }> = {
-  readability: { label: "Humanize", short: "Humanize", desc: "Make AI drafts read like a person wrote them. Plain words, varied sentences, no AI filler." },
+  readability: { label: "Humanize", short: "Humanize", desc: "Turn generic AI drafts into clear writing in your voice. Plain words, varied sentences, no filler." },
   seo: { label: "SEO", short: "SEO", desc: "Humanize plus descriptive headings, the main point early, and your keyword placed naturally." },
   aeo: { label: "AI answers (AEO)", short: "AI answers", desc: "Humanize plus a direct answer up top, question headings and quotable passages for AI Overviews, ChatGPT and Perplexity." },
 };
