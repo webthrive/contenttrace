@@ -28,7 +28,7 @@ const GOAL_BRIEF: Record<Goal, string> = {
   seo:
     "Goal: easier to read AND easier for search engines to understand. Use shorter sentences, plain words and active voice. Use descriptive headings that say what each section covers. Put the main point early. If a target keyword is given, use it naturally in the first 100 words and in at least one heading, and use close variants. Never stuff the keyword.",
   aeo:
-    "Goal: easier to read AND easy for AI assistants and answer engines (Google AI Overviews, ChatGPT, Perplexity) to quote. Start with a direct answer of 40 to 60 words to the main question. Use question-style headings where they fit. Make each paragraph self-contained: name the subject instead of starting with \"it\" or \"this\". Define key terms in one sentence. Use short lists for steps or options. State specific facts plainly. If a target question is given, answer it directly at the top.",
+    "Goal: easier to read AND easy for AI assistants and answer engines (Google AI Overviews, ChatGPT, Perplexity) to quote. Start with a direct answer of 40 to 60 words to the main question. Use question-style headings where they fit. Where a paragraph would be unclear if quoted on its own, name the subject instead of starting with \"it\" or \"this\". Define key terms in one sentence. Use short lists for steps or options. State specific facts plainly. If a target question is given, answer it directly at the top.",
 };
 
 const REWRITE_SYSTEM = `You are a senior editor. You rewrite text so it reads like a skilled human wrote it, for the goal you are given.
@@ -173,7 +173,7 @@ function syncMarkers(text: string, listed: InputNeeded[]): InputNeeded[] {
 type PartResult = { rewritten: string; changes: Change[]; inputNeeded: InputNeeded[] };
 
 type PartOpts = {
-  part: string; index: number; total: number; opening: string; outline: string; goal: Goal; keyword: string; contentLabel: string; weaknesses: Weakness[];
+  part: string; index: number; total: number; opening: string; outline: string; goal: Goal; keyword: string; contentLabel: string; weaknesses: Weakness[]; humanScore?: number;
   deadline: number; // absolute time (ms) by which this part must be finished
 };
 
@@ -206,7 +206,7 @@ async function callRewrite(content: string, timeoutMs: number): Promise<PartResu
 }
 
 async function rewritePart(opts: PartOpts): Promise<PartResult & { warnings: string[] }> {
-  const { part, index, total, opening, outline, goal, keyword, contentLabel, weaknesses } = opts;
+  const { part, index, total, opening, outline, goal, keyword, contentLabel, weaknesses, humanScore } = opts;
   const weak = weaknesses.length
     ? `The AI-detection analysis flagged these weak writing signals (0 = AI-like, 100 = human-like). Fix them by changing wording only, never by adding facts, opinions or feelings:\n${weaknesses.map((w) => `- ${w.factor} (${w.score}): ${w.note}`).join("\n")}`
     : "";
@@ -220,9 +220,17 @@ async function rewritePart(opts: PartOpts): Promise<PartResult & { warnings: str
           index > 0 ? `\nIt is not the start of the text, so do not add an opening answer, introduction or conclusion.\nOpening of the full text, for context only (do not rewrite it):\n"""${opening}"""` : ""
         }`
       : "";
+  // Search and AI-answer structure (definitions, lists, a subject named in every paragraph) can make
+  // natural writing read as more machine-like. Protect the voice, most of all when the text already reads human.
+  const voice = goal === "readability" ? "" : [
+    "Keep the author's voice: varied sentence length, contractions and natural transitions. Add structure only where it helps a reader. Do not turn every paragraph into a definition or a list, and do not repeat the subject's full name in every sentence.",
+    typeof humanScore === "number" && humanScore >= 60
+      ? `This text already reads as human-written (Human Score ${Math.round(humanScore)} out of 100). Make the smallest changes that meet the goal, and leave sentences that already work as they are.`
+      : "",
+  ].filter(Boolean).join(" ");
   const target = keyword ? `Target ${goal === "aeo" ? "question or keyword" : "keyword"}: ${keyword}` : "No target keyword given.";
 
-  const prompt = [GOAL_BRIEF[goal], target, `Content type: ${contentLabel}.`, weak, position, `Text to rewrite:\n"""\n${part}\n"""`]
+  const prompt = [GOAL_BRIEF[goal], voice, target, `Content type: ${contentLabel}.`, weak, position, `Text to rewrite:\n"""\n${part}\n"""`]
     .filter(Boolean)
     .join("\n\n");
   // First call, with one retry only if there is still time for a full second attempt.
@@ -251,7 +259,7 @@ async function rewritePart(opts: PartOpts): Promise<PartResult & { warnings: str
 
 export async function rewrite(
   text: string,
-  opts: { goal: Goal; keyword: string; contentLabel: string; weaknesses: Weakness[]; onProgress?: (done: number, total: number) => void; deadline: number }
+  opts: { goal: Goal; keyword: string; contentLabel: string; weaknesses: Weakness[]; humanScore?: number; onProgress?: (done: number, total: number) => void; deadline: number }
 ): Promise<PartResult & { warnings: string[] }> {
   const parts = splitIntoParts(text);
   const opening = parts[0].slice(0, 600);

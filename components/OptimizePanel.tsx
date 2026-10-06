@@ -251,6 +251,12 @@ export default function OptimizePanel({ text, result, historyId, usage, needsBot
           </label>
         )}
 
+        {goal !== "readability" && result.aggregateScore >= 60 && (
+          <p style={{ fontSize: "13px", color: "var(--text-secondary)", margin: "0 0 12px", lineHeight: 1.55 }}>
+            Your text already reads human (Human Score {Math.round(result.aggregateScore)}). {GOAL_LABELS[goal].short} adds structure for search, which can lower the Human Score. We keep edits light for text like this.
+          </p>
+        )}
+
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px", flexWrap: "wrap" }}>
           <span style={{ fontSize: "13px", color: "var(--text-muted)" }}>{costOf(1)}</span>
           <span style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
@@ -289,7 +295,8 @@ export default function OptimizePanel({ text, result, historyId, usage, needsBot
                 const r = runs[g];
                 const st = status[g];
                 const on = active === g;
-                const sub = st?.phase === "error" ? "Failed" : st ? "Running…" : r ? (r.afterScore != null ? `Score ${Math.round(result.aggregateScore)} → ${Math.round(r.afterScore)}` : "Scoring…") : "Not run yet";
+                const dropped = r && r.afterScore != null && r.afterScore < result.aggregateScore - 3;
+                const sub = st?.phase === "error" ? "Failed" : st ? "Running…" : r ? (r.afterScore != null ? `Score ${Math.round(result.aggregateScore)} → ${Math.round(r.afterScore)}${dropped ? " · went down" : ""}` : "Scoring…") : "Not run yet";
                 return (
                   <button key={g} role="tab" aria-selected={on} onClick={() => { setActive(g); setGoal(g); }}
                     style={{ textAlign: "left", padding: "10px 12px", borderRadius: "10px", cursor: "pointer", fontFamily: "var(--font)", minWidth: 0,

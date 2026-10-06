@@ -91,6 +91,16 @@ export default function OptimizeResults(p: OptimizeResultsProps) {
 
   const mBefore = useMemo(() => contentMetrics(p.originalText, p.keyword), [p.originalText, p.keyword]);
   const mAfter = useMemo(() => contentMetrics(p.optimizedText, p.keyword), [p.optimizedText, p.keyword]);
+  // Scores that fell by more than normal run-to-run noise (3 points). Shown only once the re-check is done.
+  const NOISE = 3;
+  const drops: string[] = [];
+  if (!p.checking && p.afterScore != null && p.afterScore < p.beforeScore - NOISE) drops.push(`Human Score ${Math.round(p.beforeScore)} → ${Math.round(p.afterScore)}`);
+  if (!p.checking && mAfter.readingEase < mBefore.readingEase - NOISE) drops.push(`Reading ease ${mBefore.readingEase} → ${mAfter.readingEase}`);
+  if (!p.checking && p.beforeReadiness && p.afterReadiness && p.afterReadiness.score < p.beforeReadiness.score - NOISE) drops.push(`Search & AI-answer readiness ${p.beforeReadiness.score} → ${p.afterReadiness.score}`);
+  const [copiedOriginal, setCopiedOriginal] = useState(false);
+  const copyOriginal = async () => {
+    try { await navigator.clipboard.writeText(p.originalText); setCopiedOriginal(true); setTimeout(() => setCopiedOriginal(false), 2000); } catch { /* clipboard blocked */ }
+  };
   const diff = useMemo(() => (tab === "side" || tab === "tracked" ? diffWords(p.originalText, p.optimizedText) : []), [tab, p.originalText, p.optimizedText]);
 
   const copy = async () => {
@@ -126,6 +136,24 @@ export default function OptimizeResults(p: OptimizeResultsProps) {
 
   return (
     <div className="fade-in" style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+      {drops.length > 0 && (
+        <div role="alert" style={{ ...card, padding: "16px 18px", borderColor: "rgba(196,122,0,0.45)", background: "var(--amber-bg)" }}>
+          <div style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "6px" }}>Your scores went down. We recommend keeping your original text.</div>
+          <ul style={{ margin: "0 0 8px", paddingLeft: "18px" }}>
+            {drops.map((d) => <li key={d} style={{ fontSize: "14px", color: "var(--text-secondary)" }}>{d}</li>)}
+          </ul>
+          <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: 1.6, margin: "0 0 10px" }}>
+            {p.goal === "readability"
+              ? "Your original already read well, so there was little for Humanize to fix."
+              : `${GOAL_LABELS[p.goal].short} adds structure (headings, short definitions, lists) that our AI check reads as less natural.`}{" "}
+            You can still copy single changes you like from the change list.
+          </p>
+          <button onClick={copyOriginal} style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "14px", fontWeight: 600, color: "var(--text-primary)", background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: "8px", padding: "8px 14px", cursor: "pointer", fontFamily: "var(--font)" }}>
+            {copiedOriginal ? <><Check size={14} />Copied</> : <><Copy size={14} />Copy original text</>}
+          </button>
+        </div>
+      )}
+
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "12px" }}>
         {p.goal === "readability" ? <>
         <ScoreCard title="Reading ease" before={mBefore.readingEase} after={mAfter.readingEase}

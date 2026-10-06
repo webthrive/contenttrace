@@ -89,6 +89,7 @@ export async function POST(req: NextRequest) {
             keyword,
             contentLabel: CONTENT_PROFILES[typeId].label,
             weaknesses: weakestFactors(result),
+            humanScore: typeof (result as { aggregateScore?: unknown })?.aggregateScore === "number" ? (result as { aggregateScore: number }).aggregateScore : undefined,
             onProgress: (done, total) => send({ type: "progress", done, total }),
             // Every model call is sized to finish before this time; slow parts keep their original wording.
             deadline: Date.now() + REWRITE_MS,
