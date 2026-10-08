@@ -18,7 +18,7 @@ const FAQ = [
   { q: "What counts as a word?", a: "Each analysis uses the number of words in the text you submit. A 1,200-word article uses 1,200 words from your allowance. Failed analyses do not count." },
   { q: "Can I cancel any time?", a: "Yes. Cancel from your account page in two clicks. Pro stays active until the end of the period you paid for." },
   { q: "Do Word Pack words expire?", a: "No. Pack words stay on your account until you use them. Pro members can also use pack words after the monthly allowance runs out." },
-  { q: "Do you store my text?", a: "No. Text is analyzed in real time and is not stored or used to train models. We only store your email, plan, and usage counts." },
+  { q: "Do you store my text?", a: "Only if you sign in. Signed out, your text is analyzed in real time and is not stored. Signed in, each analysis and optimization is saved to your private history, which only you can see. You can delete any item at any time. We also store your email, plan and usage counts. Your text is never used to train AI models." },
   { q: "Is the score proof that AI wrote something?", a: "No. Scores are probabilistic. Read our disclaimer before you use a result for any academic, legal, or employment decision." },
 ];
 
