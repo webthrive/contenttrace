@@ -1,0 +1,28 @@
+/* "Trace Lab" theme, scoped to /blog content only (Nav and Footer keep the site style).
+   Colors come from the logo: violet #570d9e -> coral #ec4860. */
+.blog-theme main {
+  --font: var(--font-blog), "Rubik", sans-serif;
+  --font-mono: var(--font-blog-mono), "DM Mono", monospace;
+  --accent: #570d9e;
+  --accent-light: rgba(87, 13, 158, 0.07);
+  --red: #c42e4a;             /* coral, darkened for text contrast on light bg */
+  --red-bg: rgba(236, 72, 96, 0.08);
+  --night: #140a24;
+  --grad: linear-gradient(90deg, #9b4dff, #ec4860);
+  font-family: var(--font);
+}
+.blog-theme main h1 { font-weight: 800 !important; letter-spacing: -0.035em !important; line-height: 1.05 !important; }
+.blog-theme main h2 { font-weight: 800 !important; letter-spacing: -0.02em !important; }
+.blog-theme main h3 { font-weight: 600 !important; }
+.blog-theme main a { text-underline-offset: 3px; }
+/* Gradient rule under the TL;DR label and pull quotes */
+.blog-theme .tldr { position: relative; overflow: hidden; }
+.blog-theme .tldr::before { content: ""; position: absolute; left: 0; top: 0; right: 0; height: 3px; background: var(--grad); }
+.blog-theme .grad-text { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.blog-theme .cta-dark { background: var(--night) !important; box-shadow: 0 6px 24px rgba(87, 13, 158, 0.35) !important; border: 1px solid #2a1846; }
+.blog-theme .cta-dark:hover { background: #1d1033 !important; }
+
+/* Blog pages: drop the site grid and cream tone for a clean, cool white. */
+body:has(.blog-theme) { background: #fbfaff; }
+body:has(.blog-theme)::before { display: none; }
+.blog-theme main { --bg-card: #ffffff; --border: #e6e0f0; --text-primary: #140a24; --text-secondary: #3b3150; --text-muted: #7c7190; }

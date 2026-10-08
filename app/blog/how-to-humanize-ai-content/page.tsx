@@ -45,14 +45,14 @@ export default function Article3() {
       <ArticleSchema slug={SLUG} title={TITLE} description={DESCRIPTION} datePublished="2026-03-29" dateModified="2026-10-07" image={HERO} faq={FAQ} />
       <main style={{ maxWidth: "700px", margin: "0 auto", padding: "60px 24px 80px", fontFamily: "var(--font)" }}>
 
-        <div style={{ display: "inline-block", fontSize: "12px", fontWeight: 600, color: "#c43302", background: "rgba(196,51,2,0.08)", border: "1px solid rgba(196,51,2,0.2)", padding: "3px 10px", borderRadius: "8px", marginBottom: "16px" }}>Guide</div>
+        <div style={{ display: "inline-block", fontSize: "12px", fontWeight: 600, color: "var(--red)", background: "var(--red-bg)", border: "1px solid rgba(236,72,96,0.2)", padding: "3px 10px", borderRadius: "8px", marginBottom: "16px" }}>Guide</div>
         <h1 style={{ fontSize: "38px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "16px", letterSpacing: "-0.02em", lineHeight: 1.2 }}>{TITLE}</h1>
         <Byline date="March 29, 2026" readTime="10 min read" updated="October 7, 2026" />
 
         <BlogHero src={HERO} alt="An AI draft marked up across six editing passes, with filler and hedges cut and real examples added, and a human signal bar rising from low to high." />
 
         {/* TL;DR */}
-        <div style={{ background: "var(--accent-light)", border: "1px solid rgba(10,115,115,0.25)", borderRadius: "12px", padding: "16px 20px", marginBottom: "36px" }}>
+        <div className="tldr" style={{ background: "var(--accent-light)", border: "1px solid rgba(87,13,158,0.25)", borderRadius: "12px", padding: "16px 20px", marginBottom: "36px" }}>
           <div style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--accent)", fontFamily: "var(--font-mono)", marginBottom: "12px" }}>TL;DR</div>
           <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "6px" }}>
             {[
@@ -81,13 +81,13 @@ export default function Article3() {
           {/* Stat banner */}
           <a href="/" style={{ textDecoration: "none" }}>
           <div style={{ background: "var(--bg-card)", cursor: "pointer", border: "1px solid var(--border)", borderRadius: "12px", padding: "16px 24px", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "12px 20px", margin: "32px 0" }}>
-            <div style={{ fontSize: "42px", fontWeight: 700, color: "#c43302", fontFamily: "var(--font-mono)", lineHeight: 1, flexShrink: 0 }}>6</div>
+            <div style={{ fontSize: "42px", fontWeight: 700, color: "var(--red)", fontFamily: "var(--font-mono)", lineHeight: 1, flexShrink: 0 }}>6</div>
             <div style={{ width: "1px", background: "var(--border)", height: "48px", flexShrink: 0 }}></div>
             <div style={{ flex: "1 1 180px", minWidth: 0 }}>
               <strong style={{ fontSize: "15px", fontWeight: 600, display: "block", marginBottom: "3px" }}>Editing passes in this framework, in the order they work best</strong>
               <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.55, margin: 0 }}>Each pass targets a different set of Content Trace signals. The order matters.</p>
             </div>
-            <div style={{ fontSize: "11px", fontWeight: 600, padding: "4px 10px", borderRadius: "20px", color: "#c43302", background: "rgba(196,51,2,0.08)", border: "1px solid rgba(196,51,2,0.2)", fontFamily: "var(--font-mono)", flexShrink: 0 }}>Guide</div>
+            <div style={{ fontSize: "11px", fontWeight: 600, padding: "4px 10px", borderRadius: "20px", color: "var(--red)", background: "var(--red-bg)", border: "1px solid rgba(236,72,96,0.2)", fontFamily: "var(--font-mono)", flexShrink: 0 }}>Guide</div>
           </div>
           </a>
 
@@ -102,17 +102,17 @@ export default function Article3() {
           {/* Signal callout */}
           <div style={{ border: "1px solid var(--border)", borderRadius: "12px", background: "var(--bg-card)", overflow: "hidden", margin: "28px 0" }}>
             <div style={{ padding: "12px 18px", background: "var(--bg-elevated)", borderBottom: "1px solid var(--border)" }}>
-              <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "#c43302", fontFamily: "var(--font-mono)" }}>Word Choice & Phrasing · 15% weight</div>
+              <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--red)", fontFamily: "var(--font-mono)" }}>Word Choice & Phrasing · 15% weight</div>
               <div style={{ fontSize: "14px", fontWeight: 600, color: "var(--text-primary)", marginTop: "2px" }}>Filler Phrase Density</div>
             </div>
             <div style={{ padding: "14px 18px" }}>
               <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.6, marginBottom: "12px" }}>AI filler phrases cluster in predictable spots: sentence openers, paragraph transitions, and right before any claim the model is unsure about.</p>
               <div style={{ display: "flex", gap: "10px", alignItems: "flex-start", fontSize: "13px", lineHeight: 1.5, marginBottom: "8px" }}>
-                <span style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.06em", padding: "2px 8px", borderRadius: "4px", background: "rgba(196,51,2,0.1)", color: "#c43302", flexShrink: 0, marginTop: "1px", fontFamily: "var(--font-mono)" }}>Before</span>
+                <span style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.06em", padding: "2px 8px", borderRadius: "4px", background: "rgba(236,72,96,0.1)", color: "var(--red)", flexShrink: 0, marginTop: "1px", fontFamily: "var(--font-mono)" }}>Before</span>
                 <span style={{ color: "var(--text-secondary)" }}>&quot;It&apos;s important to note that when editing AI content, it&apos;s worth considering the various factors that can impact readability and engagement.&quot;</span>
               </div>
               <div style={{ display: "flex", gap: "10px", alignItems: "flex-start", fontSize: "13px", lineHeight: 1.5 }}>
-                <span style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.06em", padding: "2px 8px", borderRadius: "4px", background: "rgba(10,115,115,0.1)", color: "var(--accent)", flexShrink: 0, marginTop: "1px", fontFamily: "var(--font-mono)" }}>After</span>
+                <span style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.06em", padding: "2px 8px", borderRadius: "4px", background: "rgba(87,13,158,0.1)", color: "var(--accent)", flexShrink: 0, marginTop: "1px", fontFamily: "var(--font-mono)" }}>After</span>
                 <span style={{ color: "var(--text-secondary)" }}>&quot;When editing AI content, readability and engagement are two separate problems. Fix readability first. Engagement usually follows.&quot;</span>
               </div>
             </div>
@@ -135,7 +135,7 @@ export default function Article3() {
           <p style={p}>Readers can feel the difference between an invented illustration and a real event. Nobody has a clean explanation for why. The best guess is the slightly awkward fit of a real example, the way it never slots in as neatly as a made-up one. Invented examples are too helpful. Real ones have a little friction.</p>
 
           {/* Pull quote */}
-          <div style={{ borderLeft: "4px solid #c43302", background: "rgba(196,51,2,0.06)", borderRadius: "0 12px 12px 0", padding: "18px 24px", margin: "32px 0" }}>
+          <div style={{ borderLeft: "4px solid var(--red)", background: "rgba(236,72,96,0.06)", borderRadius: "0 12px 12px 0", padding: "18px 24px", margin: "32px 0" }}>
             <blockquote style={{ fontSize: "18px", fontWeight: 600, lineHeight: 1.5, color: "var(--text-primary)", margin: "0 0 6px" }}>
               &quot;Invented examples are too helpful. Real ones have a little friction, and that friction is what makes them feel true.&quot;
             </blockquote>
@@ -156,15 +156,15 @@ export default function Article3() {
               Voice & Perspective · Signal comparison
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
-              <div style={{ padding: "14px 18px", background: "rgba(196,51,2,0.03)", borderRight: "1px solid var(--border)" }}>
-                <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "#c43302", fontFamily: "var(--font-mono)", marginBottom: "8px" }}>AI draft (hedged)</div>
+              <div style={{ padding: "14px 18px", background: "rgba(236,72,96,0.03)", borderRight: "1px solid var(--border)" }}>
+                <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--red)", fontFamily: "var(--font-mono)", marginBottom: "8px" }}>AI draft (hedged)</div>
                 <p style={{ fontSize: "14px", lineHeight: 1.65, color: "var(--text-secondary)", margin: "0 0 10px" }}>&quot;There are benefits and drawbacks to using AI writing tools. While they can save time and improve output volume, some may argue that quality could be compromised without proper oversight.&quot;</p>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px", paddingTop: "10px", borderTop: "1px solid var(--border)" }}>
-                  <div style={{ flex: 1, height: "6px", background: "var(--border)", borderRadius: "3px", overflow: "hidden" }}><div style={{ width: "17%", height: "100%", background: "#c43302", borderRadius: "3px" }}></div></div>
-                  <span style={{ fontSize: "12px", fontFamily: "var(--font-mono)", fontWeight: 600, color: "#c43302" }}>17</span>
+                  <div style={{ flex: 1, height: "6px", background: "var(--border)", borderRadius: "3px", overflow: "hidden" }}><div style={{ width: "17%", height: "100%", background: "var(--red)", borderRadius: "3px" }}></div></div>
+                  <span style={{ fontSize: "12px", fontFamily: "var(--font-mono)", fontWeight: 600, color: "var(--red)" }}>17</span>
                 </div>
               </div>
-              <div style={{ padding: "14px 18px", background: "rgba(10,115,115,0.03)" }}>
+              <div style={{ padding: "14px 18px", background: "rgba(87,13,158,0.03)" }}>
                 <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--accent)", fontFamily: "var(--font-mono)", marginBottom: "8px" }}>Edited (position taken)</div>
                 <p style={{ fontSize: "14px", lineHeight: 1.65, color: "var(--text-secondary)", margin: "0 0 10px" }}>&quot;AI tools are good at first drafts and bad at final ones. That&apos;s the right way to use them. The teams that struggle are usually the ones who skipped the edit, not the ones who used AI.&quot;</p>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px", paddingTop: "10px", borderTop: "1px solid var(--border)" }}>
@@ -229,7 +229,7 @@ export default function Article3() {
 
         <div style={{ borderTop: "1px solid var(--border)", paddingTop: "32px", marginTop: "48px" }}>
           <div style={{ fontSize: "15px", color: "var(--text-muted)", marginBottom: "20px" }}>See how your edited content scores across 32 signals.</div>
-          <a href="/" style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "12px 24px", background: "var(--accent)", color: "white", borderRadius: "8px", textDecoration: "none", fontSize: "15px", fontWeight: 600, boxShadow: "0 2px 8px rgba(10,115,115,0.25)" }}>
+          <a href="/" className="cta-dark" style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "12px 24px", background: "var(--accent)", color: "white", borderRadius: "8px", textDecoration: "none", fontSize: "15px", fontWeight: 600, boxShadow: "0 2px 8px rgba(87,13,158,0.25)" }}>
             Try Content Trace free →
           </a>
         </div>

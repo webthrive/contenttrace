@@ -54,7 +54,7 @@ The analyzer scores 8 sections. Each draft must pass all of these:
 1. Tag pill (Explainer, Analysis, Guide, Opinion)
 2. H1
 3. Meta line: date · read time · By Colin H (· Updated date)
-4. **Hero image** (16:9, see image guide)
+4. **Hero image** (16:9, Trace Lab style, see image guide)
 5. **TL;DR box** (4 to 6 bullets, each a full claim)
 6. Opening: a specific scene or fact, not a definition
 7. Stat banner (must link to `/`)

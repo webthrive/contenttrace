@@ -1,31 +1,54 @@
-@font-face { font-family: "Rubik"; font-weight: 400; src: url("fonts/rubik-latin-400-normal.woff2") format("woff2"); }
-@font-face { font-family: "Rubik"; font-weight: 500; src: url("fonts/rubik-latin-500-normal.woff2") format("woff2"); }
-@font-face { font-family: "Rubik"; font-weight: 600; src: url("fonts/rubik-latin-600-normal.woff2") format("woff2"); }
-@font-face { font-family: "Rubik"; font-weight: 700; src: url("fonts/rubik-latin-700-normal.woff2") format("woff2"); }
-@font-face { font-family: "DM Mono"; font-weight: 400; src: url("fonts/dm-mono-latin-400-normal.woff2") format("woff2"); }
-@font-face { font-family: "DM Mono"; font-weight: 500; src: url("fonts/dm-mono-latin-500-normal.woff2") format("woff2"); }
+/* ContentTrace blog images: "Trace Lab" style. See docs/blog-image-style-guide.md */
+@font-face { font-family: "Bricolage"; font-weight: 400; src: url("fonts/bricolage-grotesque-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Bricolage"; font-weight: 600; src: url("fonts/bricolage-grotesque-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Bricolage"; font-weight: 800; src: url("fonts/bricolage-grotesque-latin-800-normal.woff2") format("woff2"); }
+@font-face { font-family: "JB"; font-weight: 400; src: url("fonts/jetbrains-mono-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "JB"; font-weight: 500; src: url("fonts/jetbrains-mono-latin-500-normal.woff2") format("woff2"); }
 
 :root {
-  --bg: #fdfcfa; --panel: #f8f6f2; --card: #ffffff; --border: #e0d9cc; --border-light: #ece7dc;
-  --ink: #010221; --ink-2: #2a3a3a; --muted: #7a8a7a;
-  --teal: #0a7373; --teal-bg: rgba(10,115,115,0.10);
-  --red: #c43302; --red-bg: rgba(196,51,2,0.09);
-  --amber: #c47a00; --amber-bg: rgba(196,122,0,0.10);
+  --night: #140a24;      /* background */
+  --night-2: #1d1033;    /* panels, lens fill */
+  --night-3: #2a1846;    /* borders on dark */
+  --violet: #570d9e;     /* logo start */
+  --violet-hi: #9b4dff;  /* violet on dark */
+  --coral: #ec4860;      /* logo end */
+  --ink: #f4eefb;        /* main text on dark */
+  --ink-2: #d9cdea;      /* secondary text */
+  --dim: #5d4f78;        /* background text */
+  --muted: #a593c2;      /* labels */
+  --grad: linear-gradient(90deg, #9b4dff, #ec4860);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { background: var(--bg); }
-body { font-family: "Rubik", sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
-#canvas { position: relative; overflow: hidden; background: var(--bg); }
+html, body { background: var(--night); }
+body { font-family: "Bricolage", sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+#canvas { position: relative; overflow: hidden; background: var(--night); }
 .hero { width: 1200px; height: 675px; }
 .inline { width: 1000px; height: 560px; }
-.mono { font-family: "DM Mono", monospace; text-transform: uppercase; letter-spacing: 0.08em; }
-.grid-bg { position: absolute; inset: 0; background-image:
-  linear-gradient(var(--border-light) 1px, transparent 1px),
-  linear-gradient(90deg, var(--border-light) 1px, transparent 1px);
-  background-size: 40px 40px; opacity: 0.55; }
-.panel { position: absolute; background: var(--card); border: 1.5px solid var(--border); border-radius: 24px; }
-.tag { display: inline-block; font-size: 15px; font-weight: 500; padding: 6px 14px; border-radius: 10px; }
-.tag.teal { color: var(--teal); background: var(--teal-bg); border: 1.5px solid rgba(10,115,115,0.25); }
-.tag.red { color: var(--red); background: var(--red-bg); border: 1.5px solid rgba(196,51,2,0.25); }
-.tag.amber { color: var(--amber); background: var(--amber-bg); border: 1.5px solid rgba(196,122,0,0.25); }
-.line { height: 12px; border-radius: 6px; background: var(--border-light); }
+
+.k { font-family: "JB", monospace; font-size: 15px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--coral); }
+.mono { font-family: "JB", monospace; letter-spacing: 0.06em; }
+.grad-text { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.glow { position: absolute; width: 760px; height: 760px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(236,72,96,0.26), rgba(87,13,158,0.22) 40%, transparent 70%); }
+
+/* Hero layout */
+.hero .left { position: absolute; left: 72px; top: 0; bottom: 0; width: 500px; display: flex; flex-direction: column; justify-content: center; }
+.hero h1 { font-weight: 800; font-size: 72px; line-height: 0.98; letter-spacing: -0.035em; margin: 22px 0 28px; }
+.foot { display: flex; align-items: center; gap: 12px; font-family: "JB", monospace; font-size: 13px; color: var(--muted); letter-spacing: 0.08em; }
+.foot img { height: 20px; filter: brightness(0) invert(1); opacity: 0.85; }
+
+/* Background text and the lens */
+.bgtext { position: absolute; font-family: "JB", monospace; font-size: 17px; line-height: 2.05; color: var(--dim); }
+.lens { position: absolute; width: 330px; height: 330px; border-radius: 50%; padding: 4px; background: linear-gradient(135deg, #9b4dff, #ec4860); }
+.lens .in { width: 100%; height: 100%; border-radius: 50%; background: var(--night-2); overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; }
+.lens .t { width: 250px; font-family: "JB", monospace; font-size: 21px; line-height: 1.7; color: var(--ink-2); text-align: center; }
+.lens-handle { position: absolute; width: 150px; height: 30px; border-radius: 15px; background: var(--grad); transform: rotate(45deg); transform-origin: left center; }
+.cut { color: var(--coral); text-decoration: line-through; text-decoration-thickness: 3px; }
+.add { background: rgba(155,77,255,0.35); color: #fff; padding: 0 4px; border-radius: 3px; }
+
+/* Signal trace line (drawn by trace.js) */
+svg.trace { position: absolute; left: 0; }
+
+/* Inline cards */
+.card { background: var(--night-2); border: 1.5px solid var(--night-3); border-radius: 18px; position: relative; }
+.label { font-family: "JB", monospace; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }

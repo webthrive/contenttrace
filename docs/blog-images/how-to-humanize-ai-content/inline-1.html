@@ -1,31 +1,28 @@
 <!doctype html>
 <html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css">
 <style>
-  .title { position: absolute; left: 56px; top: 44px; font-size: 15px; color: var(--muted); }
-  .flow { position: absolute; left: 56px; right: 56px; top: 110px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px 26px; }
-  .step { background: var(--card); border: 1.5px solid var(--border); border-radius: 18px; padding: 22px 22px 20px; height: 178px; position: relative; }
-  .n { font-size: 13px; margin-bottom: 14px; }
-  .t { font-size: 23px; font-weight: 600; line-height: 1.2; letter-spacing: -0.01em; }
-  .s { position: absolute; left: 22px; right: 22px; bottom: 18px; font-size: 11px; color: var(--muted); }
-  .bar { position: absolute; left: 0; top: 0; bottom: 0; width: 6px; border-radius: 18px 0 0 18px; }
-  .mech .n { color: var(--red); } .mech .bar { background: var(--red); }
-  .deep .n { color: var(--teal); } .deep .bar { background: var(--teal); }
-  .key { position: absolute; left: 56px; bottom: 34px; display: flex; gap: 26px; font-size: 12px; color: var(--muted); }
+  .flow { position: absolute; left: 56px; right: 56px; top: 104px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px 22px; }
+  .card { height: 168px; padding: 22px 22px 18px; }
+  .n { font-family: "JB", monospace; font-size: 40px; font-weight: 500; line-height: 1; margin-bottom: 14px; }
+  .t { font-size: 22px; font-weight: 600; line-height: 1.2; letter-spacing: -0.01em; }
+  .s { position: absolute; left: 22px; bottom: 16px; font-family: "JB", monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .mech .n { color: var(--coral); }
+  .key { position: absolute; left: 56px; bottom: 30px; display: flex; gap: 26px; }
   .key span::before { content: ""; display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 8px; vertical-align: -1px; }
-  .key .a::before { background: var(--red); } .key .b::before { background: var(--teal); }
+  .key .a::before { background: var(--coral); } .key .b::before { background: var(--grad); }
 </style></head>
 <body>
 <div id="canvas" class="inline">
-  <div class="grid-bg"></div>
-  <div class="title mono">The six passes, in order</div>
+  <div class="glow" style="left:-300px;bottom:-420px;opacity:.7"></div>
+  <div class="label" style="position:absolute;left:56px;top:44px">The six passes, in order</div>
   <div class="flow">
-    <div class="step mech"><div class="bar"></div><div class="n mono">Pass 1</div><div class="t">Cut every filler phrase</div><div class="s mono">Word choice</div></div>
-    <div class="step mech"><div class="bar"></div><div class="n mono">Pass 2</div><div class="t">Read it aloud, break the rhythm</div><div class="s mono">Structure &amp; flow</div></div>
-    <div class="step deep"><div class="bar"></div><div class="n mono">Pass 3</div><div class="t">Swap illustrations for specifics</div><div class="s mono">Content &amp; logic</div></div>
-    <div class="step deep"><div class="bar"></div><div class="n mono">Pass 4</div><div class="t">Find the claim you disagree with</div><div class="s mono">Voice &amp; perspective</div></div>
-    <div class="step deep"><div class="bar"></div><div class="n mono">Pass 5</div><div class="t">Add one real doubt</div><div class="s mono">Cognitive fingerprint</div></div>
-    <div class="step deep"><div class="bar"></div><div class="n mono">Pass 6</div><div class="t">Score it, fix the weakest section</div><div class="s mono">All 8 sections</div></div>
+    <div class="card mech"><div class="n">01</div><div class="t">Cut every filler phrase</div><div class="s">Word choice</div></div>
+    <div class="card mech"><div class="n">02</div><div class="t">Read it aloud, break the rhythm</div><div class="s">Structure &amp; flow</div></div>
+    <div class="card"><div class="n grad-text">03</div><div class="t">Swap illustrations for specifics</div><div class="s">Content &amp; logic</div></div>
+    <div class="card"><div class="n grad-text">04</div><div class="t">Find the claim to disagree with</div><div class="s">Voice &amp; perspective</div></div>
+    <div class="card"><div class="n grad-text">05</div><div class="t">Add one real doubt</div><div class="s">Cognitive fingerprint</div></div>
+    <div class="card"><div class="n grad-text">06</div><div class="t">Score it, fix the weakest section</div><div class="s">All 8 sections</div></div>
   </div>
-  <div class="key mono"><span class="a">Mechanical edit</span><span class="b">Thinking edit</span></div>
+  <div class="key label"><span class="a">Mechanical edit</span><span class="b">Thinking edit</span></div>
 </div>
 </body></html>

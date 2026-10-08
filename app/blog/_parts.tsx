@@ -58,7 +58,7 @@ export function Byline({ date, readTime, updated }: { date: string; readTime: st
 /** 16:9 hero image. */
 export function BlogHero({ src, alt }: { src: string; alt: string }) {
   return (
-    <div style={{ borderRadius: "14px", overflow: "hidden", border: "1px solid var(--border)", marginBottom: "32px" }}>
+    <div style={{ borderRadius: "14px", overflow: "hidden", border: "1px solid #2a1846", marginBottom: "32px" }}>
       <Image src={src} alt={alt} width={1600} height={900} priority sizes="(max-width: 748px) 100vw, 700px" style={{ width: "100%", height: "auto", display: "block" }} />
     </div>
   );
@@ -68,7 +68,7 @@ export function BlogHero({ src, alt }: { src: string; alt: string }) {
 export function Figure({ src, alt, caption }: { src: string; alt: string; caption: string }) {
   return (
     <figure style={{ margin: "32px 0" }}>
-      <div style={{ borderRadius: "12px", overflow: "hidden", border: "1px solid var(--border)" }}>
+      <div style={{ borderRadius: "12px", overflow: "hidden", border: "1px solid #2a1846" }}>
         <Image src={src} alt={alt} width={1400} height={784} sizes="(max-width: 748px) 100vw, 700px" style={{ width: "100%", height: "auto", display: "block" }} />
       </div>
       <figcaption style={{ fontSize: "14px", color: "var(--text-muted)", marginTop: "10px", lineHeight: 1.5 }}>{caption}</figcaption>

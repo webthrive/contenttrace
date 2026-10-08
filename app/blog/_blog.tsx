@@ -98,10 +98,10 @@ const POSTS: Post[] = [
 ];
 
 const TAG_COLORS: Record<string, { color: string; bg: string; border: string }> = {
-  Explainer: { color: "#0a7373", bg: "rgba(10,115,115,0.08)", border: "rgba(10,115,115,0.2)" },
-  Analysis:  { color: "#c47a00", bg: "rgba(196,122,0,0.08)", border: "rgba(196,122,0,0.2)" },
-  Guide:     { color: "#c43302", bg: "rgba(196,51,2,0.08)", border: "rgba(196,51,2,0.2)" },
-  Opinion:   { color: "#6b3fa0", bg: "rgba(107,63,160,0.08)", border: "rgba(107,63,160,0.2)" },
+  Explainer: { color: "#570d9e", bg: "rgba(87,13,158,0.07)", border: "rgba(87,13,158,0.22)" },
+  Analysis:  { color: "#a35f00", bg: "rgba(196,122,0,0.08)", border: "rgba(196,122,0,0.24)" },
+  Guide:     { color: "#c42e4a", bg: "rgba(236,72,96,0.08)", border: "rgba(236,72,96,0.26)" },
+  Opinion:   { color: "#140a24", bg: "rgba(20,10,36,0.06)", border: "rgba(20,10,36,0.2)" },
 };
 
 export default function BlogIndex() {
@@ -110,7 +110,7 @@ export default function BlogIndex() {
       <main style={{ maxWidth: "760px", margin: "0 auto", padding: "60px 24px 80px", fontFamily: "var(--font)" }}>
       
 
-      <h1 style={{ fontSize: "42px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "8px", letterSpacing: "-0.02em" }}>Blog</h1>
+      <h1 style={{ fontSize: "42px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "8px", letterSpacing: "-0.02em" }}>Content<span className="grad-text">Trace</span> Blog</h1>
       <p style={{ fontSize: "17px", color: "var(--text-secondary)", marginBottom: "48px", lineHeight: "1.65" }}>
         Articles on AI content detection, what makes writing feel human, and how to understand the signals that separate authentic prose from generated text.
       </p>
