@@ -11,9 +11,12 @@ import Nav from "@/components/Nav";
 import { X, ArrowRight, Zap, Sparkles, Scan } from "lucide-react";
 import { CONTENT_TYPE_OPTIONS } from "@/lib/contentTypes";
 import { fetchUsage, type UsageInfo } from "@/lib/billing/browser";
-import { PLANS, PRO_YEARLY_PER_MONTH } from "@/lib/billing/config";
 import { TURNSTILE_BOX, clearHumanPass, getHumanPass, needsBotCheckFor, setHumanPass, useTurnstile } from "@/hooks/useTurnstile";
 import LandingSections, { OptimizerCards } from "@/components/LandingSections";
+import RichEditor from "@/components/RichEditor";
+import MarkdownView from "@/components/MarkdownView";
+import LimitModal, { takeDraft } from "@/components/LimitModal";
+import { mdToPlain } from "@/lib/markdown";
 import { LANDING_COPY, type LandingVariant } from "@/lib/landingCopy";
 
 const CHAR_LIMIT = 10000;
@@ -38,6 +41,7 @@ export default function AnalyzerPage({ variant = "home" }: { variant?: LandingVa
   const [detectedType, setDetectedType] = useState<string | null>(null);
   const [usage, setUsage] = useState<UsageInfo | null>(null);
   const [limitMessage, setLimitMessage] = useState<string | null>(null);
+  const [limitCode, setLimitCode] = useState<string>("limit");
   const [view, setView] = useState<"analysis" | "optimize">("analysis");
   const [optRuns, setOptRuns] = useState(0);
   const [textOpen, setTextOpen] = useState(false);
@@ -51,12 +55,17 @@ export default function AnalyzerPage({ variant = "home" }: { variant?: LandingVa
   const landing = !signedIn && !loading && !result;
 
   useEffect(() => { fetchUsage().then(setUsage); }, []);
+  // Text saved before a sign-in link was sent from the limit popup.
+  useEffect(() => { const d = takeDraft(); if (d) setText(d); }, []);
 
   const charCount = text.length;
-  const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
+  const plainText = mdToPlain(text);
+  const wordCount = plainText.trim() ? plainText.trim().split(/\s+/).length : 0;
+  const overLimit = charCount > charLimit;
 
   const handleAnalyze = async () => {
     if (!text.trim() || text.length < 50) { setError("Please enter at least 50 characters."); return; }
+    if (overLimit) { setError(`Your text is over the ${charLimit.toLocaleString()} character limit for your plan. Shorten it, or go Pro for longer texts.`); return; }
     setLoading(true); setView("analysis"); setTextOpen(false); setError(null); setLimitMessage(null); setResult(null); setStreamingSections([]); setSectionsComplete(0); setDetectedType(null);
     // A human pass from an earlier check skips Turnstile. Otherwise get a fresh token.
     const humanPass = needsBotCheck ? getHumanPass() : null;
@@ -84,7 +93,7 @@ export default function AnalyzerPage({ variant = "home" }: { variant?: LandingVa
         let message = "Analysis failed. Please try again.";
         let code: string | undefined;
         try { const data = await res.json(); if (data?.error) message = data.error; code = data?.code; } catch { /* non-JSON error page */ }
-        if (code === "limit" || code === "too_long") { setLimitMessage(message); setLoading(false); resetTurnstile(); return; }
+        if (code === "limit" || code === "too_long") { setLimitCode(code); setLimitMessage(message); setLoading(false); resetTurnstile(); return; }
         throw new Error(message);
       }
       const reader = res.body!.getReader();
@@ -186,16 +195,19 @@ export default function AnalyzerPage({ variant = "home" }: { variant?: LandingVa
               </button>
             </div>
           )}
-          {(!result || textOpen) && (
-          <textarea
-            id="ct-input"
-            className="input-area"
-            value={text}
-            onChange={(e) => { if (!result && !loading) setText(e.target.value.slice(0, charLimit)); }}
-            readOnly={!!result || loading}
-            placeholder="Paste any text here: blog post, email, essay, social content, product description, marketing copy..."
-            style={{ width: "100%", minHeight: result ? "120px" : "240px", maxHeight: result ? "300px" : undefined, padding: "22px", background: "none", border: "none", outline: "none", color: "var(--text-primary)", fontSize: "16px", fontFamily: "var(--font)", lineHeight: "1.75", resize: result ? "none" : "vertical", boxSizing: "border-box", opacity: result ? 0.8 : 1 }}
-          />
+          {!result && (
+            <RichEditor
+              id="ct-input"
+              value={text}
+              onChange={setText}
+              editable={!loading}
+              placeholder="Paste any text here: blog post, email, essay, social content, product description, marketing copy... Headings, bold and lists are kept."
+            />
+          )}
+          {result && textOpen && (
+            <div style={{ maxHeight: "300px", overflowY: "auto", padding: "16px 22px", fontSize: "15px", lineHeight: 1.7, color: "var(--text-secondary)", overflowWrap: "anywhere" }}>
+              <MarkdownView text={text} />
+            </div>
           )}
           {!result && (
             <div style={{ borderTop: "1px solid var(--border)", padding: "10px 18px", display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap", background: "var(--bg-card)" }}>
@@ -218,17 +230,23 @@ export default function AnalyzerPage({ variant = "home" }: { variant?: LandingVa
           )}
           {!result && <div style={{ borderTop: "1px solid var(--border)", padding: "14px 18px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "10px", background: "var(--bg-elevated)" }}>
             <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
-              <span style={{ fontSize: "13px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>{wordCount} words · {charCount.toLocaleString()}/{charLimit.toLocaleString()} chars</span>
+              <span style={{ fontSize: "13px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>{wordCount} words · <span style={{ color: overLimit ? "var(--red)" : undefined, fontWeight: overLimit ? 700 : undefined }}>{charCount.toLocaleString()}/{charLimit.toLocaleString()} chars</span></span>
               <button onClick={loadSample} style={{ fontSize: "13px", color: "var(--accent)", background: "none", border: "none", cursor: "pointer", textDecoration: "underline" }}>Load sample</button>
             </div>
-            <button onClick={handleAnalyze} disabled={loading || charCount < 50} className="analyze-btn"
-              style={{ display: "flex", alignItems: "center", gap: "8px", padding: "12px 24px", background: loading || charCount < 50 ? "var(--bg-elevated)" : "var(--accent)", color: loading || charCount < 50 ? "var(--text-muted)" : "white", border: loading || charCount < 50 ? "1px solid var(--border)" : "none", borderRadius: "8px", fontSize: "15px", fontWeight: 600, cursor: loading || charCount < 50 ? "not-allowed" : "pointer", fontFamily: "var(--font)", boxShadow: loading || charCount < 50 ? "none" : "0 2px 8px rgba(10,115,115,0.3)" }}>
+            <button onClick={handleAnalyze} disabled={loading || charCount < 50 || overLimit} className="analyze-btn"
+              style={{ display: "flex", alignItems: "center", gap: "8px", padding: "12px 24px", background: loading || charCount < 50 || overLimit ? "var(--bg-elevated)" : "var(--accent)", color: loading || charCount < 50 || overLimit ? "var(--text-muted)" : "white", border: loading || charCount < 50 || overLimit ? "1px solid var(--border)" : "none", borderRadius: "8px", fontSize: "15px", fontWeight: 600, cursor: loading || charCount < 50 || overLimit ? "not-allowed" : "pointer", fontFamily: "var(--font)", boxShadow: loading || charCount < 50 || overLimit ? "none" : "0 2px 8px rgba(10,115,115,0.3)" }}>
               {loading
                 ? (<><span style={{ width: "15px", height: "15px", border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "white", borderRadius: "50%", display: "inline-block" }} className="spin" />Analyzing...</>)
                 : (<><Scan size={15} />{copy.cta}<ArrowRight size={15} /></>)}
             </button>
           </div>}
         </div>
+
+        {overLimit && !result && (
+          <p role="alert" style={{ fontSize: "14px", color: "var(--red)", margin: "-8px 2px 14px" }}>
+            Your text is over the {charLimit.toLocaleString()} character limit. Shorten it{usage?.plan !== "pro" ? <>, or <a href="/pricing" style={{ color: "var(--accent)", fontWeight: 600 }}>go Pro</a> for longer texts</> : ""}.
+          </p>
+        )}
 
         {needsBotCheck && <div ref={turnstileRef} style={TURNSTILE_BOX} />}
 
@@ -244,16 +262,7 @@ export default function AnalyzerPage({ variant = "home" }: { variant?: LandingVa
         )}
 
         {limitMessage && (
-          <div role="alert" style={{ border: "1px solid rgba(10,115,115,0.35)", borderRadius: "12px", background: "var(--accent-light)", padding: "18px 20px", marginBottom: "16px" }}>
-            <div style={{ fontSize: "16px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "6px" }}>{limitMessage}</div>
-            <div style={{ fontSize: "14px", color: "var(--text-secondary)", marginBottom: "12px" }}>
-              Pro is ${PRO_YEARLY_PER_MONTH} a month billed yearly (${PLANS.pro.yearlyPrice}), or ${PLANS.pro.monthlyPrice} month to month, for {PLANS.pro.wordsPerMonth.toLocaleString()} words a month and texts up to {PLANS.pro.charLimit.toLocaleString()} characters. Or buy a one-time Word Pack ({PLANS.pack.words.toLocaleString()} words for ${PLANS.pack.price}).
-            </div>
-            <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-              <a href="/pricing" style={{ padding: "10px 16px", borderRadius: "8px", background: "var(--accent)", color: "white", fontSize: "14px", fontWeight: 600, textDecoration: "none" }}>See plans</a>
-              {!usage?.signedIn && <a href="/login?next=/" style={{ padding: "10px 16px", borderRadius: "8px", border: "1px solid var(--border)", color: "var(--text-primary)", fontSize: "14px", fontWeight: 600, textDecoration: "none", background: "var(--bg-card)" }}>Sign in</a>}
-            </div>
-          </div>
+          <LimitModal message={limitMessage} code={limitCode} signedIn={Boolean(usage?.signedIn)} plan={usage?.plan} draftText={text} onClose={() => setLimitMessage(null)} />
         )}
 
         {error && (

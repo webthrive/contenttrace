@@ -1,4 +1,5 @@
 import { logError } from "@/lib/log";
+import { scoringText } from "@/lib/markdown";
 import { NextRequest } from "next/server";
 import { PLANS, billingEnabled, countWords, currentPeriod } from "@/lib/billing/config";
 import { getStatus, reserve, supabaseStore, type Reservation } from "@/lib/billing/entitlements";
@@ -13,7 +14,7 @@ export const maxDuration = 60;
 // Save a finished analysis to the user's history. A failure here never breaks the analysis.
 // An optimizer re-check is saved with its optimization details (original text, changes, scores before).
 async function saveAnalysis(userId: string, text: string, result: AnalysisOutput & { optimization?: unknown }): Promise<string | null> {
-  const preview = text.replace(/\s+/g, " ").trim().slice(0, 160);
+  const preview = scoringText(text).replace(/\s+/g, " ").trim().slice(0, 160);
   try {
     const { data, error } = await supabaseAdmin()
       .from("analyses")
@@ -132,7 +133,7 @@ export async function POST(req: NextRequest) {
         : Promise.resolve(null);
 
       try {
-        const result = await analyzeText(text, requestedType, send);
+        const result = await analyzeText(scoringText(text), requestedType, send); // markdown marks removed: same as plain pasted text
         const readiness = await readinessPromise;
         if (readiness) send({ type: "readiness", readiness });
         const opt = recheck ? cleanOptimization(optimization, recheck, readiness) : undefined;

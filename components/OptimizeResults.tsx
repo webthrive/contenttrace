@@ -1,9 +1,11 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import { diffWords } from "diff";
+import { diffWordsWithSpace } from "diff";
 import { ArrowRight, Check, Copy, PenLine } from "lucide-react";
 import { contentMetrics, readingEaseLabel } from "@/lib/contentMetrics";
+import { mdToHtml, mdToPlain } from "@/lib/markdown";
+import MarkdownView from "./MarkdownView";
 import { GOAL_LABELS, type OptimizeChange, type OptimizeGoal, type OptimizeInputNeeded, type Readiness } from "@/types/optimize";
 
 export type OptimizeResultsProps = {
@@ -58,6 +60,23 @@ function ScoreCard({ title, before, after, hint, pending, beforeNote, afterNote 
   );
 }
 
+const markers = (t: string) => <WithMarkers text={t} />;
+
+// Copy formatted text: rich HTML for Google Docs, Word and CMS editors, plain text elsewhere.
+async function copyRich(md: string) {
+  const plain = mdToPlain(md);
+  if (typeof ClipboardItem !== "undefined" && navigator.clipboard?.write) {
+    try {
+      await navigator.clipboard.write([new ClipboardItem({
+        "text/html": new Blob([mdToHtml(md)], { type: "text/html" }),
+        "text/plain": new Blob([plain], { type: "text/plain" }),
+      })]);
+      return;
+    } catch { /* fall back to plain text */ }
+  }
+  await navigator.clipboard.writeText(plain);
+}
+
 // Show [Add: ...] markers as highlighted chips inside the text.
 function WithMarkers({ text }: { text: string }) {
   const parts = text.split(/(\[Add:[^\]]*\])/g);
@@ -99,13 +118,17 @@ export default function OptimizeResults(p: OptimizeResultsProps) {
   if (!p.checking && p.beforeReadiness && p.afterReadiness && p.afterReadiness.score < p.beforeReadiness.score - NOISE) drops.push(`Search & AI-answer readiness ${p.beforeReadiness.score} → ${p.afterReadiness.score}`);
   const [copiedOriginal, setCopiedOriginal] = useState(false);
   const copyOriginal = async () => {
-    try { await navigator.clipboard.writeText(p.originalText); setCopiedOriginal(true); setTimeout(() => setCopiedOriginal(false), 2000); } catch { /* clipboard blocked */ }
+    try { await copyRich(p.originalText); setCopiedOriginal(true); setTimeout(() => setCopiedOriginal(false), 2000); } catch { /* clipboard blocked */ }
   };
-  const diff = useMemo(() => (tab === "side" || tab === "tracked" ? diffWords(p.originalText, p.optimizedText) : []), [tab, p.originalText, p.optimizedText]);
+  const diff = useMemo(() => (tab === "side" || tab === "tracked" ? diffWordsWithSpace(p.originalText, p.optimizedText) : []), [tab, p.originalText, p.optimizedText]);
 
+  const [copiedMd, setCopiedMd] = useState(false);
+  const copyMarkdown = async () => {
+    try { await navigator.clipboard.writeText(p.optimizedText); setCopiedMd(true); setTimeout(() => setCopiedMd(false), 2000); } catch { /* clipboard blocked */ }
+  };
   const copy = async () => {
     try {
-      await navigator.clipboard.writeText(p.optimizedText);
+      await copyRich(p.optimizedText);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch { /* clipboard blocked: the text is still selectable */ }
@@ -233,9 +256,14 @@ export default function OptimizeResults(p: OptimizeResultsProps) {
             {tabBtn("changes", `Change list (${p.changes.length})`)}
             {tabBtn("text", "Optimized text")}
           </div>
-          <button onClick={copy} style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "14px", fontWeight: 600, color: "white", background: "var(--accent)", border: "none", borderRadius: "8px", padding: "8px 14px", cursor: "pointer", fontFamily: "var(--font)" }}>
+          <span style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
+          <button onClick={copyMarkdown} title="Copy with markdown symbols (## and **), for markdown editors" style={{ fontSize: "13px", fontWeight: 600, color: "var(--accent)", background: "none", border: "none", cursor: "pointer", fontFamily: "var(--font)", padding: 0 }}>
+            {copiedMd ? "Copied" : "Copy as Markdown"}
+          </button>
+          <button onClick={copy} title="Keeps headings, bold and lists when you paste into Google Docs, Word or your CMS" style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "14px", fontWeight: 600, color: "white", background: "var(--accent)", border: "none", borderRadius: "8px", padding: "8px 14px", cursor: "pointer", fontFamily: "var(--font)" }}>
             {copied ? <><Check size={14} />Copied</> : <><Copy size={14} />Copy optimized text</>}
           </button>
+          </span>
         </div>
 
         {tab === "side" && (
@@ -252,10 +280,8 @@ export default function OptimizeResults(p: OptimizeResultsProps) {
                 </div>
                 <div ref={leftRef} onScroll={syncScroll("l")} style={{ ...paneStyle, color: "var(--text-secondary)" }}>
                   {highlight
-                    ? diff.filter((d) => !d.added).map((d, i) => d.removed
-                        ? <del key={i} style={{ background: "var(--red-bg)", color: "var(--red)", textDecorationColor: "rgba(196,51,2,0.5)" }}>{d.value}</del>
-                        : <span key={i}>{d.value}</span>)
-                    : p.originalText}
+                    ? <MarkdownView segments={diff.filter((d) => !d.added)} />
+                    : <MarkdownView text={p.originalText} />}
                 </div>
               </div>
               <div style={{ border: "2px solid var(--accent)", borderRadius: "10px", overflow: "hidden", display: "flex", flexDirection: "column" }}>
@@ -265,10 +291,8 @@ export default function OptimizeResults(p: OptimizeResultsProps) {
                 </div>
                 <div ref={rightRef} onScroll={syncScroll("r")} style={{ ...paneStyle, color: "var(--text-primary)" }}>
                   {highlight
-                    ? diff.filter((d) => !d.removed).map((d, i) => d.added
-                        ? <ins key={i} style={{ background: "var(--accent-light)", textDecoration: "none", borderRadius: "3px" }}><WithMarkers text={d.value} /></ins>
-                        : <span key={i}><WithMarkers text={d.value} /></span>)
-                    : <WithMarkers text={p.optimizedText} />}
+                    ? <MarkdownView segments={diff.filter((d) => !d.removed)} renderText={markers} />
+                    : <MarkdownView text={p.optimizedText} renderText={markers} />}
                 </div>
               </div>
             </div>
@@ -277,11 +301,7 @@ export default function OptimizeResults(p: OptimizeResultsProps) {
 
         {tab === "tracked" && (
           <div style={{ fontSize: "15px", lineHeight: 1.8, color: "var(--text-secondary)", whiteSpace: "pre-wrap", maxHeight: "560px", overflowY: "auto", overflowWrap: "anywhere" }}>
-            {diff.map((d, i) =>
-              d.added ? <ins key={i} style={{ background: "var(--accent-light)", color: "var(--text-primary)", textDecoration: "none", borderRadius: "3px" }}>{d.value}</ins>
-              : d.removed ? <del key={i} style={{ background: "var(--red-bg)", color: "var(--red)", textDecorationColor: "rgba(196,51,2,0.5)" }}>{d.value}</del>
-              : <span key={i}>{d.value}</span>
-            )}
+            <MarkdownView segments={diff} />
           </div>
         )}
 
@@ -294,8 +314,8 @@ export default function OptimizeResults(p: OptimizeResultsProps) {
                   <span style={{ fontSize: "11px", fontWeight: 600, color: KIND_COLORS[c.kind] ?? "var(--accent)", border: `1px solid ${KIND_COLORS[c.kind] ?? "var(--accent)"}55`, borderRadius: "6px", padding: "2px 8px" }}>{c.kind}</span>
                   <span style={{ fontSize: "13px", color: "var(--text-secondary)" }}>{c.reason}</span>
                 </div>
-                {c.before && <div style={{ fontSize: "14px", lineHeight: 1.6, color: "var(--red)", background: "var(--red-bg)", borderRadius: "6px", padding: "6px 10px", textDecoration: "line-through", textDecorationColor: "rgba(196,51,2,0.5)", marginBottom: "4px" }}>{c.before}</div>}
-                <div style={{ fontSize: "14px", lineHeight: 1.6, color: "var(--text-primary)", background: "var(--accent-light)", borderRadius: "6px", padding: "6px 10px" }}><WithMarkers text={c.after} /></div>
+                {c.before && <div style={{ fontSize: "14px", lineHeight: 1.6, color: "var(--red)", background: "var(--red-bg)", borderRadius: "6px", padding: "6px 10px", textDecoration: "line-through", textDecorationColor: "rgba(196,51,2,0.5)", marginBottom: "4px" }}><MarkdownView text={c.before} /></div>}
+                <div style={{ fontSize: "14px", lineHeight: 1.6, color: "var(--text-primary)", background: "var(--accent-light)", borderRadius: "6px", padding: "6px 10px" }}><MarkdownView text={c.after} renderText={markers} /></div>
               </div>
             ))}
           </div>
@@ -303,7 +323,7 @@ export default function OptimizeResults(p: OptimizeResultsProps) {
 
         {tab === "text" && (
           <div style={{ fontSize: "15px", lineHeight: 1.8, color: "var(--text-primary)", whiteSpace: "pre-wrap", maxHeight: "560px", overflowY: "auto", overflowWrap: "anywhere" }}>
-            <WithMarkers text={p.optimizedText} />
+            <MarkdownView text={p.optimizedText} renderText={markers} />
           </div>
         )}
       </div>

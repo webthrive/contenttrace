@@ -63,5 +63,6 @@ export function currentPeriod(d = new Date()): string {
 
 export function countWords(text: string): number {
   const t = text.trim();
-  return t ? t.split(/\s+/).length : 0;
+  // Markdown symbols on their own ("##", "-") are not words.
+  return t ? t.split(/\s+/).filter((w) => /[\p{L}\p{N}]/u.test(w)).length : 0;
 }

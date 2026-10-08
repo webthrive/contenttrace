@@ -1,5 +1,6 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
+import MarkdownView from "@/components/MarkdownView";
 import ResultsDisplay from "@/components/ResultsDisplay";
 import OptimizeResults from "@/components/OptimizeResults";
 import OptimizePanel from "@/components/OptimizePanel";
@@ -128,8 +129,8 @@ export default function SavedAnalysis({ id }: { id: string }) {
             </button>
           </div>
           {showText && (
-            <div style={{ border: "1px solid var(--border)", borderRadius: "12px", background: "var(--bg-card)", padding: "18px 20px", marginBottom: "20px", fontSize: "15px", lineHeight: 1.7, color: "var(--text-secondary)", whiteSpace: "pre-wrap", maxHeight: "420px", overflowY: "auto" }}>
-              {data.input_text}
+            <div style={{ border: "1px solid var(--border)", borderRadius: "12px", background: "var(--bg-card)", padding: "18px 20px", marginBottom: "20px", fontSize: "15px", lineHeight: 1.7, color: "var(--text-secondary)", maxHeight: "420px", overflowY: "auto", overflowWrap: "anywhere" }}>
+              <MarkdownView text={data.input_text} />
             </div>
           )}
 

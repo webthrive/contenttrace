@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import LimitModal from "./LimitModal";
 import { Sparkles } from "lucide-react";
 import type { AnalysisResult } from "@/types/analysis";
 import type { UsageInfo } from "@/lib/billing/browser";
@@ -64,6 +65,7 @@ export default function OptimizePanel({ text, result, historyId, usage, needsBot
   const [active, setActive] = useState<OptimizeGoal | null>(null);
   const [status, setStatus] = useState<Partial<Record<OptimizeGoal, Status>>>({});
   const [limit, setLimit] = useState<string | null>(null);
+  const [limitCode, setLimitCode] = useState<string>("limit");
   const resultsRef = useRef<HTMLDivElement>(null);
   const scrolled = useRef(false);
   const autoStarted = useRef(false);
@@ -143,7 +145,7 @@ export default function OptimizePanel({ text, result, historyId, usage, needsBot
       }
       if (!res.ok) {
         const { message, code } = await errorOf(res, "The optimizer failed. Please try again.");
-        if (code === "limit" || code === "too_long") { setLimit(message); setGoalStatus(g, null); return "limit"; }
+        if (code === "limit" || code === "too_long") { setLimitCode(code); setLimit(message); setGoalStatus(g, null); return "limit"; }
         throw new Error(message);
       }
       let out: (Rewrite & { recheckToken: string }) | null = null;
@@ -279,9 +281,7 @@ export default function OptimizePanel({ text, result, historyId, usage, needsBot
         {busy && <p style={{ fontSize: "12px", color: "var(--text-muted)", margin: "10px 0 0" }}>Each goal takes about 20 to 50 seconds. You can stay on this page while it runs.</p>}
 
         {limit && (
-          <div role="alert" style={{ marginTop: "12px", fontSize: "14px", color: "var(--text-secondary)" }}>
-            {limit} <a href="/pricing" style={{ color: "var(--accent)", fontWeight: 600 }}>See plans</a>
-          </div>
+          <LimitModal message={limit} code={limitCode} signedIn={Boolean(usage?.signedIn)} plan={usage?.plan} draftText={text} onClose={() => setLimit(null)} />
         )}
       </div>
 
