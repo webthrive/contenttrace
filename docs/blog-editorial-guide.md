@@ -2,6 +2,19 @@
 
 Rules for every post on `/blog`. Use this guide for rewrites of old posts and for all new posts.
 
+## 0. Positioning (read first)
+
+- ContentTrace is **not an AI detection tool**. It helps writers produce superior, valuable, engaging content that is not run-of-the-mill AI output.
+- ContentTrace **supports the use of AI**. Google accepts AI-assisted content that helps people. The product formats writing for the best outcomes in **reader engagement, SEO and AEO**.
+- Never frame a post, CTA or meta description as "detect AI", "catch AI" or "beat detectors". Frame it as better writing, engagement and visibility.
+- Never tell readers to avoid AI. Show how to use it well.
+- Detection topics are allowed (old posts keep them), but treat the score as a diagnostic for editing, never as a verdict on a person.
+- **Topic mix:**
+  - Product: purpose, technical (how scoring and calibration work), tuning, features. Technical posts build validation, so include real method details.
+  - Craft: useful information that helps AI-assisted writers produce better work (editing, structure, SEO, AEO, voice, policy).
+- **Dates and truth:** a backdated post must not describe a feature before it existed. Product posts about the current engine go on or after Sept 30, 2026; posts about the optimizer go on or after Oct 3, 2026.
+- **Claims:** no accuracy percentages unless they come from a documented eval, with sample size and limits stated. No "proprietary deep learning model" or "learns" claims.
+
 ## 1. Voice
 
 - **No first person.** Do not use "I", "me", "my", "we", "our", "us" in body copy, TL;DR, FAQ, or pull quotes.
@@ -21,7 +34,7 @@ Rules for every post on `/blog`. Use this guide for rewrites of old posts and fo
 
 ## 2. EEAT checklist (every post)
 
-- [ ] Byline: **Colin H** (links to `/about`), with a 2-sentence bio box at the end of the post.
+- [ ] Byline: **Colin H** (links to `/about`), with the bio box at the end of the post. In the bio box, the name links to https://www.webthrive.io/home.
 - [ ] Visible dates: published date. On rewrites, add "Updated {date}".
 - [ ] Article JSON-LD: `headline`, `image`, `datePublished`, `dateModified`, `author` (Person, Colin H), `publisher` (ContentTrace).
 - [ ] FAQPage JSON-LD that matches the visible FAQ.

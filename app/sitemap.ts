@@ -23,6 +23,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.7,
     },
     {
+      url: `${SITE_URL}/manifesto`,
+      lastModified: new Date("2026-10-08"),
+      changeFrequency: "yearly",
+      priority: 0.6,
+    },
+    {
       url: `${SITE_URL}/blog`,
       lastModified: new Date(),
       changeFrequency: "weekly",

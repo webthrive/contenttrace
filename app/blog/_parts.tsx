@@ -4,8 +4,8 @@ export const SITE_URL = "https://www.contenttrace.ai";
 
 export const AUTHOR = {
   name: "Colin H",
-  url: `${SITE_URL}/about`,
-  bio: "Colin H builds ContentTrace at Web Thrive. He has spent 20+ years in B2B SaaS marketing, running content, SEO and paid programs, and now studies what makes writing read as human.",
+  url: "https://www.webthrive.io/home",
+  bio: "He has spent 20+ years in B2B SaaS marketing, running content, SEO and AEO programs, and now builds them around AI-assisted content production.",
 };
 
 type ArticleSchemaProps = {
@@ -98,7 +98,8 @@ export function AuthorBio() {
       <div>
         <div style={{ fontSize: "15px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "4px" }}>About the author</div>
         <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.6, margin: 0 }}>
-          {AUTHOR.bio} <a href="/about" style={{ color: "var(--accent)", textDecoration: "underline" }}>More about ContentTrace</a>
+          <a href={AUTHOR.url} target="_blank" rel="noopener" style={{ color: "var(--accent)", fontWeight: 600, textDecoration: "underline" }}>{AUTHOR.name}</a> builds ContentTrace at Web Thrive. {AUTHOR.bio}{" "}
+          <a href="/manifesto" style={{ color: "var(--accent)", textDecoration: "underline" }}>Read the ContentTrace manifesto</a>
         </p>
       </div>
     </div>

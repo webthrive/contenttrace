@@ -5,11 +5,11 @@ const SITE_URL = "https://www.contenttrace.ai";
 
 export const metadata: Metadata = {
   title: "About",
-  description: "Content Trace is an AI content detector that explains its score with 32 signals, then helps you fix the weak spots with three optimizers: Humanize, SEO and AI answers.",
+  description: "Content Trace helps AI-assisted writers publish content that is worth reading. 32 explained signals show what makes a draft generic, then three optimizers improve it for readers, SEO and AI answers.",
   alternates: { canonical: `${SITE_URL}/about` },
   openGraph: {
     title: "About Content Trace",
-    description: "AI detection that explains why, plus Humanize, SEO and AI-answer optimizers that show every change.",
+    description: "A writing quality tool for AI-assisted writers: explained signals, plus Humanize, SEO and AI-answer optimizers that show every change.",
     url: `${SITE_URL}/about`,
     siteName: "Content Trace",
     type: "website",
@@ -24,19 +24,22 @@ export default function AboutPage() {
       
 
       <h1 style={{ fontSize: "42px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "8px", letterSpacing: "-0.02em" }}>About Content Trace</h1>
-      <p style={{ fontSize: "14px", color: "var(--text-muted)", marginBottom: "40px" }}>Built by Colin at Web Thrive</p>
+      <p style={{ fontSize: "14px", color: "var(--text-muted)", marginBottom: "40px" }}>Built by <a href="https://www.webthrive.io/home" target="_blank" rel="noopener" style={{ color: "var(--accent)", textDecoration: "none", fontWeight: 600 }}>Colin H</a> at Web Thrive · <a href="/manifesto" style={{ color: "var(--accent)", textDecoration: "underline" }}>Read our manifesto</a></p>
 
       {/* Mission */}
       <div style={{ marginBottom: "40px" }}>
         <h2 style={{ fontSize: "22px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "14px" }}>Why we built this</h2>
         <p style={{ fontSize: "16px", color: "var(--text-secondary)", marginBottom: "14px" }}>
-          AI writing tools are now part of everyday work. Most teams start with an AI draft, and that's fine. The problem is what comes next: drafts that sound generic, read like every other page, and get passed over by readers, search engines and AI assistants. At the same time, teachers, editors and publishers still want to know what they're reading.
+          AI writing tools are part of everyday work now, and we think that&apos;s a good thing. Google has said plainly that it rewards helpful content however it was made. So the question isn&apos;t whether you used AI. The question is whether the finished piece is worth someone&apos;s time.
         </p>
         <p style={{ fontSize: "16px", color: "var(--text-secondary)", marginBottom: "14px" }}>
-          Most AI detectors give you one score and a verdict with no explanation, and then leave you on your own. Content Trace shows you <em>why</em> something scores the way it does. Then it helps you fix it, with three optimizers that rewrite the weak spots and show every change before and after.
+          Most AI drafts aren&apos;t, at least not yet. They read like every other page on the topic: smooth, balanced, general, and easy to skip. Readers leave after two paragraphs. Search engines and AI assistants find nothing new to rank or quote. Content Trace exists to close that gap.
+        </p>
+        <p style={{ fontSize: "16px", color: "var(--text-secondary)", marginBottom: "14px" }}>
+          It is not built to catch anyone. It shows you, signal by signal, what makes a draft read as generic, then helps you fix it for the three audiences that decide whether content works: readers, search engines and AI answer engines. Every change is shown before and after, so the final call stays yours.
         </p>
         <p style={{ fontSize: "16px", color: "var(--text-secondary)" }}>
-          We also wanted it to be easy to try. Anyone can run a few full analyses every month for free, with no account. Pro and one-time Word Packs are there for people who check and optimize longer texts, or do it often.
+          Anyone can try it for free each month, with no account. Pro and one-time Word Packs are there for people who write and optimize longer pieces, or do it often.
         </p>
       </div>
 
@@ -44,7 +47,7 @@ export default function AboutPage() {
       <div style={{ marginBottom: "40px" }}>
         <h2 style={{ fontSize: "22px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "14px" }}>How it works</h2>
         <p style={{ fontSize: "16px", color: "var(--text-secondary)", marginBottom: "14px" }}>
-          Content Trace analyzes text across 8 sections and 32 individual signals, from sentence rhythm and word choice to reasoning patterns and emotional texture. Each signal is scored on its own and explained in plain language, so you can see exactly what drives the result.
+          Content Trace reads a draft across 8 sections and 32 individual signals, from sentence rhythm and word choice to reasoning patterns and emotional texture. These are the same things that separate writing people finish from writing people skim. Each signal is explained in plain language, so you can see exactly what to improve.
         </p>
         <p style={{ fontSize: "16px", color: "var(--text-secondary)", marginBottom: "20px" }}>
           Most signals are read by Claude, Anthropic's AI model, which reviews the writing the way a trained editor would. A few are measured directly from the text, such as how much sentence length varies. The analysis settings are fixed, so the same text gets the same or a very close score each time.
@@ -120,9 +123,9 @@ export default function AboutPage() {
 
       {/* Human Score */}
       <div style={{ marginBottom: "40px" }}>
-        <h2 style={{ fontSize: "22px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "14px" }}>The Human Score</h2>
+        <h2 style={{ fontSize: "22px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "14px" }}>The Human Score: a diagnostic, not a verdict</h2>
         <p style={{ fontSize: "16px", color: "var(--text-secondary)", marginBottom: "14px" }}>
-          Rather than labeling text as "AI" or "human" with false confidence, Content Trace gives you a Human Score out of 100. Higher scores indicate stronger human writing signals. Lower scores indicate patterns more consistent with AI generation. Each report also shows a confidence level, which is lower for short texts.
+          The Human Score shows how strongly a draft carries the signals of writing a person thought through. It does not label anyone&apos;s work with false confidence. It is a score out of 100. Higher scores indicate stronger human writing signals. Lower scores indicate patterns more consistent with AI generation. Each report also shows a confidence level, which is lower for short texts.
         </p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "10px", margin: "20px 0" }}>
           {[
@@ -147,17 +150,17 @@ export default function AboutPage() {
 
       {/* Who it's for */}
       <div style={{ marginBottom: "40px" }}>
-        <h2 style={{ fontSize: "22px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "14px" }}>Who it's for</h2>
+        <h2 style={{ fontSize: "22px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "14px" }}>Who it&apos;s for</h2>
         <p style={{ fontSize: "16px", color: "var(--text-secondary)", marginBottom: "14px" }}>
-          Content Trace is for anyone who writes with AI, or reviews writing that might be:
+          Content Trace is for anyone who writes with AI and wants the result to be better than the draft:
         </p>
         <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px" }}>
           {[
-            { who: "Content & SEO teams", why: "Humanize AI drafts and tune them for search and AI answers" },
-            { who: "Marketers", why: "Turn AI first drafts into copy that sounds like your brand" },
-            { who: "Writers & creators", why: "Check your own work and tighten it before you publish" },
-            { who: "Editors & publishers", why: "See which signals stand out in a submission" },
-            { who: "Teachers & academics", why: "A supplementary signal when reviewing student work" },
+            { who: "Content & SEO teams", why: "Turn AI drafts into posts that rank, get quoted in AI answers and keep readers on the page" },
+            { who: "Marketers", why: "Make AI first drafts sound like your brand, not like everyone else's" },
+            { who: "Writers & creators", why: "See where your own draft goes generic and tighten it before you publish" },
+            { who: "Editors & publishers", why: "Give writers specific, signal-level feedback instead of \"this feels off\"" },
+            { who: "Teachers & academics", why: "A supplementary signal when reviewing work, never the only evidence" },
           ].map((item) => (
             <li key={item.who} style={{ display: "flex", flexWrap: "wrap", gap: "4px 12px", padding: "12px 16px", background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: "10px" }}>
               <span style={{ fontSize: "15px", fontWeight: 600, color: "var(--text-primary)", minWidth: "180px" }}>{item.who}</span>
@@ -171,10 +174,10 @@ export default function AboutPage() {
       <div style={{ marginBottom: "40px" }}>
         <h2 style={{ fontSize: "22px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "14px" }}>Who we are</h2>
         <p style={{ fontSize: "16px", color: "var(--text-secondary)", marginBottom: "14px" }}>
-          Content Trace is built and maintained by <a href="https://www.webthrive.io/home" target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", textDecoration: "none", fontWeight: 600 }}>Colin</a>, a digital marketing consultant at <strong style={{ color: "var(--text-primary)" }}>Web Thrive</strong> based in the United States.
+          Content Trace is built and maintained by <a href="https://www.webthrive.io/home" target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", textDecoration: "none", fontWeight: 600 }}>Colin H</a> at <strong style={{ color: "var(--text-primary)" }}>Web Thrive</strong>. He has spent 20+ years in B2B SaaS marketing, running content, SEO and AEO programs, and now builds them around AI-assisted content production. Content Trace is the tool he wanted for that work.
         </p>
         <p style={{ fontSize: "16px", color: "var(--text-secondary)" }}>
-          Have a question, a feature request, or just want to say hello? We'd love to hear from you.{" "}
+          The principles behind the product are in <a href="/manifesto" style={{ color: "var(--accent)", textDecoration: "underline" }}>our manifesto</a>. Have a question or a feature request? We&apos;d love to hear from you.{" "}
           <a href="/contact" style={{ color: "var(--accent)", textDecoration: "underline" }}>Get in touch →</a>
         </p>
       </div>
@@ -182,7 +185,7 @@ export default function AboutPage() {
       {/* Disclaimer */}
       <div style={{ border: "1px solid var(--border)", borderRadius: "10px", padding: "20px 24px", background: "var(--bg-elevated)", fontSize: "14px", color: "var(--text-muted)", lineHeight: "1.75" }}>
         <strong style={{ color: "var(--text-secondary)", display: "block", marginBottom: "6px" }}>A note on accuracy</strong>
-        Content Trace provides probabilistic analysis only. Results should not be used as definitive evidence in academic, legal, employment, or disciplinary proceedings. AI detection is an imperfect science, and no tool, including this one, is 100% accurate.
+        Content Trace provides probabilistic analysis only. Results should not be used as definitive evidence in academic, legal, employment, or disciplinary proceedings. Judging whether text was written by AI is an imperfect science, and no tool, including this one, is 100% accurate.
       </div>
     </main>
     </>

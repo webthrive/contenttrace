@@ -1,0 +1,33 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css">
+<style>
+  .hero .left { width: 620px; }
+  .hero h1 { font-size: 88px; }
+  .list { position: absolute; left: 760px; top: 120px; width: 380px; font-family: "JB", monospace; font-size: 18px; line-height: 2.3; color: var(--dim); }
+  .list .on { color: var(--ink-2); }
+  .list .on b { font-weight: 500; }
+  .list .n { display: inline-block; width: 40px; }
+  .list .on .n { color: var(--coral); }
+</style></head>
+<body>
+<div id="canvas" class="hero">
+  <div class="glow" style="right:-220px;top:-200px"></div>
+  <svg class="trace" data-seed="manifesto" width="1200" height="80" style="bottom:14px"></svg>
+  <div class="left">
+    <div class="k">The ContentTrace manifesto</div>
+    <h1>Use AI. Then do the <span class="grad-text">work.</span></h1>
+    <div class="foot"><img src="../logo.svg" alt="">/ manifesto</div>
+  </div>
+  <div class="list">
+    <div class="on"><span class="n">01</span>Use AI. Then do the work.</div>
+    <div class="on"><span class="n">02</span>The reader decides.</div>
+    <div><span class="n">03</span>Specific beats polished.</div>
+    <div><span class="n">04</span>Edit. Never invent.</div>
+    <div><span class="n">05</span>A score is a diagnostic.</div>
+    <div><span class="n">06</span>Write for people.</div>
+    <div><span class="n">07</span>Format for machines.</div>
+    <div><span class="n">08</span>Say where we fall short.</div>
+  </div>
+</div>
+<script src="../trace.js"></script>
+</body></html>
