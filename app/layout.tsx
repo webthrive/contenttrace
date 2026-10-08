@@ -26,12 +26,14 @@ export const metadata: Metadata = {
     title: "Content Trace: AI Detector, Humanizer and Content Optimizer",
     description: "Check text for AI with 32 explained signals. Then Humanize, SEO or AI answers, with every change shown before and after.",
     locale: "en_US",
+    images: [{ url: "/og/home.jpg", width: 1200, height: 630, alt: "Content Trace: AI drafts that read human.", type: "image/jpeg" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Content Trace: AI Detector, Humanizer and Content Optimizer",
     description: "Check text for AI with 32 explained signals. Then Humanize, SEO or AI answers, with every change shown before and after.",
     creator: "@contenttrace",
+    images: [{ url: "/og/home.jpg", width: 1200, height: 630, alt: "Content Trace: AI drafts that read human.", type: "image/jpeg" }],
   },
 };
 

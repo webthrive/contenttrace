@@ -1,4 +1,5 @@
 import Nav from "@/components/Nav";
+import { ogImage } from "@/lib/og";
 import type { Metadata } from "next";
 import BlogIndex from "./_blog";
 
@@ -14,7 +15,9 @@ export const metadata: Metadata = {
     url: `${SITE_URL}/blog`,
     siteName: "Content Trace",
     type: "website",
+    images: [ogImage("blog", "The Content Trace blog: notes on writing that reads human.")],
   },
+  twitter: { card: "summary_large_image", images: [ogImage("blog", "The Content Trace blog: notes on writing that reads human.")] },
   robots: { index: true, follow: true },
 };
 

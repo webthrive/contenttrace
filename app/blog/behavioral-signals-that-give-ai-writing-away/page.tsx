@@ -7,6 +7,7 @@ const TITLE = "The 8 Signals That Give AI Writing Away (and What Readers Finish)
 const H1 = "The 8 Signals That Give AI Writing Away, and the Writing Readers Finish Instead";
 const DESCRIPTION = "Eight behavioral signals separate raw AI content from writing people read to the end. What each one looks like, and how to add it to an AI-assisted draft.";
 const HERO = `/blog/${SLUG}/hero.webp`;
+const OG = `/og/blog/${SLUG}.jpg`; // 1200 x 630 social image
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -21,9 +22,9 @@ export const metadata: Metadata = {
     publishedTime: "2026-03-11",
     modifiedTime: "2026-10-07",
     authors: ["Colin H"],
-    images: [{ url: HERO, width: 1600, height: 900, alt: "A lens over dim AI-style text cuts a reflexive hedge and highlights a remembered detail" }],
+    images: [{ url: OG, width: 1200, height: 630, alt: "A lens over dim AI-style text cuts a reflexive hedge and highlights a remembered detail", type: "image/jpeg" }],
   },
-  twitter: { card: "summary_large_image", images: [HERO] },
+  twitter: { card: "summary_large_image", images: [OG] },
   robots: { index: true, follow: true },
 };
 

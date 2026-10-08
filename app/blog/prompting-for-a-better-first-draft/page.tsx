@@ -6,6 +6,7 @@ const SLUG = "prompting-for-a-better-first-draft";
 const TITLE = "Prompting for a Better First Draft: What to Give the Model Before It Writes";
 const DESCRIPTION = "AI writing prompts for blog posts work when they carry five inputs: the reader, a position, real material, sources and positive constraints.";
 const HERO = `/blog/${SLUG}/hero.webp`;
+const OG = `/og/blog/${SLUG}.jpg`; // 1200 x 630 social image
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -20,9 +21,9 @@ export const metadata: Metadata = {
     publishedTime: "2026-05-12",
     modifiedTime: "2026-05-12",
     authors: ["Colin H"],
-    images: [{ url: HERO, width: 1600, height: 900, alt: "A one-line prompt beside a five-part writing brief, showing that inputs decide the quality of an AI first draft" }],
+    images: [{ url: OG, width: 1200, height: 630, alt: "A one-line prompt beside a five-part writing brief, showing that inputs decide the quality of an AI first draft", type: "image/jpeg" }],
   },
-  twitter: { card: "summary_large_image", images: [HERO] },
+  twitter: { card: "summary_large_image", images: [OG] },
   robots: { index: true, follow: true },
 };
 

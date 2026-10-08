@@ -45,7 +45,7 @@ All blog images are built as HTML/SVG and rendered to WebP. No stock photos. No 
 |---|---|---|---|
 | Hero | 1200 × 675 (16:9) | 1600 × 900 | `public/blog/{slug}/hero.webp` |
 | Inline | 1000 × 560 | 1400 × 784 | `public/blog/{slug}/inline-{n}.webp` |
-| OG / social | Uses hero | — | `metadata.openGraph.images` |
+| OG / social | 1200 × 630 JPEG | 1200 × 630 | `public/og/blog/{slug}.jpg` (crop of the hero) |
 
 - WebP, quality 85, target under 120 KB.
 - Source HTML stays in `docs/blog-images/{slug}/` so any image can be edited and re-rendered.
@@ -74,6 +74,8 @@ All blog images are built as HTML/SVG and rendered to WebP. No stock photos. No 
 1. Copy `docs/blog-images/_template-hero.html` to `docs/blog-images/{slug}/hero.html`. Change the kicker, headline, lens text and `data-seed`.
 2. Run `node docs/blog-images/render.mjs {slug}` (needs `playwright` and `sharp`).
 3. Output goes to `public/blog/{slug}/`.
+4. Run `node docs/blog-images/render-og.mjs` to make the social image (`public/og/blog/{slug}.jpg`, 1200 × 630 JPEG). Set `openGraph.images` and `twitter.images` to it (see any post's `const OG`). Site page cards live in `docs/blog-images/og/` and render to `public/og/`. JPEG, not WebP: LinkedIn does not show WebP previews.
+5. New posts are added to `/sitemap.xml` automatically (`app/sitemap.ts` reads `app/blog`).
 
 ## 9. Blog page styling (`app/blog/layout.tsx`, `app/blog/blog.css`)
 

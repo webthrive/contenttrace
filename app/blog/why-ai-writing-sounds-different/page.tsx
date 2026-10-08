@@ -6,6 +6,7 @@ const SLUG = "why-ai-writing-sounds-different";
 const TITLE = "Why AI Writing Sounds Different (Even When It's Technically Correct)";
 const DESCRIPTION = "AI drafts are grammatically clean and factually reasonable, yet readers feel something is off. The cause is missing evidence of a mind at work, and it can be fixed.";
 const HERO = `/blog/${SLUG}/hero.webp`;
+const OG = `/og/blog/${SLUG}.jpg`; // 1200 x 630 social image
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -20,9 +21,9 @@ export const metadata: Metadata = {
     publishedTime: "2026-03-24",
     modifiedTime: "2026-10-07",
     authors: ["Colin H"],
-    images: [{ url: HERO, width: 1600, height: 900, alt: "A lens over smooth AI-style prose strikes out a hedge and highlights a specific, real detail" }],
+    images: [{ url: OG, width: 1200, height: 630, alt: "A lens over smooth AI-style prose strikes out a hedge and highlights a specific, real detail", type: "image/jpeg" }],
   },
-  twitter: { card: "summary_large_image", images: [HERO] },
+  twitter: { card: "summary_large_image", images: [OG] },
   robots: { index: true, follow: true },
 };
 

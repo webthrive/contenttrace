@@ -6,6 +6,7 @@ const SLUG = "how-ai-text-detection-works";
 const TITLE = "How AI Text Detection Actually Works";
 const DESCRIPTION = "Perplexity, trained classifiers and rubric-based reading: how each AI text detection approach works, where it breaks, and why burstiness got demoted.";
 const HERO = `/blog/${SLUG}/hero.webp`;
+const OG = `/og/blog/${SLUG}.jpg`; // 1200 x 630 social image
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -20,9 +21,9 @@ export const metadata: Metadata = {
     publishedTime: "2026-03-19",
     modifiedTime: "2026-10-07",
     authors: ["Colin H"],
-    images: [{ url: HERO, width: 1600, height: 900, alt: "A lens over AI-style text strikes out a one-number verdict and shows three detection methods instead" }],
+    images: [{ url: OG, width: 1200, height: 630, alt: "A lens over AI-style text strikes out a one-number verdict and shows three detection methods instead", type: "image/jpeg" }],
   },
-  twitter: { card: "summary_large_image", images: [HERO] },
+  twitter: { card: "summary_large_image", images: [OG] },
   robots: { index: true, follow: true },
 };
 

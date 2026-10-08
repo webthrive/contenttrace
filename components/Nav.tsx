@@ -7,6 +7,8 @@ import { authAvailable, supabaseBrowser } from "@/lib/billing/browser";
 const LINKS = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
+  { label: "Manifesto", href: "/manifesto" },
+  { label: "Blog", href: "/blog" },
   { label: "Pricing", href: "/pricing" },
   { label: "Contact", href: "/contact" },
   { label: "FAQ", href: "/#faq" },
@@ -32,18 +34,18 @@ export default function Nav({ current }: { current?: string }) {
 
   return (
     <nav style={{ borderBottom: "1px solid var(--border)", background: "var(--bg-card)", position: "sticky", top: 0, zIndex: 100 }}>
-      <div style={{ maxWidth: "760px", margin: "0 auto", padding: "0 16px", display: "flex", alignItems: "center", justifyContent: "space-between", height: "56px" }}>
+      <div style={{ maxWidth: "960px", margin: "0 auto", padding: "0 16px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px", height: "56px" }}>
 
         {/* Logo */}
-        <a href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
+        <a href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none", flexShrink: 0 }}>
           <img src="/logo.svg" alt="Content Trace" style={{ height: "28px", width: "auto" }} />
         </a>
 
         {/* Desktop links */}
-        <div style={{ display: "flex", gap: "4px", alignItems: "center" }} className="nav-desktop">
+        <div style={{ display: "flex", gap: "2px", alignItems: "center" }} className="nav-desktop">
           {LINKS.map((l) => (
             <a key={l.href} href={l.href} style={{
-              fontSize: "14px", fontWeight: 500, padding: "6px 12px", borderRadius: "6px",
+              fontSize: "14px", fontWeight: 500, padding: "6px 10px", borderRadius: "6px", whiteSpace: "nowrap",
               textDecoration: "none",
               color: current === l.href ? "var(--accent)" : "var(--text-secondary)",
               background: current === l.href ? "var(--accent-light)" : "transparent",
@@ -53,7 +55,7 @@ export default function Nav({ current }: { current?: string }) {
           ))}
           {account && (
             <a href={account.href} style={{
-              display: "flex", alignItems: "center", gap: "6px", marginLeft: "8px",
+              display: "flex", alignItems: "center", gap: "6px", marginLeft: "8px", whiteSpace: "nowrap",
               fontSize: "14px", fontWeight: 600, padding: "6px 14px", borderRadius: "999px", textDecoration: "none",
               border: "1px solid var(--accent)",
               color: accountActive ? "white" : "var(--accent)",

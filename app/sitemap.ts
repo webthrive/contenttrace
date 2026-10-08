@@ -1,158 +1,49 @@
 import { MetadataRoute } from "next";
+import fs from "node:fs";
+import path from "node:path";
+
+// Served at https://www.contenttrace.ai/sitemap.xml (submit this URL in Google Search Console).
+// Blog posts are found automatically: every folder in app/blog with a page.tsx is listed,
+// with lastModified taken from the post's openGraph modifiedTime (or publishedTime).
+// Pages that are noindex (login, account, thank-you, paid landing pages) are left out on purpose.
+
+export const dynamic = "force-static"; // built once at deploy time (reads app/blog from disk)
 
 const SITE_URL = "https://www.contenttrace.ai";
 
+// Date of the last real change to each static page. Update a date when you change that page.
+const PAGES: { path: string; lastModified: string; changeFrequency: "weekly" | "monthly" | "yearly"; priority: number }[] = [
+  { path: "", lastModified: "2026-10-08", changeFrequency: "weekly", priority: 1.0 },
+  { path: "/pricing", lastModified: "2026-10-08", changeFrequency: "monthly", priority: 0.9 },
+  { path: "/about", lastModified: "2026-10-08", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/manifesto", lastModified: "2026-10-08", changeFrequency: "yearly", priority: 0.7 },
+  { path: "/contact", lastModified: "2026-10-08", changeFrequency: "yearly", priority: 0.6 },
+  { path: "/disclaimer", lastModified: "2026-10-08", changeFrequency: "yearly", priority: 0.4 },
+  { path: "/privacy", lastModified: "2026-10-08", changeFrequency: "yearly", priority: 0.3 },
+  { path: "/terms", lastModified: "2026-10-08", changeFrequency: "yearly", priority: 0.3 },
+  { path: "/cookies", lastModified: "2026-10-08", changeFrequency: "yearly", priority: 0.3 },
+];
+
+function blogPosts(): { slug: string; lastModified: string }[] {
+  const dir = path.join(process.cwd(), "app", "blog");
+  const posts: { slug: string; lastModified: string }[] = [];
+  for (const slug of fs.readdirSync(dir)) {
+    const file = path.join(dir, slug, "page.tsx");
+    if (slug.startsWith("_") || !fs.existsSync(file)) continue;
+    const src = fs.readFileSync(file, "utf8");
+    if (/index:\s*false/.test(src)) continue;
+    const date = /modifiedTime:\s*"([\d-]+)"/.exec(src)?.[1] ?? /publishedTime:\s*"([\d-]+)"/.exec(src)?.[1] ?? "2026-10-08";
+    posts.push({ slug, lastModified: date });
+  }
+  return posts.sort((a, b) => b.lastModified.localeCompare(a.lastModified) || a.slug.localeCompare(b.slug));
+}
+
 export default function sitemap(): MetadataRoute.Sitemap {
+  const posts = blogPosts();
+  const newestPost = posts[0]?.lastModified ?? "2026-10-08";
   return [
-    {
-      url: SITE_URL,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 1.0,
-    },
-    {
-      url: `${SITE_URL}/about`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/contact`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${SITE_URL}/manifesto`,
-      lastModified: new Date("2026-10-08"),
-      changeFrequency: "yearly",
-      priority: 0.6,
-    },
-    {
-      url: `${SITE_URL}/blog`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-    {
-      url: `${SITE_URL}/blog/how-contenttrace-is-calibrated`,
-      lastModified: new Date("2026-10-06"),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/blog/editor-not-author-content-optimizer`,
-      lastModified: new Date("2026-10-04"),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/blog/inside-the-32-signals`,
-      lastModified: new Date("2026-10-03"),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/blog/the-generic-middle-of-ai-drafts`,
-      lastModified: new Date("2026-05-20"),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/blog/prompting-for-a-better-first-draft`,
-      lastModified: new Date("2026-05-12"),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/blog/google-is-fine-with-ai-assisted-content`,
-      lastModified: new Date("2026-05-04"),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/blog/how-to-read-a-detection-report`,
-      lastModified: new Date("2026-10-07"),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/blog/ai-content-policies-at-work`,
-      lastModified: new Date("2026-10-07"),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/blog/the-specificity-test`,
-      lastModified: new Date("2026-10-07"),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/blog/ai-detection-and-seo`,
-      lastModified: new Date("2026-10-07"),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/blog/how-to-humanize-ai-content`,
-      lastModified: new Date("2026-10-07"),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/blog/why-ai-writing-sounds-different`,
-      lastModified: new Date("2026-10-07"),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/blog/how-ai-text-detection-works`,
-      lastModified: new Date("2026-10-07"),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/blog/why-your-ai-detector-score-keeps-changing`,
-      lastModified: new Date("2026-10-07"),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/blog/behavioral-signals-that-give-ai-writing-away`,
-      lastModified: new Date("2026-10-07"),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/blog/ai-detection-in-education`,
-      lastModified: new Date("2026-10-07"),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/blog/can-ai-detectors-be-fooled`,
-      lastModified: new Date("2026-10-07"),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/privacy`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 0.4,
-    },
-    {
-      url: `${SITE_URL}/terms`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 0.4,
-    },
-    {
-      url: `${SITE_URL}/cookies`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 0.4,
-    },
+    ...PAGES.map((p) => ({ url: `${SITE_URL}${p.path}`, lastModified: new Date(p.lastModified), changeFrequency: p.changeFrequency, priority: p.priority })),
+    { url: `${SITE_URL}/blog`, lastModified: new Date(newestPost > "2026-10-08" ? newestPost : "2026-10-08"), changeFrequency: "weekly", priority: 0.9 },
+    ...posts.map((p) => ({ url: `${SITE_URL}/blog/${p.slug}`, lastModified: new Date(p.lastModified), changeFrequency: "monthly" as const, priority: 0.8 })),
   ];
 }

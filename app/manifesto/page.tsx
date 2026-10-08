@@ -4,6 +4,7 @@ import Image from "next/image";
 
 const SITE_URL = "https://www.contenttrace.ai";
 const HERO = "/blog/manifesto/hero.webp";
+const OG = "/og/blog/manifesto.jpg"; // 1200 x 630 social image
 
 export const metadata: Metadata = {
   title: "Manifesto",
@@ -15,9 +16,9 @@ export const metadata: Metadata = {
     url: `${SITE_URL}/manifesto`,
     siteName: "Content Trace",
     type: "article",
-    images: [{ url: HERO, width: 1600, height: 900, alt: "The ContentTrace manifesto: Use AI. Then do the work." }],
+    images: [{ url: OG, width: 1200, height: 630, alt: "The ContentTrace manifesto: Use AI. Then do the work.", type: "image/jpeg" }],
   },
-  twitter: { card: "summary_large_image", images: [HERO] },
+  twitter: { card: "summary_large_image", images: [OG] },
   robots: { index: true, follow: true },
 };
 

@@ -108,7 +108,7 @@ body > * {
 .nav-desktop { display: flex !important; }
 .nav-mobile  { display: none !important; }
 
-@media (max-width: 600px) {
+@media (max-width: 860px) {
   .nav-desktop { display: none !important; }
   .nav-mobile  { display: block !important; }
 }

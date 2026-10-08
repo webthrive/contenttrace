@@ -6,6 +6,7 @@ const SLUG = "editor-not-author-content-optimizer";
 const TITLE = "Editor, Not Author: How the Content Optimizer Avoids Inventing Facts";
 const DESCRIPTION = "The ContentTrace Content Optimizer rewrites for clarity, SEO or AI answers while keeping every fact, name, number and quote. Here is how the fact guard works.";
 const HERO = `/blog/${SLUG}/hero.webp`;
+const OG = `/og/blog/${SLUG}.jpg`; // 1200 x 630 social image
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -20,9 +21,9 @@ export const metadata: Metadata = {
     publishedTime: "2026-10-04",
     modifiedTime: "2026-10-04",
     authors: ["Colin H"],
-    images: [{ url: HERO, width: 1600, height: 900, alt: "A lens strikes out an invented claim of over 500 clients and leaves a marker asking the writer to add a real example" }],
+    images: [{ url: OG, width: 1200, height: 630, alt: "A lens strikes out an invented claim of over 500 clients and leaves a marker asking the writer to add a real example", type: "image/jpeg" }],
   },
-  twitter: { card: "summary_large_image", images: [HERO] },
+  twitter: { card: "summary_large_image", images: [OG] },
   robots: { index: true, follow: true },
 };
 

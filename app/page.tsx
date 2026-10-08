@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ogImage } from "@/lib/og";
 
 const SITE_URL = "https://www.contenttrace.ai";
 
@@ -12,11 +13,13 @@ export const metadata: Metadata = {
     url: SITE_URL,
     siteName: "Content Trace",
     type: "website",
+    images: [ogImage("home", "Content Trace: AI drafts that read human. Check, humanize and optimize your writing.")],
   },
   twitter: {
     card: "summary_large_image",
     title: "Content Trace: Humanize AI Writing, Then Optimize It",
     description: "Check text for AI with 32 explained signals. Then Humanize, SEO or AI answers, with every change shown before and after.",
+    images: [ogImage("home", "Content Trace: AI drafts that read human. Check, humanize and optimize your writing.")],
   },
 };
 

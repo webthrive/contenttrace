@@ -6,6 +6,7 @@ const SLUG = "inside-the-32-signals";
 const TITLE = "Inside the 32 Signals: How ContentTrace Reads a Draft";
 const DESCRIPTION = "How ContentTrace scores a draft: Claude as an editor with a fixed rubric at temperature 0, 8 sections, content types and calibration. The full method.";
 const HERO = `/blog/${SLUG}/hero.webp`;
+const OG = `/og/blog/${SLUG}.jpg`; // 1200 x 630 social image
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -20,9 +21,9 @@ export const metadata: Metadata = {
     publishedTime: "2026-10-03",
     modifiedTime: "2026-10-03",
     authors: ["Colin H"],
-    images: [{ url: HERO, width: 1600, height: 900, alt: "A lens over generic AI filler text turns several key factors into 32 signals, each with two notes" }],
+    images: [{ url: OG, width: 1200, height: 630, alt: "A lens over generic AI filler text turns several key factors into 32 signals, each with two notes", type: "image/jpeg" }],
   },
-  twitter: { card: "summary_large_image", images: [HERO] },
+  twitter: { card: "summary_large_image", images: [OG] },
   robots: { index: true, follow: true },
 };
 

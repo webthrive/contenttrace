@@ -6,6 +6,7 @@ const SLUG = "ai-detection-and-seo";
 const TITLE = "Does Google Penalize AI Content? What Search Actually Rewards";
 const DESCRIPTION = "Google rewards helpful, people-first pages however they are made. What that means for AI-assisted writers, and how to meet the bar in search.";
 const HERO = `/blog/${SLUG}/hero.webp`;
+const OG = `/og/blog/${SLUG}.jpg`; // 1200 x 630 social image
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -20,9 +21,9 @@ export const metadata: Metadata = {
     publishedTime: "2026-04-07",
     modifiedTime: "2026-10-07",
     authors: ["Colin H"],
-    images: [{ url: HERO, width: 1600, height: 900, alt: "A lens over generic SEO filler strikes out a keyword phrase and highlights first-hand detail and a named source" }],
+    images: [{ url: OG, width: 1200, height: 630, alt: "A lens over generic SEO filler strikes out a keyword phrase and highlights first-hand detail and a named source", type: "image/jpeg" }],
   },
-  twitter: { card: "summary_large_image", images: [HERO] },
+  twitter: { card: "summary_large_image", images: [OG] },
   robots: { index: true, follow: true },
 };
 

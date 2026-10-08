@@ -7,8 +7,10 @@ export default function Footer() {
         </div>
         <div style={{ display: "flex", justifyContent: "center", gap: "20px", flexWrap: "wrap" }}>
           {[
-          {label: "About",          href: "/about" },
+            { label: "About",          href: "/about" },
+            { label: "Manifesto",      href: "/manifesto" },
             { label: "Blog",           href: "/blog" },
+            { label: "Pricing",        href: "/pricing" },
             { label: "Contact",        href: "/contact" },
             { label: "Privacy Policy", href: "/privacy" },
             { label: "Terms of Use",   href: "/terms" },

@@ -6,6 +6,7 @@ const SLUG = "the-specificity-test";
 const TITLE = "The Specificity Test: The Detail That Makes Writing Memorable";
 const DESCRIPTION = "AI drafts are accurate and generic. The fastest way to improve one is the specificity test: find where specific, inconvenient detail is missing and add it.";
 const HERO = `/blog/${SLUG}/hero.webp`;
+const OG = `/og/blog/${SLUG}.jpg`; // 1200 x 630 social image
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -20,9 +21,9 @@ export const metadata: Metadata = {
     publishedTime: "2026-04-14",
     modifiedTime: "2026-10-07",
     authors: ["Colin H"],
-    images: [{ url: HERO, width: 1600, height: 900, alt: "A lens over generic AI text strikes out a vague claim and highlights an exact number and date" }],
+    images: [{ url: OG, width: 1200, height: 630, alt: "A lens over generic AI text strikes out a vague claim and highlights an exact number and date", type: "image/jpeg" }],
   },
-  twitter: { card: "summary_large_image", images: [HERO] },
+  twitter: { card: "summary_large_image", images: [OG] },
   robots: { index: true, follow: true },
 };
 

@@ -6,6 +6,7 @@ const SLUG = "ai-detection-in-education";
 const TITLE = "AI Detection in Education: What Schools Are Getting Wrong";
 const DESCRIPTION = "Schools treat AI detector scores like verdicts. A score is never the only evidence about a student. What fair, workable practice looks like for teachers.";
 const HERO = `/blog/${SLUG}/hero.webp`;
+const OG = `/og/blog/${SLUG}.jpg`; // 1200 x 630 social image
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -20,9 +21,9 @@ export const metadata: Metadata = {
     publishedTime: "2026-03-07",
     modifiedTime: "2026-10-07",
     authors: ["Colin H"],
-    images: [{ url: HERO, width: 1600, height: 900, alt: "A lens over a dim essay strikes out a bare score and highlights a student conversation" }],
+    images: [{ url: OG, width: 1200, height: 630, alt: "A lens over a dim essay strikes out a bare score and highlights a student conversation", type: "image/jpeg" }],
   },
-  twitter: { card: "summary_large_image", images: [HERO] },
+  twitter: { card: "summary_large_image", images: [OG] },
   robots: { index: true, follow: true },
 };
 

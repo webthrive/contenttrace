@@ -6,6 +6,7 @@ const SLUG = "why-your-ai-detector-score-keeps-changing";
 const TITLE = "Why Your AI Detector Score Keeps Changing (And What to Do About It)";
 const DESCRIPTION = "Same text, different tools, different scores. Why AI detector results vary across tools and runs, which variation matters, and how to read scores well.";
 const HERO = `/blog/${SLUG}/hero.webp`;
+const OG = `/og/blog/${SLUG}.jpg`; // 1200 x 630 social image
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -20,9 +21,9 @@ export const metadata: Metadata = {
     publishedTime: "2026-03-15",
     modifiedTime: "2026-10-07",
     authors: ["Colin H"],
-    images: [{ url: HERO, width: 1600, height: 900, alt: "Score bars from four tools disagree on the same text, beside a breakdown that points to one weak section" }],
+    images: [{ url: OG, width: 1200, height: 630, alt: "Score bars from four tools disagree on the same text, beside a breakdown that points to one weak section", type: "image/jpeg" }],
   },
-  twitter: { card: "summary_large_image", images: [HERO] },
+  twitter: { card: "summary_large_image", images: [OG] },
   robots: { index: true, follow: true },
 };
 

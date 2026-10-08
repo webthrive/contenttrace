@@ -6,6 +6,7 @@ const SLUG = "google-is-fine-with-ai-assisted-content";
 const TITLE = "Google Is Fine With AI-Assisted Content. Readers Are the Harder Audience";
 const DESCRIPTION = "Is AI content bad for SEO? Google's own guidance says no, if it helps people. Readers are stricter: they trust suspected AI writing far less.";
 const HERO = `/blog/${SLUG}/hero.webp`;
+const OG = `/og/blog/${SLUG}.jpg`; // 1200 x 630 social image
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -20,9 +21,9 @@ export const metadata: Metadata = {
     publishedTime: "2026-05-04",
     modifiedTime: "2026-05-04",
     authors: ["Colin H"],
-    images: [{ url: HERO, width: 1600, height: 900, alt: "Google's checklist passes an AI-assisted page while a reader's trust meter drops on generic copy" }],
+    images: [{ url: OG, width: 1200, height: 630, alt: "Google's checklist passes an AI-assisted page while a reader's trust meter drops on generic copy", type: "image/jpeg" }],
   },
-  twitter: { card: "summary_large_image", images: [HERO] },
+  twitter: { card: "summary_large_image", images: [OG] },
   robots: { index: true, follow: true },
 };
 

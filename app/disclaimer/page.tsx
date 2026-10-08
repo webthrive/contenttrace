@@ -1,11 +1,12 @@
 import Nav from "@/components/Nav";
+import { ogImage } from "@/lib/og";
 import Footer from "@/components/Footer";
 import type { Metadata } from "next";
 
 const SITE_URL = "https://www.contenttrace.ai";
 
 export const metadata: Metadata = {
-  title: "Disclaimer | Content Trace",
+  title: "Disclaimer",
   description: "Content Trace disclaimer — important information about the limitations of AI detection and how results should be interpreted.",
   alternates: { canonical: `${SITE_URL}/disclaimer` },
   openGraph: {
@@ -14,7 +15,9 @@ export const metadata: Metadata = {
     url: `${SITE_URL}/disclaimer`,
     siteName: "Content Trace",
     type: "website",
+    images: [ogImage("disclaimer", "Content Trace disclaimer: read scores as diagnostics, not proof.")],
   },
+  twitter: { card: "summary_large_image", images: [ogImage("disclaimer", "Content Trace disclaimer: read scores as diagnostics, not proof.")] },
   robots: { index: true, follow: true },
 };
 

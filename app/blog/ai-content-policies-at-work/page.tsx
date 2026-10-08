@@ -6,6 +6,7 @@ const SLUG = "ai-content-policies-at-work";
 const TITLE = "AI Writing Policies at Work: How Strong Teams Govern AI-Assisted Content";
 const DESCRIPTION = "Banning AI fails and disclosure logs turn into theater. The AI content policies that work set a quality bar, a real review step and honest disclosure.";
 const HERO = `/blog/${SLUG}/hero.webp`;
+const OG = `/og/blog/${SLUG}.jpg`; // 1200 x 630 social image
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -20,9 +21,9 @@ export const metadata: Metadata = {
     publishedTime: "2026-04-21",
     modifiedTime: "2026-10-07",
     authors: ["Colin H"],
-    images: [{ url: HERO, width: 1600, height: 900, alt: "A policy checklist where process rules are struck out and output standards are checked" }],
+    images: [{ url: OG, width: 1200, height: 630, alt: "A policy checklist where process rules are struck out and output standards are checked", type: "image/jpeg" }],
   },
-  twitter: { card: "summary_large_image", images: [HERO] },
+  twitter: { card: "summary_large_image", images: [OG] },
   robots: { index: true, follow: true },
 };
 

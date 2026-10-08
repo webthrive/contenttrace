@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ogImage } from "@/lib/og";
 import Nav from "@/components/Nav";
 import PricingPlans from "./PricingPlans";
 import { PLANS, PRO_YEARLY_PER_MONTH } from "@/lib/billing/config";
@@ -9,7 +10,8 @@ export const metadata: Metadata = {
   title: "Pricing",
   description: `Content Trace is free for ${PLANS.free.analysesPerMonth} analyses a month. Pro is from $${PRO_YEARLY_PER_MONTH}/month billed yearly, for ${PLANS.pro.wordsPerMonth.toLocaleString()} words, the Content Optimizer, longer texts and no ads. Or buy a one-time Word Pack.`,
   alternates: { canonical: `${SITE_URL}/pricing` },
-  openGraph: { title: "Content Trace Pricing", url: `${SITE_URL}/pricing`, siteName: "Content Trace", type: "website" },
+  openGraph: { title: "Content Trace Pricing", url: `${SITE_URL}/pricing`, siteName: "Content Trace", type: "website", images: [ogImage("pricing", "Content Trace pricing: Free, Pro and Word Pack plans.")] },
+  twitter: { card: "summary_large_image", images: [ogImage("pricing", "Content Trace pricing: Free, Pro and Word Pack plans.")] },
 };
 
 const FAQ = [

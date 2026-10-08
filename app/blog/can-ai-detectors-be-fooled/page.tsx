@@ -6,6 +6,7 @@ const SLUG = "can-ai-detectors-be-fooled";
 const TITLE = "Can AI Detectors Be Fooled? What the Research Actually Shows";
 const DESCRIPTION = "Yes, paraphrasers can fool AI detectors, and the research proves it. Why beating the score is the wrong goal for AI content, and what to aim for instead.";
 const HERO = `/blog/${SLUG}/hero.webp`;
+const OG = `/og/blog/${SLUG}.jpg`; // 1200 x 630 social image
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -20,9 +21,9 @@ export const metadata: Metadata = {
     publishedTime: "2026-03-03",
     modifiedTime: "2026-10-07",
     authors: ["Colin H"],
-    images: [{ url: HERO, width: 1600, height: 900, alt: "A lens over dim AI-style text, striking out a bypass trick and highlighting a real detail" }],
+    images: [{ url: OG, width: 1200, height: 630, alt: "A lens over dim AI-style text, striking out a bypass trick and highlighting a real detail", type: "image/jpeg" }],
   },
-  twitter: { card: "summary_large_image", images: [HERO] },
+  twitter: { card: "summary_large_image", images: [OG] },
   robots: { index: true, follow: true },
 };
 

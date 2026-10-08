@@ -6,6 +6,7 @@ const SLUG = "the-generic-middle-of-ai-drafts";
 const TITLE = "The Generic Middle: Why AI Drafts Sag After the Intro";
 const DESCRIPTION = "AI drafts usually open well and go flat by section two. Why the middle sags, how readers scan past it, and how to rebuild it so the page earns the scroll.";
 const HERO = `/blog/${SLUG}/hero.webp`;
+const OG = `/og/blog/${SLUG}.jpg`; // 1200 x 630 social image
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -20,9 +21,9 @@ export const metadata: Metadata = {
     publishedTime: "2026-05-20",
     modifiedTime: "2026-05-20",
     authors: ["Colin H"],
-    images: [{ url: HERO, width: 1600, height: 900, alt: "A signal line that holds high through an AI draft's intro and flattens across its middle sections" }],
+    images: [{ url: OG, width: 1200, height: 630, alt: "A signal line that holds high through an AI draft's intro and flattens across its middle sections", type: "image/jpeg" }],
   },
-  twitter: { card: "summary_large_image", images: [HERO] },
+  twitter: { card: "summary_large_image", images: [OG] },
   robots: { index: true, follow: true },
 };
 

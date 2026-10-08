@@ -6,6 +6,7 @@ const SLUG = "how-to-humanize-ai-content";
 const TITLE = "How to Humanize AI Content: A Practical Guide";
 const DESCRIPTION = "AI drafts are a useful starting point, but they need real editing before they're worth publishing. A six-pass framework for making AI content read like a person wrote it.";
 const HERO = `/blog/${SLUG}/hero.webp`;
+const OG = `/og/blog/${SLUG}.jpg`; // 1200 x 630 social image
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -20,9 +21,9 @@ export const metadata: Metadata = {
     publishedTime: "2026-03-29",
     modifiedTime: "2026-10-07",
     authors: ["Colin H"],
-    images: [{ url: HERO, width: 1600, height: 900, alt: "Six editing passes that turn an AI draft into human writing" }],
+    images: [{ url: OG, width: 1200, height: 630, alt: "Six editing passes that turn an AI draft into human writing", type: "image/jpeg" }],
   },
-  twitter: { card: "summary_large_image", images: [HERO] },
+  twitter: { card: "summary_large_image", images: [OG] },
   robots: { index: true, follow: true },
 };
 

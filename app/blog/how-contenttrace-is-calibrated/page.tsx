@@ -6,6 +6,7 @@ const SLUG = "how-contenttrace-is-calibrated";
 const TITLE = "How ContentTrace Is Calibrated: Testing Against Human and AI Writing";
 const DESCRIPTION = "ContentTrace's internal Oct 3, 2026 test: 162 samples, leave-one-out, 89% accuracy, AUC up to 94.8%, and the limits that still matter.";
 const HERO = `/blog/${SLUG}/hero.webp`;
+const OG = `/og/blog/${SLUG}.jpg`; // 1200 x 630 social image
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -20,9 +21,9 @@ export const metadata: Metadata = {
     publishedTime: "2026-10-06",
     modifiedTime: "2026-10-06",
     authors: ["Colin H"],
-    images: [{ url: HERO, width: 1600, height: 900, alt: "A lens strikes out a 99% accurate claim and shows the real internal results: 71 of 75 human texts and 62 of 75 AI texts" }],
+    images: [{ url: OG, width: 1200, height: 630, alt: "A lens strikes out a 99% accurate claim and shows the real internal results: 71 of 75 human texts and 62 of 75 AI texts", type: "image/jpeg" }],
   },
-  twitter: { card: "summary_large_image", images: [HERO] },
+  twitter: { card: "summary_large_image", images: [OG] },
   robots: { index: true, follow: true },
 };
 
