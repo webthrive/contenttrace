@@ -52,3 +52,14 @@ svg.trace { position: absolute; left: 0; }
 /* Inline cards */
 .card { background: var(--night-2); border: 1.5px solid var(--night-3); border-radius: 18px; position: relative; }
 .label { font-family: "JB", monospace; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+
+/* Light variant for inline images (sits inside light article pages). Use <div id="canvas" class="inline light">. */
+#canvas.light {
+  --night: #fbfaff; --night-2: #ffffff; --night-3: #e6e0f0;
+  --ink: #140a24; --ink-2: #3b3150; --dim: #c9c0d8; --muted: #7c7190;
+  --coral: #c42e4a; --violet-hi: #6a1fc0;
+  --grad: linear-gradient(90deg, #6a1fc0, #d6304d);
+  background: #fbfaff; color: var(--ink);
+}
+#canvas.light .glow { opacity: 0.35 !important; }
+#canvas.light .card { box-shadow: 0 1px 0 #ece7f5, 0 8px 24px rgba(87, 13, 158, 0.06); }

@@ -124,7 +124,7 @@ export default function BlogIndex() {
               onMouseLeave={e => (e.currentTarget.style.boxShadow = "0 1px 6px rgba(1,2,33,0.05)")}>
               {post.image && (
                 <div style={{ margin: "-28px -32px 20px", borderBottom: "1px solid var(--border)", overflow: "hidden", borderRadius: "14px 14px 0 0" }}>
-                  <Image src={post.image} alt={post.imageAlt ?? ""} width={1600} height={900} sizes="(max-width: 808px) 100vw, 760px" style={{ width: "100%", height: "auto", display: "block" }} />
+                  <Image src={post.image} alt={post.imageAlt ?? ""} width={1600} height={900} sizes="(max-width: 808px) 100vw, 760px" style={{ width: "100%", height: "auto", aspectRatio: "2.4 / 1", objectFit: "cover", objectPosition: "50% 45%", display: "block" }} />
                 </div>
               )}
               <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>

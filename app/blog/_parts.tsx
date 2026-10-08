@@ -68,7 +68,7 @@ export function BlogHero({ src, alt }: { src: string; alt: string }) {
 export function Figure({ src, alt, caption }: { src: string; alt: string; caption: string }) {
   return (
     <figure style={{ margin: "32px 0" }}>
-      <div style={{ borderRadius: "12px", overflow: "hidden", border: "1px solid #2a1846" }}>
+      <div style={{ borderRadius: "12px", overflow: "hidden", border: "1px solid var(--border)" }}>
         <Image src={src} alt={alt} width={1400} height={784} sizes="(max-width: 748px) 100vw, 700px" style={{ width: "100%", height: "auto", display: "block" }} />
       </div>
       <figcaption style={{ fontSize: "14px", color: "var(--text-muted)", marginTop: "10px", lineHeight: 1.5 }}>{caption}</figcaption>

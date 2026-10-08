@@ -10,7 +10,7 @@ All blog images are built as HTML/SVG and rendered to WebP. No stock photos. No 
   - **The lens:** a gradient magnifier over background text. Inside the lens: the "after" version, with filler struck out in coral and real details highlighted in violet.
   - **The signal trace:** a thin gradient line with spikes, like an ECG. Drawn by `trace.js`, unique per post (seeded by slug).
   - **Background text:** dim monospace AI-style copy that the lens "inspects."
-- Inline images: dark cards, big monospace numerals, coral = problem, violet gradient = fix.
+- **Heroes are dark. Inline images are light.** Inline images use the light variant (`<div id="canvas" class="inline light">`): white cards on `#fbfaff`, same fonts, numerals and color meaning. This keeps the article easy to read.
 - Every image explains one idea from the post. If it does not, cut it.
 
 ## 2. Color (from the logo gradient)
@@ -58,6 +58,8 @@ All blog images are built as HTML/SVG and rendered to WebP. No stock photos. No 
 
 ## 6. Inline rules
 
+- Always use the light variant (`class="inline light"`).
+
 - 1 or 2 per post, placed after the H2 they explain.
 - Types: process cards, low-score-to-fix table, before/after, annotated text, simple chart.
 - Charts use real numbers only.
@@ -80,3 +82,4 @@ All blog images are built as HTML/SVG and rendered to WebP. No stock photos. No 
 - Accent: violet `#570d9e`. Problem color: coral `#c42e4a` (darker coral for text contrast).
 - TL;DR box has a gradient top rule. Bottom CTA is the dark night button.
 - No grid background on blog pages.
+- Blog index cards crop the hero to 2.4:1 (`objectFit: cover`), so a long list of dark cards does not get heavy. Keep key hero content inside the middle 75% of the height.
