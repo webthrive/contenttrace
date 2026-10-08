@@ -1,0 +1,31 @@
+@font-face { font-family: "Rubik"; font-weight: 400; src: url("fonts/rubik-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Rubik"; font-weight: 500; src: url("fonts/rubik-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "Rubik"; font-weight: 600; src: url("fonts/rubik-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Rubik"; font-weight: 700; src: url("fonts/rubik-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "DM Mono"; font-weight: 400; src: url("fonts/dm-mono-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "DM Mono"; font-weight: 500; src: url("fonts/dm-mono-latin-500-normal.woff2") format("woff2"); }
+
+:root {
+  --bg: #fdfcfa; --panel: #f8f6f2; --card: #ffffff; --border: #e0d9cc; --border-light: #ece7dc;
+  --ink: #010221; --ink-2: #2a3a3a; --muted: #7a8a7a;
+  --teal: #0a7373; --teal-bg: rgba(10,115,115,0.10);
+  --red: #c43302; --red-bg: rgba(196,51,2,0.09);
+  --amber: #c47a00; --amber-bg: rgba(196,122,0,0.10);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--bg); }
+body { font-family: "Rubik", sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+#canvas { position: relative; overflow: hidden; background: var(--bg); }
+.hero { width: 1200px; height: 675px; }
+.inline { width: 1000px; height: 560px; }
+.mono { font-family: "DM Mono", monospace; text-transform: uppercase; letter-spacing: 0.08em; }
+.grid-bg { position: absolute; inset: 0; background-image:
+  linear-gradient(var(--border-light) 1px, transparent 1px),
+  linear-gradient(90deg, var(--border-light) 1px, transparent 1px);
+  background-size: 40px 40px; opacity: 0.55; }
+.panel { position: absolute; background: var(--card); border: 1.5px solid var(--border); border-radius: 24px; }
+.tag { display: inline-block; font-size: 15px; font-weight: 500; padding: 6px 14px; border-radius: 10px; }
+.tag.teal { color: var(--teal); background: var(--teal-bg); border: 1.5px solid rgba(10,115,115,0.25); }
+.tag.red { color: var(--red); background: var(--red-bg); border: 1.5px solid rgba(196,51,2,0.25); }
+.tag.amber { color: var(--amber); background: var(--amber-bg); border: 1.5px solid rgba(196,122,0,0.25); }
+.line { height: 12px; border-radius: 6px; background: var(--border-light); }

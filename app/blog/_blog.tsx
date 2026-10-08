@@ -1,7 +1,10 @@
 "use client";
 import Nav from "@/components/Nav";
+import Image from "next/image";
 
-const POSTS = [
+type Post = { slug: string; title: string; date: string; readTime: string; excerpt: string; tag: string; image?: string; imageAlt?: string };
+
+const POSTS: Post[] = [
   {
     slug: "how-to-read-a-detection-report",
     title: "How to Read a Detection Report: Making Sense of Your Score",
@@ -41,6 +44,8 @@ const POSTS = [
     readTime: "10 min read",
     excerpt: "AI drafts are a useful starting point, but they need real editing before they're worth publishing. Here's the practical framework for making AI content read like it was actually written by a person.",
     tag: "Guide",
+    image: "/blog/how-to-humanize-ai-content/hero.webp",
+    imageAlt: "Six editing passes that turn an AI draft into human writing",
   },
   {
     slug: "why-ai-writing-sounds-different",
@@ -117,6 +122,11 @@ export default function BlogIndex() {
             <a key={post.slug} href={`/blog/${post.slug}`} style={{ textDecoration: "none", display: "block", border: "1px solid var(--border)", borderRadius: "14px", padding: "28px 32px", background: "var(--bg-card)", boxShadow: "0 1px 6px rgba(1,2,33,0.05)", transition: "box-shadow 0.2s" }}
               onMouseEnter={e => (e.currentTarget.style.boxShadow = "0 4px 20px rgba(1,2,33,0.1)")}
               onMouseLeave={e => (e.currentTarget.style.boxShadow = "0 1px 6px rgba(1,2,33,0.05)")}>
+              {post.image && (
+                <div style={{ margin: "-28px -32px 20px", borderBottom: "1px solid var(--border)", overflow: "hidden", borderRadius: "14px 14px 0 0" }}>
+                  <Image src={post.image} alt={post.imageAlt ?? ""} width={1600} height={900} sizes="(max-width: 808px) 100vw, 760px" style={{ width: "100%", height: "auto", display: "block" }} />
+                </div>
+              )}
               <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
                 <span style={{ fontSize: "12px", fontWeight: 600, color: tag.color, background: tag.bg, border: `1px solid ${tag.border}`, padding: "3px 10px", borderRadius: "8px" }}>{post.tag}</span>
                 <span style={{ fontSize: "13px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>{post.date} · {post.readTime}</span>
