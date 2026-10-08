@@ -1,0 +1,30 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css">
+<style>
+  .cols { position: absolute; left: 56px; right: 56px; top: 120px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .card { height: 330px; padding: 24px 26px; }
+  .h { font-family: "JB", monospace; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 10px; }
+  .row { display: flex; align-items: center; gap: 16px; font-size: 23px; font-weight: 600; letter-spacing: -0.01em; padding: 15px 0; border-bottom: 1.5px solid var(--night-3); }
+  .row:last-child { border-bottom: 0; }
+  .n { font-family: "JB", monospace; font-size: 15px; font-weight: 500; width: 28px; }
+</style></head>
+<body>
+<div id="canvas" class="inline light">
+  <div class="glow" style="left:-300px;bottom:-420px;opacity:.7"></div>
+  <div class="label" style="position:absolute;left:56px;top:44px">Why the same text gets new scores</div>
+  <div class="cols">
+    <div class="card"><div class="h grad-text">Across tools</div>
+      <div class="row"><div class="n grad-text">01</div>Different signals</div>
+      <div class="row"><div class="n grad-text">02</div>Different reference model</div>
+      <div class="row"><div class="n grad-text">03</div>Different training data</div>
+      <div class="row"><div class="n grad-text">04</div>Different thresholds</div>
+    </div>
+    <div class="card"><div class="h grad-text">Across runs of one tool</div>
+      <div class="row"><div class="n grad-text">05</div>Random sampling</div>
+      <div class="row"><div class="n grad-text">06</div>Text split differently</div>
+      <div class="row"><div class="n grad-text">07</div>Silent model updates</div>
+      <div class="row"><div class="n grad-text">08</div>Small edits or pasting</div>
+    </div>
+  </div>
+</div>
+</body></html>

@@ -1,0 +1,27 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css">
+<style>
+  .tbl { position: absolute; left: 56px; right: 56px; top: 92px; padding: 6px 28px; }
+  .hd, .r { display: grid; grid-template-columns: 56px 1fr 50px 1.25fr; align-items: center; }
+  .hd { height: 52px; border-bottom: 1.5px solid var(--night-3); }
+  .r { height: 92px; border-bottom: 1.5px solid var(--night-3); }
+  .r:last-child { border-bottom: 0; }
+  .n { font-family: "JB", monospace; font-size: 13px; color: var(--muted); letter-spacing: 0.1em; }
+  .old { font-family: "JB", monospace; font-size: 17px; color: var(--coral); text-decoration: line-through; text-decoration-thickness: 2px; }
+  .arrow { font-size: 24px; color: var(--muted); text-align: center; }
+  .new { font-size: 22px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.25; }
+  .ha { color: var(--coral); } .hb { color: var(--violet-hi); }
+</style></head>
+<body>
+<div id="canvas" class="inline light">
+  <div class="glow" style="right:-360px;top:-380px;opacity:.8"></div>
+  <div class="label" style="position:absolute;left:56px;top:44px">Middle headings, rebuilt to state a claim</div>
+  <div class="card tbl">
+    <div class="hd label"><div>H2</div><div class="ha">Generic AI draft</div><div></div><div class="hb">Rebuilt, front-loaded</div></div>
+    <div class="r"><div class="n">02</div><div class="old">Benefits of Content Refresh</div><div class="arrow">→</div><div class="new">Refresh only pages that once earned traffic</div></div>
+    <div class="r"><div class="n">03</div><div class="old">Key Strategies</div><div class="arrow">→</div><div class="new">Merge posts that compete with each other</div></div>
+    <div class="r"><div class="n">04</div><div class="old">Common Challenges</div><div class="arrow">→</div><div class="new">Deleting old posts feels risky. Usually it isn't.</div></div>
+    <div class="r"><div class="n">05</div><div class="old">Best Practices</div><div class="arrow">→</div><div class="new">Cut. Its useful lines moved up.</div></div>
+  </div>
+</div>
+</body></html>

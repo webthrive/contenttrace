@@ -1,0 +1,32 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css">
+<style>
+  .pol { position: absolute; left: 650px; top: 150px; width: 470px; padding: 26px 30px; }
+  .pol .label { margin-bottom: 18px; }
+  .row { display: flex; align-items: center; gap: 16px; font-size: 24px; font-weight: 600; height: 54px; border-top: 1.5px solid var(--night-3); }
+  .row .m { font-family: "JB", monospace; font-size: 22px; width: 26px; text-align: center; }
+  .row.x { color: var(--dim); } .row.x span.t { text-decoration: line-through; text-decoration-color: var(--coral); text-decoration-thickness: 3px; }
+  .row.x .m { color: var(--coral); }
+  .row.ok .m { color: var(--violet-hi); }
+</style></head>
+<body>
+<div id="canvas" class="hero">
+  <div class="glow" style="right:-180px;top:-160px"></div>
+  <svg class="trace" data-seed="ai-content-policies-at-work" width="1200" height="80" style="bottom:14px"></svg>
+  <div class="left">
+    <div class="k">Guide · AI policy</div>
+    <h1>Write the policy around the <span class="grad-text">result.</span></h1>
+    <div class="foot"><img src="../logo.svg" alt="">/ blog</div>
+  </div>
+  <div class="card pol">
+    <div class="label">AI-assisted writing policy</div>
+    <div class="row x"><span class="m">✕</span><span class="t">Log every AI use</span></div>
+    <div class="row x"><span class="m">✕</span><span class="t">Police with a detector</span></div>
+    <div class="row ok"><span class="m">✓</span><span class="t">Every claim sourced</span></div>
+    <div class="row ok"><span class="m">✓</span><span class="t">One real position</span></div>
+    <div class="row ok"><span class="m">✓</span><span class="t">Named, accountable editor</span></div>
+    <div class="row ok"><span class="m">✓</span><span class="t">Disclosure written for readers</span></div>
+  </div>
+</div>
+<script src="../trace.js"></script>
+</body></html>

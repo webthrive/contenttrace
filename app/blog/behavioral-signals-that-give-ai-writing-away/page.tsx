@@ -1,47 +1,69 @@
 import Nav from "@/components/Nav";
 import type { Metadata } from "next";
+import { ArticleSchema, AuthorBio, BlogHero, Byline, Figure, SITE_URL, Sources } from "../_parts";
 
-const SITE_URL = "https://www.contenttrace.ai";
 const SLUG = "behavioral-signals-that-give-ai-writing-away";
+const TITLE = "The 8 Signals That Give AI Writing Away (and What Readers Finish)";
+const H1 = "The 8 Signals That Give AI Writing Away, and the Writing Readers Finish Instead";
+const DESCRIPTION = "Eight behavioral signals separate raw AI content from writing people read to the end. What each one looks like, and how to add it to an AI-assisted draft.";
+const HERO = `/blog/${SLUG}/hero.webp`;
 
 export const metadata: Metadata = {
-  title: "The 8 Behavioral Signals That Give AI Writing Away",
-  description: "Statistical signals like perplexity are easy to game. Behavioral signals aren't. Here are the 8 patterns that reveal AI-generated text even after editing.",
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: { canonical: `${SITE_URL}/blog/${SLUG}` },
   openGraph: {
-    title: "The 8 Behavioral Signals That Give AI Writing Away | Content Trace",
-    description: "Statistical signals are easy to game. These 8 behavioral patterns reveal AI text even after editing.",
+    title: `${TITLE} | Content Trace`,
+    description: "The patterns that make raw AI writing easy to abandon, and the signals that keep readers going to the last paragraph.",
     url: `${SITE_URL}/blog/${SLUG}`,
     siteName: "Content Trace",
     type: "article",
+    publishedTime: "2026-03-11",
+    modifiedTime: "2026-10-07",
+    authors: ["Colin H"],
+    images: [{ url: HERO, width: 1600, height: 900, alt: "A lens over dim AI-style text cuts a reflexive hedge and highlights a remembered detail" }],
   },
+  twitter: { card: "summary_large_image", images: [HERO] },
   robots: { index: true, follow: true },
 };
 
+const FAQ = [
+  { q: "What are the signs of AI writing?", a: "The behavioral ones matter most: a position that never moves, hedges in front of obvious claims, examples that fit too neatly, no visible self-correction, a structure that only delivers, one flat tone, no real perspective, and counterarguments balanced with suspicious care. Each one is also a reason readers drift away." },
+  { q: "Can these signals be faked with the right prompt?", a: "Partly. A model will add a self-correction or a change of mind if asked, but prompted versions tend to be formulaic and show up in the same place with the same move. More to the point, a faked signal doesn't give readers anything. A real example or a real opinion does." },
+  { q: "Do academics and technical writers show these patterns too?", a: "Some do, on some signals, especially structure and tone. Formal genres call for delivery structure and an even register. That's why no single signal settles anything, and why the writing should be judged against its genre." },
+  { q: "Which signal is hardest to add after the fact?", a: "Remembered specifics. A real example carries a small amount of friction, a detail that doesn't quite serve the argument or a complication that has to be acknowledged. That friction needs an actual memory behind it, which a model can't supply." },
+  { q: "Is AI content bad for engagement by default?", a: "No. AI-assisted writing can hold readers fine once a person adds what the model can't: a position, real examples and some voice. Raw AI output tends to lose readers for a simpler reason: it offers nothing they couldn't predict." },
+  { q: "How do these signals relate to the 32 in a Content Trace report?", a: "They map mostly to the Voice & Perspective, Content & Logic, Cognitive Fingerprinting, Emotional Texture and Pragmatics & Subtext sections. Content Trace explains its results with 32 signals in 8 sections, so a report shows which of these patterns a draft still has." },
+];
+
 export default function PostBehavioralSignals() {
-  const p: React.CSSProperties = { marginBottom: "20px" };
-  const h2s: React.CSSProperties = { fontSize: "22px", fontWeight: 700, color: "var(--text-primary)", margin: "40px 0 14px", letterSpacing: "-0.01em", lineHeight: 1.3 };
-  const h3s: React.CSSProperties = { fontSize: "18px", fontWeight: 600, color: "var(--text-primary)", margin: "28px 0 10px" };
+  const p = { marginBottom: "20px" };
+  const h2s = { fontSize: "22px", fontWeight: 700, color: "var(--text-primary)", margin: "40px 0 14px", letterSpacing: "-0.01em", lineHeight: 1.3 };
+  const h3s = { fontSize: "18px", fontWeight: 600, color: "var(--text-primary)", margin: "28px 0 10px" };
 
   return (
     <><Nav current="/blog" />
+      <ArticleSchema slug={SLUG} title={TITLE} description={DESCRIPTION} datePublished="2026-03-11" dateModified="2026-10-07" image={HERO} faq={FAQ} />
       <main style={{ maxWidth: "700px", margin: "0 auto", padding: "60px 24px 80px", fontFamily: "var(--font)" }}>
 
-        <div style={{ display: "inline-block", fontSize: "12px", fontWeight: 600, color: "#c43302", background: "rgba(196,51,2,0.08)", border: "1px solid rgba(196,51,2,0.2)", padding: "3px 10px", borderRadius: "8px", marginBottom: "16px" }}>Guide</div>
-        <h1 style={{ fontSize: "38px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "16px", letterSpacing: "-0.02em", lineHeight: 1.2 }}>The 8 Behavioral Signals That Give AI Writing Away</h1>
-        <div style={{ fontSize: "14px", color: "var(--text-muted)", fontFamily: "var(--font-mono)", marginBottom: "32px" }}>March 11, 2026 · 10 min read · By <a href="https://www.webthrive.io/home/" target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", textDecoration: "none", fontWeight: 500 }}>Colin</a></div>
+        <div style={{ display: "inline-block", fontSize: "12px", fontWeight: 600, color: "var(--red)", background: "var(--red-bg)", border: "1px solid rgba(236,72,96,0.2)", padding: "3px 10px", borderRadius: "8px", marginBottom: "16px" }}>Guide</div>
+        <h1 style={{ fontSize: "38px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "16px", letterSpacing: "-0.02em", lineHeight: 1.2 }}>{H1}</h1>
+        <Byline date="March 11, 2026" readTime="9 min read" updated="October 7, 2026" />
 
-        <div style={{ background: "var(--accent-light)", border: "1px solid rgba(10,115,115,0.25)", borderRadius: "12px", padding: "16px 20px", marginBottom: "36px" }}>
-          <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--accent)", fontFamily: "var(--font-mono)", marginBottom: "10px" }}>TL;DR</div>
+        <BlogHero src={HERO} alt="A gradient lens over dim AI-style text cuts a reflexive hedge and highlights a remembered detail, showing the signals that keep a reader reading." />
+
+        {/* TL;DR */}
+        <div className="tldr" style={{ background: "var(--accent-light)", border: "1px solid rgba(87,13,158,0.25)", borderRadius: "12px", padding: "16px 20px", marginBottom: "36px" }}>
+          <div style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--accent)", fontFamily: "var(--font-mono)", marginBottom: "12px" }}>TL;DR</div>
           <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "6px" }}>
             {[
-              "Behavioral signals are harder to game than statistical ones because they reflect actual cognition — opinion drift, self-correction, specific memory — not surface-level word choice.",
-              "Opinion uniformity is the single most reliable tell. AI holds the same position from sentence one to the end. Human writing changes direction.",
-              "AI specifics are too clean. Real examples are slightly awkward, imperfectly illustrative, and contextually specific in ways constructed examples aren't.",
-              "Reflexive hedging is an AI default. 'It's worth noting' before an uncontroversial point is almost never something a human writer does intentionally.",
-              "These 8 patterns are what Content Trace weights most heavily — and they're the signals that paraphrasing tools and prompt tricks can't reliably move.",
+              "The signals that give AI writing away are the same ones that make readers stop. Fixing them is about holding attention.",
+              "A position that never moves is the most reliable tell. Writing people finish takes a side, then shows where it bends.",
+              "Raw AI examples are too clean. Remembered specifics have friction, and readers trust friction.",
+              "Reflexive hedging (\"it's worth noting\" before an obvious point) is a model default. Writers who keep readers hedge only where the doubt is real.",
+              "Paraphrasers and \"sound human\" prompts don't add these signals. A writer with something to say does.",
             ].map((item, i) => (
-              <li key={i} style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.5, display: "flex", gap: "8px" }}>
+              <li key={i} style={{ fontSize: "16px", color: "var(--text-secondary)", lineHeight: 1.6, display: "flex", gap: "8px" }}>
                 <span style={{ color: "var(--accent)", fontWeight: 600, flexShrink: 0 }}>→</span><span>{item}</span>
               </li>
             ))}
@@ -50,139 +72,169 @@ export default function PostBehavioralSignals() {
 
         <div style={{ fontSize: "17px", color: "var(--text-secondary)", lineHeight: "1.8" }}>
 
-          <p style={p}>A lot of attention in AI detection goes to perplexity — how predictable the word choices are, how uniform the sentence lengths run. And look, it's a real signal. I'm not dismissing it. But it's also the most gameable one. Run any AI essay through Quillbot and the perplexity score moves. The text is still hollow. The thinking is still thin. The behavioral fingerprints are still there.</p>
+          <p style={p}>In 2008, Jakob Nielsen took browsing data from 25 people and 45,237 page views and worked out how much of a page people actually read. The answer: at most 28% of the words on an average visit, and 20% is more likely. Six years later, Chartbeat CEO Tony Haile reported that 55% of visitors spent fewer than 15 seconds actively on a page.</p>
 
-          <p style={p}>These 8 patterns are what I focus on when I want to know whether something was actually written by a person thinking through a problem in real time. They're harder to fake because they're not about the surface features of the text — they're about evidence of a mind at work. And they're the signals that paraphrasing tools, synonym-swappers, and "write like a human" prompts can't reliably manufacture.</p>
+          <p style={p}>That&apos;s the real test every piece of writing faces. Most readers decide early whether to keep going, and they leave quietly. Raw AI output loses that test more often than it should, and the reasons are specific. They&apos;re the same patterns people mean when they talk about the signs of AI writing.</p>
 
+          <p style={p}>A lot of attention goes to the statistical tells, such as how predictable the word choices are. Those are real, and they&apos;re also the easiest to shuffle with a paraphrasing tool. The eight signals below sit deeper. They&apos;re about whether a mind made decisions on the page, and they explain why one article gets finished while another gets a two-paragraph skim. This guide treats them as a checklist for AI-assisted writers: what readers finish, and how to put it in.</p>
+
+          {/* Stat banner */}
           <a href="/" style={{ textDecoration: "none" }}>
-            <div style={{ background: "var(--bg-card)", cursor: "pointer", border: "1px solid var(--border)", borderRadius: "12px", padding: "16px 24px", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "12px 20px", margin: "32px 0" }}>
-              <div style={{ fontSize: "42px", fontWeight: 700, color: "var(--accent)", fontFamily: "var(--font-mono)", lineHeight: 1, flexShrink: 0 }}>16%</div>
-              <div style={{ width: "1px", background: "var(--border)", height: "48px", flexShrink: 0 }}></div>
-              <div style={{ flex: "1 1 180px", minWidth: 0 }}>
-                <strong style={{ fontSize: "15px", fontWeight: 600, display: "block", marginBottom: "3px" }}>Cognitive Fingerprinting's weight in Content Trace scoring</strong>
-                <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.55, margin: 0 }}>The single highest-weighted category — because opinion drift, self-correction, and visible reasoning are the hardest signals to manufacture.</p>
-              </div>
-              <div style={{ fontSize: "11px", fontWeight: 600, padding: "4px 10px", borderRadius: "20px", color: "var(--accent)", background: "var(--accent-light)", border: "1px solid rgba(10,115,115,0.2)", fontFamily: "var(--font-mono)", flexShrink: 0 }}>Free · Always</div>
+          <div style={{ background: "var(--bg-card)", cursor: "pointer", border: "1px solid var(--border)", borderRadius: "12px", padding: "16px 24px", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "12px 20px", margin: "32px 0" }}>
+            <div style={{ fontSize: "42px", fontWeight: 700, color: "var(--red)", fontFamily: "var(--font-mono)", lineHeight: 1, flexShrink: 0 }}>28%</div>
+            <div style={{ width: "1px", background: "var(--border)", height: "48px", flexShrink: 0 }}></div>
+            <div style={{ flex: "1 1 180px", minWidth: 0 }}>
+              <strong style={{ fontSize: "15px", fontWeight: 600, display: "block", marginBottom: "3px" }}>The most of a page people read on an average visit</strong>
+              <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.55, margin: 0 }}>Nielsen Norman Group&apos;s estimate, with 20% more likely. Every signal below is about earning the rest.</p>
             </div>
+            <div style={{ fontSize: "11px", fontWeight: 600, padding: "4px 10px", borderRadius: "20px", color: "var(--red)", background: "var(--red-bg)", border: "1px solid rgba(236,72,96,0.2)", fontFamily: "var(--font-mono)", flexShrink: 0 }}>Guide</div>
+          </div>
           </a>
 
-          <h2 style={h2s}>1. Opinion uniformity — the most reliable tell</h2>
+          <h2 style={h2s}>Why the signs of AI writing are reader problems</h2>
 
-          <p style={p}>Human writers don't hold perfectly stable positions from the first sentence to the last. They make a claim, then soften it. Take a strong side, encounter the counterargument mid-piece, adjust. Sometimes end up somewhere meaningfully different from where they started. That drift isn't sloppiness — it's evidence of actually thinking through a problem while writing.</p>
+          <p style={p}>Haile&apos;s data held a surprise that still holds up. Chartbeat found no relationship between how much an article was shared and how much attention readers actually gave it. People share headlines. They finish writing. Those are different jobs, and raw AI output is often good at the first and bad at the second.</p>
 
-          <p style={p}>AI text doesn't do this. It picks a position in response to the prompt and maintains it, uniformly, across the entire piece. The introduction, body, and conclusion pull in exactly the same direction with equal conviction. Every counterargument is resolved neatly in favor of the thesis. The position never genuinely wobbles — because the model isn't deliberating. It picked a thesis and executed on it.</p>
+          <p style={p}>The reason is predictability. A reader who can guess the next paragraph has no reason to read it. Every signal below is a form of that problem: a stance you saw coming, an example that could have been invented by anyone, a tone that never changes. Google&apos;s guidance on helpful content asks a similar question in its own terms: whether a page offers &quot;original information, reporting, research, or analysis,&quot; and whether a reader will leave &quot;feeling they&apos;ve learned enough about a topic to help achieve their goal.&quot;</p>
 
-          <p style={p}>This is the most reliable behavioral signal I know of. When every section aligns perfectly and no part of the argument creates real tension, that uniformity is suspicious.</p>
+          <Figure src={`/blog/${SLUG}/inline-1.webp`} alt="Eight cards pair each AI default with the signal readers finish: fixed position to a position that moves, reflexive hedges to real doubt, built examples to remembered ones, and five more." caption="Each AI default on the left is a reason to stop reading. The signal on the right is the edit." />
 
-          <h2 style={h2s}>2. Reflexive hedging</h2>
+          <h2 style={h2s}>Signals of a mind making decisions</h2>
 
-          <p style={p}>There's a specific hedging pattern that's almost exclusively an AI behavior: the reflexive qualifier dropped in before even uncontroversial claims. "It's worth noting that," "It's important to consider," "It should be mentioned that." These appear because language models learned that academic and professional writing softens claims this way — and they apply it broadly, even when the claim being hedged is completely obvious.</p>
+          <h3 style={h3s}>1. A position that moves (instead of opinion uniformity)</h3>
 
-          <p style={p}>Humans hedge strategically. We qualify when we're genuinely uncertain, or when we're acknowledging a legitimate competing view, or when we're about to say something that might be controversial. We don't hedge before stating that consistency matters in branding.</p>
+          <p style={p}>People don&apos;t hold perfectly stable positions from the first sentence to the last. They make a claim, then soften it. They meet a counterargument halfway through and adjust. Sometimes they end up somewhere different from where they started. That drift is what thinking looks like on the page.</p>
 
-          <p style={p}>The ratio of hedged claims to direct claims is one of the cleaner statistical proxies for AI writing — and it's one that paraphrasing tools don't typically address.</p>
+          <p style={p}>Raw AI output picks a position in response to the prompt and holds it evenly across the whole piece. The introduction, body and conclusion pull in exactly the same direction with the same conviction. For a reader, that means the conclusion is visible from paragraph one, so there&apos;s no reason to reach it. This is the most reliable of the eight, and the one most worth fixing.</p>
 
-          <h2 style={h2s}>3. Constructed specifics</h2>
+          <h3 style={h3s}>2. Hedges only where the doubt is real (instead of reflexive hedging)</h3>
 
-          <p style={p}>AI examples are too well-chosen. When a language model needs to illustrate a point, it reaches for a scenario that fits cleanly and perfectly. The example has no rough edges. It doesn't extend beyond the point it's illustrating. It doesn't drag in adjacent complications or context that doesn't serve the argument. It's optimized for clarity at the cost of authenticity.</p>
+          <p style={p}>There&apos;s a hedging pattern that is almost entirely a model habit: the qualifier dropped in front of claims nobody disputes. &quot;It&apos;s worth noting that.&quot; &quot;It&apos;s important to consider.&quot; Models picked up that professional writing softens claims, and they apply it everywhere.</p>
 
-          <p style={p}>Real examples are messier. You pick something from memory and it's slightly imperfect for your purposes — it illustrates the main point but has a wrinkle you have to acknowledge. "This is roughly what I mean, though the situation was more complicated because..." That complication is evidence of real memory. Constructed examples don't have wrinkles because they weren't remembered. They were built to order.</p>
+          <p style={p}>Good writers hedge on purpose. They qualify when they&apos;re unsure, or when a serious competing view exists, or right before saying something that might start an argument. Nobody needs a hedge before announcing that consistency matters in branding. Readers feel the difference as confidence, and they reward it.</p>
 
-          <div style={{ border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px", overflow: "hidden", background: "var(--bg-card)", margin: "24px 0" }}>
-            <div style={{ padding: "10px 18px", background: "rgba(255,255,255,0.05)", borderBottom: "1px solid rgba(255,255,255,0.1)", fontSize: "11px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: "var(--font-mono)" }}>
-              Specificity · Constructed vs. Remembered
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
-              <div style={{ padding: "14px 18px", borderRight: "1px solid rgba(255,255,255,0.1)" }}>
-                <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "#ff6b6b", fontFamily: "var(--font-mono)", marginBottom: "8px" }}>AI specificity</div>
-                <p style={{ fontSize: "14px", lineHeight: 1.65, margin: 0 }}>"For example, a marketing team might use this approach to improve ROI by identifying the most effective channels for their target audience."</p>
-              </div>
-              <div style={{ padding: "14px 18px" }}>
-                <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--accent)", fontFamily: "var(--font-mono)", marginBottom: "8px" }}>Human specificity</div>
-                <p style={{ fontSize: "14px", lineHeight: 1.65, margin: 0 }}>"We ran this for a home services client in Phoenix — Google Local campaigns eating 40% of budget for maybe 8% of conversions. Took three months and two reports to get anyone to act on it."</p>
-              </div>
-            </div>
-          </div>
-
-          <h2 style={h2s}>4. No self-correction</h2>
-
-          <p style={p}>Human writers catch themselves mid-thought. "Actually, that's not quite right —" or "Let me walk that back a bit." These in-text corrections appear because humans write in real time, often discovering what they think in the process. The first formulation of an idea frequently isn't quite right, and a writer working through a problem will revise it on the page rather than only in their head.</p>
-
-          <p style={p}>AI text doesn't self-correct because the model isn't discovering anything. It's generating text based on probability distributions. There's nothing to correct because there was no initial formulation to be wrong about — the text comes out polished and final-sounding because it was never drafted. It was predicted.</p>
-
-          <h2 style={h2s}>5. Delivery structure vs. discovery structure</h2>
-
-          <p style={p}>Two ways to structure an argument. Delivery: you know the point, you know the evidence, you lay it out in logical order. Discovery: you start with a question, work through it, and the structure emerges from figuring out the answer.</p>
-
-          <p style={p}>AI text almost always has delivery structure. The introduction tells you exactly what's coming, the body delivers it in labeled sections, the conclusion summarizes. This isn't inherently problematic — plenty of legitimate writing uses delivery structure. But when combined with other signals, it's a behavioral fingerprint. Human writing that's genuinely working through a problem tends to feel like it's figuring something out, not presenting pre-packaged findings. There's a qualitative difference that's hard to name but easy to feel once you know to look for it.</p>
-
-          <div style={{ border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px", background: "var(--bg-card)", overflow: "hidden", margin: "24px 0" }}>
-            <div style={{ padding: "12px 18px", background: "rgba(255,255,255,0.05)", borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
-              <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--accent)", fontFamily: "var(--font-mono)" }}>Structural Coherence · Discovery vs. Delivery</div>
-              <div style={{ fontSize: "14px", fontWeight: 600, marginTop: "2px" }}>How the argument moves through the piece</div>
+          {/* Signal callout */}
+          <div style={{ border: "1px solid var(--border)", borderRadius: "12px", background: "var(--bg-card)", overflow: "hidden", margin: "28px 0" }}>
+            <div style={{ padding: "12px 18px", background: "var(--bg-elevated)", borderBottom: "1px solid var(--border)" }}>
+              <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--red)", fontFamily: "var(--font-mono)" }}>Word Choice & Phrasing</div>
+              <div style={{ fontSize: "14px", fontWeight: 600, color: "var(--text-primary)", marginTop: "2px" }}>Hedging Language Overuse</div>
             </div>
             <div style={{ padding: "14px 18px" }}>
-              <p style={{ fontSize: "14px", lineHeight: 1.6, marginBottom: "12px" }}>Delivery structure announces conclusions upfront and executes on them. Discovery structure follows the argument and lets uncertainty stay visible. AI uses delivery structure because there's nothing to discover — it's executing on a prompt, not working through a problem.</p>
+              <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.6, marginBottom: "12px" }}>Reflexive hedges cluster before uncontroversial claims. Cutting them makes the real doubts easier to see.</p>
               <div style={{ display: "flex", gap: "10px", alignItems: "flex-start", fontSize: "13px", lineHeight: 1.5, marginBottom: "8px" }}>
-                <span style={{ fontSize: "10px", fontWeight: 700, padding: "2px 8px", borderRadius: "4px", background: "rgba(255,107,107,0.15)", color: "#ff6b6b", flexShrink: 0, fontFamily: "var(--font-mono)" }}>DELIVERY</span>
-                <span>"There are three key factors. First: X. Second: Y. Third: Z. These factors collectively determine the outcome."</span>
+                <span style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.06em", padding: "2px 8px", borderRadius: "4px", background: "rgba(236,72,96,0.1)", color: "var(--red)", flexShrink: 0, marginTop: "1px", fontFamily: "var(--font-mono)" }}>Before</span>
+                <span style={{ color: "var(--text-secondary)" }}>&quot;It&apos;s worth noting that customer retention can potentially be an important factor for many businesses.&quot;</span>
               </div>
               <div style={{ display: "flex", gap: "10px", alignItems: "flex-start", fontSize: "13px", lineHeight: 1.5 }}>
-                <span style={{ fontSize: "10px", fontWeight: 700, padding: "2px 8px", borderRadius: "4px", background: "rgba(10,115,115,0.15)", color: "var(--accent)", flexShrink: 0, fontFamily: "var(--font-mono)" }}>DISCOVERY</span>
-                <span>"I assumed X was the main driver. Running the numbers, Z mattered more than I expected — which changes how I'd approach the whole problem."</span>
+                <span style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.06em", padding: "2px 8px", borderRadius: "4px", background: "rgba(87,13,158,0.1)", color: "var(--accent)", flexShrink: 0, marginTop: "1px", fontFamily: "var(--font-mono)" }}>After</span>
+                <span style={{ color: "var(--text-secondary)" }}>&quot;Retention matters more than acquisition for most subscription businesses. The exception is the first year, when there&apos;s barely anyone to retain.&quot;</span>
               </div>
             </div>
           </div>
 
-          <h2 style={h2s}>6. Tonal uniformity</h2>
+          <h3 style={h3s}>3. Uneven counterarguments (instead of perfect balance)</h3>
 
-          <p style={p}>AI writing is tonally consistent in a way that's subtly inhuman. The register doesn't shift. The level of formality holds constant from the first paragraph to the last. There are no moments where the writer steps outside the mode they're in to say something more directly, or more bluntly, or more warmly than the surrounding context calls for.</p>
+          <p style={p}>Raw AI output treats counterarguments with suspicious fairness. Every point gets a counterpoint, and every counterpoint is resolved with matching weight. It reads as balanced because the model spreads probability evenly across positions. Nobody actually weighed them.</p>
 
-          <p style={p}>Human writing has tonal variation even within a single piece. A professional blog post might drop into a more personal register for one paragraph, or punch harder on a point the writer cares about, or pick up a trace of sarcasm when something strikes them as absurd. That variation isn't inconsistency — it's evidence of a real person behind the text, with actual reactions that don't perfectly follow genre conventions.</p>
+          <p style={p}>People who hold real positions don&apos;t write that way. They take the objections they find convincing seriously and wave off the ones they don&apos;t. Their concessions are real concessions. That lopsidedness tells the reader what the writer actually thinks, which is the thing the reader came for.</p>
 
-          <h2 style={h2s}>7. No real perspective</h2>
+          <h2 style={h2s}>Signals of something that happened</h2>
 
-          <p style={p}>This one is harder to articulate, but I think it's the deepest tell. Real writing has a perspective embedded in it — specific knowledge, specific experience, specific stakes that shape what gets said and how. Someone writing about AI detection has actually used these tools, has been frustrated by specific false positives, has opinions about which vendors are overselling their capabilities. That grounding shows up in the writing even when it isn't stated explicitly.</p>
+          <h3 style={h3s}>4. Remembered specifics (instead of built examples)</h3>
 
-          <p style={p}>AI writing about the same topic covers the subject matter correctly but doesn't hold a perspective on it. It knows the positions that exist; it doesn't occupy one. The result is writing that's comprehensive and balanced in a way that genuine expertise rarely is. Real subject matter knowledge comes with opinions, preferences, and sometimes blind spots. The absence of those things is its own tell.</p>
+          <p style={p}>AI examples are too well chosen. When a model needs to illustrate a point, it reaches for a scenario that fits perfectly, with no rough edges and nothing that runs past the point. It&apos;s tidy, and it&apos;s forgettable.</p>
 
-          <h2 style={h2s}>8. Perfect counterargument balance</h2>
+          <p style={p}>Real examples are messier. Pulled from memory, they&apos;re a slightly imperfect fit, with a wrinkle that has to be acknowledged: &quot;roughly this, though the situation was more complicated because...&quot; That wrinkle is evidence of a real event. Readers can&apos;t always say why a real example feels different. They just stay for it.</p>
 
-          <p style={p}>Related to opinion uniformity, but worth separating: AI text presents counterarguments with suspicious evenhandedness. Every point gets a counterpoint. Every counterpoint is resolved with matching weight. The argument feels fair and balanced — not because the writer wrestled with competing views, but because the model distributes probability across positions evenly.</p>
-
-          <p style={p}>Humans who hold actual positions don't write this way. They engage seriously with the counterarguments they find genuinely compelling and wave off the ones they don't. Their rebuttals are more vigorous in some places than others. Their concessions are real concessions. The asymmetry in how they handle different objections tells you something about what they actually think. That asymmetry is absent from AI text almost entirely.</p>
-
-          <div style={{ borderLeft: "4px solid var(--accent)", background: "var(--accent-light)", borderRadius: "0 12px 12px 0", padding: "18px 24px", margin: "24px 0" }}>
-            <blockquote style={{ fontSize: "18px", fontWeight: 600, lineHeight: 1.5, margin: "0 0 6px" }}>
-              "AI text knows the positions that exist. It doesn't hold one."
-            </blockquote>
-            <cite style={{ fontSize: "12px", fontStyle: "normal", fontFamily: "var(--font-mono)", color: "var(--text-muted)" }}>
-              The absence of genuine perspective is the deepest behavioral signal of all.
-            </cite>
+          {/* Before/After */}
+          <div style={{ border: "1px solid var(--border)", borderRadius: "12px", overflow: "hidden", background: "var(--bg-card)", margin: "32px 0" }}>
+            <div style={{ padding: "10px 18px", background: "var(--bg-elevated)", borderBottom: "1px solid var(--border)", fontSize: "11px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>
+              Content & Logic · Built vs. remembered (hypothetical examples)
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
+              <div style={{ padding: "14px 18px", background: "rgba(236,72,96,0.03)", borderRight: "1px solid var(--border)" }}>
+                <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--red)", fontFamily: "var(--font-mono)", marginBottom: "8px" }}>Built</div>
+                <p style={{ fontSize: "14px", lineHeight: 1.65, color: "var(--text-secondary)", margin: 0 }}>&quot;For example, a marketing team might use this approach to improve ROI by identifying the most effective channels for their target audience.&quot;</p>
+              </div>
+              <div style={{ padding: "14px 18px", background: "rgba(87,13,158,0.03)" }}>
+                <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--accent)", fontFamily: "var(--font-mono)", marginBottom: "8px" }}>Remembered</div>
+                <p style={{ fontSize: "14px", lineHeight: 1.65, color: "var(--text-secondary)", margin: 0 }}>&quot;A home services account in Phoenix had local campaigns eating 40% of budget for maybe 8% of conversions. It took three months and two reports before anyone moved the money.&quot;</p>
+              </div>
+            </div>
           </div>
 
-          <h2 style={h2s}>How these signals work in combination</h2>
+          <h3 style={h3s}>5. A real perspective (instead of coverage)</h3>
 
-          <p style={p}>None of these signals is definitive on its own. A highly structured human writer — an academic, a lawyer, a technical writer — might score poorly on delivery vs. discovery, tonal uniformity, and reflexive hedging, all while writing completely original work. The value is in the combination.</p>
+          <p style={p}>This one is harder to name, and it may be the deepest. Real writing carries a perspective: specific knowledge, specific experience and specific stakes that shape what gets said. Someone writing about detection tools who has actually used them knows the irritation of a false positive on a paragraph they wrote themselves, and has opinions about which vendors oversell. That grounding shows even when it isn&apos;t stated.</p>
 
-          <p style={p}>When a piece of text shows all eight patterns simultaneously, the probability that it represents authentic human writing drops substantially. And crucially — these patterns don't respond to paraphrasing tools or synonym-swapping. You can shuffle the vocabulary around a hollow argument and the argument stays hollow. The behavioral fingerprint is in the architecture of the reasoning, not in the specific words used to express it.</p>
+          <p style={p}>Raw AI output on the same topic covers the ground correctly and holds no view of it. It knows the positions that exist. It doesn&apos;t occupy one. The result is comprehensive and balanced in a way real expertise rarely is, since real expertise comes with preferences and the odd blind spot.</p>
 
-          <p style={p}><a href="/" style={{ color: "var(--accent)", textDecoration: "none", fontWeight: 500 }}>Run your text through Content Trace</a> and look at how it scores on the behavioral categories specifically. For the underlying mechanics of how these signals get measured, the <a href="/blog/how-ai-text-detection-works" style={{ color: "var(--accent)", textDecoration: "none" }}>explainer on how AI text detection works</a> covers the full framework.</p>
+          {/* Pull quote */}
+          <div style={{ borderLeft: "4px solid var(--red)", background: "rgba(236,72,96,0.06)", borderRadius: "0 12px 12px 0", padding: "18px 24px", margin: "32px 0" }}>
+            <blockquote style={{ fontSize: "18px", fontWeight: 600, lineHeight: 1.5, color: "var(--text-primary)", margin: "0 0 6px" }}>
+              &quot;AI text knows the positions that exist. It doesn&apos;t hold one. Readers come for the one somebody holds.&quot;
+            </blockquote>
+            <cite style={{ fontSize: "12px", color: "var(--text-muted)", fontStyle: "normal", fontFamily: "var(--font-mono)" }}>Content Trace · Voice & Perspective Signal</cite>
+          </div>
+
+          <h2 style={h2s}>Signals of a draft that was worked</h2>
+
+          <h3 style={h3s}>6. Visible self-correction (instead of instant polish)</h3>
+
+          <p style={p}>Writers catch themselves mid-thought. &quot;Actually, that&apos;s not quite right.&quot; &quot;That needs walking back a little.&quot; Those corrections appear because people often find out what they think while writing, and the first version of an idea is frequently a bit wrong.</p>
+
+          <p style={p}>Raw AI output doesn&apos;t self-correct, because nothing was discovered. The text arrives polished and final-sounding because it was never drafted. It was predicted. One honest correction tells a reader that the writer is working something out alongside them, and that&apos;s an oddly strong reason to keep reading.</p>
+
+          <h3 style={h3s}>7. Discovery structure (instead of delivery only)</h3>
+
+          <p style={p}>There are two ways to build an argument. Delivery: you know the point and the evidence, and you lay them out in order. Discovery: you start with a question, work through it, and the structure comes from finding the answer.</p>
+
+          <p style={p}>Raw AI output almost always delivers. The intro says what&apos;s coming, labeled sections deliver it, and the conclusion repeats it. Plenty of good writing uses delivery structure, so on its own this proves nothing. But a piece with a little discovery in it, one question the reader doesn&apos;t know the answer to yet, gives them a reason to get to the end.</p>
+
+          <Figure src={`/blog/${SLUG}/inline-2.webp`} alt="Two outlines compared: a delivery outline announces three factors and repeats them, while a discovery outline starts from a question, finds a surprise and changes the conclusion." caption="Delivery tells readers the ending up front. Discovery gives them a reason to get there." />
+
+          <h2 style={h2s}>Signals of a voice</h2>
+
+          <h3 style={h3s}>8. Tonal range (instead of one flat register)</h3>
+
+          <p style={p}>Raw AI output is tonally even in a way that feels slightly off. The formality holds from the first paragraph to the last. Nothing ever steps outside the mode to say something more bluntly, or more warmly, than the context calls for.</p>
+
+          <p style={p}>Human writing moves. A professional post drops into a personal register for a paragraph, or hits harder on a point the writer cares about, or picks up a trace of sarcasm when something seems absurd. That variation is a real person reacting, and readers respond to people.</p>
+
+          <h2 style={h2s}>How the signals work together</h2>
+
+          <p style={p}>None of these is decisive alone. A careful academic, lawyer or technical writer might show delivery structure, an even tone and plenty of hedging while writing entirely original work. Genre matters, and the value is in the combination.</p>
+
+          <p style={p}>The obvious fix is to prompt the model for the signals directly: &quot;add a personal story, change your mind once, vary the tone.&quot; It doesn&apos;t work, because the model will invent a story and stage a change of mind in the same spot every time. That gives a reader a performance, and readers notice performances. The signals have to come from the writer: a real example, a held position and a sentence that says what the writer actually thinks. That&apos;s also the only version that makes AI-assisted writing worth finishing.</p>
+
+          <p style={p}><a href="/" style={{ color: "var(--accent)", textDecoration: "underline" }}>Content Trace</a> explains its results with 32 signals in 8 sections, so a report shows which of these patterns a draft still carries. Use it as a map for the next edit. The score matters less than the section dragging it down.</p>
 
           <h2 style={h2s}>Frequently asked questions</h2>
 
-          <h3 style={h3s}>Can these behavioral signals be faked with the right prompt?</h3>
-          <p style={p}>Partially. You can prompt a model to introduce self-corrections or shift position mid-argument — and it'll do it. The problem is that prompted opinion drift tends to be formulaic, appearing in the same structural position with the same rhetorical move. Real human cognitive patterns are irregular and contextual in ways that AI-generated approximations aren't. The simulation is detectable.</p>
+          {FAQ.map(({ q, a }, i) => (
+            <div key={i} style={{ borderTop: "1px solid var(--border)", padding: "20px 0" }}>
+              <div style={{ fontSize: "16px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "8px" }}>{q}</div>
+              <div style={{ fontSize: "15px", color: "var(--text-secondary)", lineHeight: 1.7 }}>{a}</div>
+            </div>
+          ))}
 
-          <h3 style={h3s}>Do structured writers like academics score poorly on these signals?</h3>
-          <p style={p}>Some do, on certain signals — particularly delivery structure and tonal uniformity. This is why good detectors weight categories independently rather than treating any single signal as definitive. An academic writer may score high on delivery structure but score clearly human on specificity, perspective, and non-uniform opinion. The combination tells the real story.</p>
+          <p style={{ ...p, marginTop: "32px" }}>To put these signals into a draft, <a href="/blog/how-to-humanize-ai-content" style={{ color: "var(--accent)", textDecoration: "underline" }}>How to Humanize AI Content</a> walks through six editing passes. <a href="/blog/why-ai-writing-sounds-different" style={{ color: "var(--accent)", textDecoration: "underline" }}>Why AI Writing Sounds Different</a> covers the reasons models write this way. And <a href="/blog/the-specificity-test" style={{ color: "var(--accent)", textDecoration: "underline" }}>The Specificity Test</a> goes deeper on remembered specifics.</p>
 
-          <h3 style={h3s}>Which signal is hardest to fake?</h3>
-          <p style={p}>Authentic specific memory. Real examples always carry a small amount of contextual imperfection — details that don't quite serve the argument, complications that have to be acknowledged. AI examples don't have that messiness because they weren't remembered; they were constructed. That imperfection is very hard to simulate convincingly because it requires actually having the memory to be imperfect about.</p>
+          <Sources items={[
+            { label: "Nielsen Norman Group: How Little Do Users Read? (Jakob Nielsen, 2008)", href: "https://www.nngroup.com/articles/how-little-do-users-read/" },
+            { label: "TIME: What You Think You Know About the Web Is Wrong (Tony Haile, Chartbeat, 2014)", href: "https://time.com/12933/what-you-think-you-know-about-the-web-is-wrong/" },
+            { label: "Google Search Central: Creating helpful, reliable, people-first content", href: "https://developers.google.com/search/docs/fundamentals/creating-helpful-content" },
+          ]} />
 
-          <h3 style={h3s}>How do these behavioral signals relate to the 32 Content Trace analyzes?</h3>
-          <p style={p}>These 8 behavioral patterns map to roughly 20 of Content Trace's 32 signals, primarily under Cognitive Fingerprinting, Voice & Perspective, and Structural Coherence. The remaining signals cover word choice, rhythm, audience awareness, and statistical proxies. The full <a href="/blog/how-ai-text-detection-works" style={{ color: "var(--accent)", textDecoration: "none" }}>breakdown of how detection works</a> covers all eight categories.</p>
+          <AuthorBio />
 
+        </div>
+
+        <div style={{ borderTop: "1px solid var(--border)", paddingTop: "32px", marginTop: "48px" }}>
+          <div style={{ fontSize: "15px", color: "var(--text-muted)", marginBottom: "20px" }}>See which of these signals your draft still carries.</div>
+          <a href="/" className="cta-dark" style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "12px 24px", background: "var(--accent)", color: "white", borderRadius: "8px", textDecoration: "none", fontSize: "15px", fontWeight: 600, boxShadow: "0 2px 8px rgba(87,13,158,0.25)" }}>
+            Check your next draft →
+          </a>
         </div>
       </main>
     </>

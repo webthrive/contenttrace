@@ -1,0 +1,23 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css">
+<style>
+  .chart { position: absolute; left: 56px; right: 56px; top: 120px; }
+  .r { display: grid; grid-template-columns: 210px 1fr 110px; align-items: center; height: 96px; }
+  .w { font-family: "JB", monospace; font-size: 24px; color: var(--ink); }
+  .track { height: 34px; border-radius: 8px; background: var(--night-3); overflow: hidden; }
+  .fill { height: 100%; background: var(--coral); border-radius: 8px; }
+  .x { font-family: "JB", monospace; font-size: 28px; text-align: right; color: var(--coral); }
+  .note { position: absolute; left: 56px; bottom: 40px; font-size: 13px; }
+</style></head>
+<body>
+<div id="canvas" class="inline light">
+  <div class="glow" style="left:-300px;bottom:-420px;opacity:.7"></div>
+  <div class="label" style="position:absolute;left:56px;top:44px">Excess word use in 2024 PubMed abstracts</div>
+  <div class="chart">
+    <div class="r"><div class="w">delves</div><div class="track"><div class="fill" style="width:100%"></div></div><div class="x">28.0×</div></div>
+    <div class="r"><div class="w">underscores</div><div class="track"><div class="fill" style="width:49.3%"></div></div><div class="x">13.8×</div></div>
+    <div class="r"><div class="w">showcasing</div><div class="track"><div class="fill" style="width:38.2%"></div></div><div class="x">10.7×</div></div>
+  </div>
+  <div class="label note">Ratio vs. expected trend · Kobak et al., 2024</div>
+</div>
+</body></html>

@@ -1,0 +1,29 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css">
+<style>
+  .grid { position: absolute; left: 56px; right: 56px; top: 120px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .card { height: 168px; padding: 20px 20px 16px; }
+  .n { font-family: "JB", monospace; font-size: 14px; color: var(--muted); letter-spacing: 0.1em; }
+  .ai { font-family: "JB", monospace; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--coral); margin: 12px 0 10px; text-decoration: line-through; text-decoration-thickness: 1.5px; }
+  .t { font-size: 21px; font-weight: 600; line-height: 1.2; letter-spacing: -0.01em; }
+  .key { position: absolute; left: 56px; bottom: 26px; display: flex; gap: 26px; }
+  .key span::before { content: ""; display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 8px; vertical-align: -1px; }
+  .key .a::before { background: var(--coral); } .key .b::before { background: var(--grad); }
+</style></head>
+<body>
+<div id="canvas" class="inline light">
+  <div class="glow" style="left:-300px;bottom:-420px;opacity:.7"></div>
+  <div class="label" style="position:absolute;left:56px;top:44px">AI default → what readers finish</div>
+  <div class="grid">
+    <div class="card"><div class="n grad-text">01</div><div class="ai">Fixed position</div><div class="t">A position that moves</div></div>
+    <div class="card"><div class="n grad-text">02</div><div class="ai">Reflexive hedges</div><div class="t">Doubt only where it's real</div></div>
+    <div class="card"><div class="n grad-text">03</div><div class="ai">Perfect balance</div><div class="t">Uneven counterarguments</div></div>
+    <div class="card"><div class="n grad-text">04</div><div class="ai">Built examples</div><div class="t">Remembered specifics</div></div>
+    <div class="card"><div class="n grad-text">05</div><div class="ai">Coverage</div><div class="t">A real perspective</div></div>
+    <div class="card"><div class="n grad-text">06</div><div class="ai">Instant polish</div><div class="t">Visible self-correction</div></div>
+    <div class="card"><div class="n grad-text">07</div><div class="ai">Delivery only</div><div class="t">Some discovery</div></div>
+    <div class="card"><div class="n grad-text">08</div><div class="ai">One flat register</div><div class="t">Tonal range</div></div>
+  </div>
+  <div class="key label"><span class="a">AI default</span><span class="b">Reader keeps going</span></div>
+</div>
+</body></html>

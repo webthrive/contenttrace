@@ -1,0 +1,34 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css">
+<style>
+  .panel { position: absolute; left: 640px; top: 150px; width: 480px; padding: 28px 30px; background: var(--night-2); border: 1.5px solid var(--night-3); border-radius: 20px; }
+  .ph { font-family: "JB", monospace; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 22px; }
+  .row { display: grid; grid-template-columns: 90px 1fr; align-items: center; gap: 16px; margin-bottom: 18px; }
+  .row span { font-family: "JB", monospace; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); }
+  .track { height: 14px; border-radius: 7px; background: var(--night-3); overflow: hidden; }
+  .fill { height: 100%; border-radius: 7px; background: var(--coral); }
+  .sep { border-top: 1.5px dashed var(--night-3); margin: 24px 0 18px; }
+  .fix { font-size: 22px; font-weight: 600; line-height: 1.3; }
+</style></head>
+<body>
+<div id="canvas" class="hero">
+  <div class="glow" style="right:-180px;top:-160px"></div>
+  <svg class="trace" data-seed="why-your-ai-detector-score-keeps-changing" width="1200" height="80" style="bottom:14px"></svg>
+  <div class="left">
+    <div class="k">Explainer · Score variation</div>
+    <h1>Same text. Different <span class="grad-text">scores.</span></h1>
+    <div class="foot"><img src="../logo.svg" alt="">/ blog</div>
+  </div>
+  <div class="panel">
+    <div class="ph">One draft · four tools</div>
+    <div class="row"><span>Tool A</span><div class="track"><div class="fill" style="width:14%"></div></div></div>
+    <div class="row"><span>Tool B</span><div class="track"><div class="fill" style="width:66%"></div></div></div>
+    <div class="row"><span>Tool C</span><div class="track"><div class="fill" style="width:88%"></div></div></div>
+    <div class="row"><span>Tool D</span><div class="track"><div class="fill" style="width:36%"></div></div></div>
+    <div class="sep"></div>
+    <div class="ph" style="margin-bottom:10px">Better question</div>
+    <div class="fix">Which <span class="grad-text">section</span> drives the result?</div>
+  </div>
+</div>
+<script src="../trace.js"></script>
+</body></html>

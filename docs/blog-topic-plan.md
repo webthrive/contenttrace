@@ -1,6 +1,6 @@
 # ContentTrace Blog: Topic Plan (May 1 to Oct 7, 2026)
 
-Status: **proposed, waiting for Colin's approval.** Rules: `docs/blog-editorial-guide.md` (section 0 first).
+Status: **approved by Colin, Oct 7, 2026.** #23 publishes internal eval numbers with limits (approved). Rules: `docs/blog-editorial-guide.md` (section 0 first).
 
 Mix: about 70% craft (better AI-assisted writing, SEO, AEO), about 30% product and technical (validation).
 Dates: 4 per month, evenly spread. Product posts about the current engine are dated on or after Sept 30, 2026 (the engine rebuild) and optimizer posts on or after Oct 3, 2026 (optimizer launch).
@@ -9,7 +9,7 @@ Dates: 4 per month, evenly spread. Product posts about the current engine are da
 
 | # | Date | Tag | Working title | Angle / why it matters | Main keyword idea |
 |---|---|---|---|---|---|
-| 1 | May 4 | Analysis | Google Is Fine With AI Content. Readers Are the Harder Audience | Google's own guidance, and why engagement is the real test | is AI content bad for SEO |
+| 1 | May 4 | Analysis | Google Is Fine With AI-Assisted Content. Readers Are the Harder Audience | Google's own guidance, and why engagement is the real test | is AI content bad for SEO |
 | 2 | May 12 | Guide | Prompting for a Better First Draft: What to Give the Model Before It Writes | Inputs (audience, position, real examples, sources) decide how much editing is left | AI writing prompts for blog posts |
 | 3 | May 20 | Analysis | The Generic Middle: Why AI Drafts Sag After the Intro | Where AI drafts lose readers and how to rebuild the middle | improve AI written content |
 | 4 | May 28 | Guide | Brand Voice Guides That AI Can Actually Follow | Turning a vague voice doc into rules a model obeys | AI brand voice guide |
@@ -33,7 +33,7 @@ Dates: 4 per month, evenly spread. Product posts about the current engine are da
 | 22 | Oct 4 | Explainer (product) | Editor, Not Author: How the Content Optimizer Avoids Inventing Facts | Fact guard, [Add: ...] markers, honest score gains | AI content optimizer |
 | 23 | Oct 6 | Explainer (product) | How ContentTrace Is Calibrated: Testing Against Human and AI Writing | Eval method, content types, anchors, known limits | AI writing scoring accuracy |
 
-**Needs Colin's OK before writing #23:** it publishes internal eval numbers (sample sizes, results, known misses). Option: method only, no numbers.
+#23: approved to publish internal eval numbers, labeled as internal testing, with sample sizes and known limits.
 
 ## Old posts (10 to update)
 

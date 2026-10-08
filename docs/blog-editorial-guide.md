@@ -13,6 +13,8 @@ Rules for every post on `/blog`. Use this guide for rewrites of old posts and fo
   - Product: purpose, technical (how scoring and calibration work), tuning, features. Technical posts build validation, so include real method details.
   - Craft: useful information that helps AI-assisted writers produce better work (editing, structure, SEO, AEO, voice, policy).
 - **Dates and truth:** a backdated post must not describe a feature before it existed. Product posts about the current engine go on or after Sept 30, 2026; posts about the optimizer go on or after Oct 3, 2026.
+- **Wording rule:** "AI-assisted" is the default for the human + AI process. "AI draft", "AI-generated" or "raw AI output" for unedited model output. "AI content" only as an exact search phrase (one FAQ question, one H2 or the meta description).
+- **Product facts:** use only `docs/blog-facts.md`.
 - **Claims:** no accuracy percentages unless they come from a documented eval, with sample size and limits stated. No "proprietary deep learning model" or "learns" claims.
 
 ## 1. Voice

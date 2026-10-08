@@ -1,0 +1,38 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css">
+<style>
+  .rep { position: absolute; left: 650px; top: 140px; width: 480px; padding: 26px 30px; }
+  .top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .big { height: 14px; border-radius: 7px; background: var(--night-3); overflow: hidden; margin-bottom: 22px; }
+  .big div { height: 100%; width: 54%; background: var(--grad); border-radius: 7px; }
+  .row { display: grid; grid-template-columns: 210px 1fr; align-items: center; gap: 14px; height: 40px; }
+  .nm { font-family: "JB", monospace; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-2); }
+  .tr { height: 10px; border-radius: 5px; background: var(--night-3); overflow: hidden; }
+  .tr div { height: 100%; border-radius: 5px; background: var(--grad); }
+  .row.low .nm { color: var(--coral); }
+  .row.low .tr div { background: var(--coral); }
+  .flag { position: absolute; right: 30px; margin-top: -2px; font-family: "JB", monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #fff; background: var(--coral); padding: 6px 10px; border-radius: 6px; }
+</style></head>
+<body>
+<div id="canvas" class="hero">
+  <div class="glow" style="right:-180px;top:-160px"></div>
+  <svg class="trace" data-seed="how-to-read-a-detection-report" width="1200" height="80" style="bottom:14px"></svg>
+  <div class="left">
+    <div class="k">Guide · 8 sections</div>
+    <h1>Read the score like an <span class="grad-text">editor.</span></h1>
+    <div class="foot"><img src="../logo.svg" alt="">/ blog</div>
+  </div>
+  <div class="card rep">
+    <div class="top"><div class="label">Human Score</div><div class="label">Summary only</div></div>
+    <div class="big"><div></div></div>
+    <div class="row"><div class="nm">Structure &amp; flow</div><div class="tr"><div style="width:78%"></div></div></div>
+    <div class="row"><div class="nm">Word choice</div><div class="tr"><div style="width:72%"></div></div></div>
+    <div class="row low" style="position:relative"><div class="nm">Voice &amp; perspective</div><div class="tr" style="width:40%"><div style="width:60%"></div></div><div class="flag">Edit first</div></div>
+    <div class="row"><div class="nm">Content &amp; logic</div><div class="tr"><div style="width:48%"></div></div></div>
+    <div class="row"><div class="nm">Cognitive fingerprint</div><div class="tr"><div style="width:38%"></div></div></div>
+    <div class="row"><div class="nm">Emotional texture</div><div class="tr"><div style="width:52%"></div></div></div>
+    <div class="row"><div class="nm">Pragmatics</div><div class="tr"><div style="width:58%"></div></div></div>
+  </div>
+</div>
+<script src="../trace.js"></script>
+</body></html>

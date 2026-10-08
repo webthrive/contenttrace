@@ -1,0 +1,37 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css">
+<style>
+  .flow { position: absolute; left: 56px; right: 56px; display: grid; grid-template-columns: 170px 1fr 40px 1fr 40px 1fr; align-items: center; }
+  .f1 { top: 135px; } .f2 { top: 345px; }
+  .tag { font-family: "JB", monospace; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; }
+  .f1 .tag { color: var(--coral); }
+  .card { height: 120px; padding: 18px 20px; display: flex; flex-direction: column; justify-content: center; }
+  .t { font-size: 22px; font-weight: 600; line-height: 1.2; letter-spacing: -0.01em; }
+  .s { font-family: "JB", monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-top: 8px; }
+  .ar { text-align: center; font-size: 26px; color: var(--muted); }
+  .bad { border-color: rgba(196,46,74,0.35); }
+  .bad .t { color: var(--coral); }
+  .good { border-color: rgba(106,31,192,0.35); }
+</style></head>
+<body>
+<div id="canvas" class="inline light">
+  <div class="glow" style="right:-360px;top:-380px;opacity:.8"></div>
+  <div class="label" style="position:absolute;left:56px;top:44px">Same score, two different jobs</div>
+  <div class="flow f1">
+    <div class="tag">Common</div>
+    <div class="card"><div class="t">Score above threshold</div></div>
+    <div class="ar">→</div>
+    <div class="card bad"><div class="t">Integrity report filed</div></div>
+    <div class="ar">→</div>
+    <div class="card bad"><div class="t">Student argues with a number</div></div>
+  </div>
+  <div class="flow f2">
+    <div class="tag grad-text">Better</div>
+    <div class="card"><div class="t">Score flags an essay</div><div class="s">Triage</div></div>
+    <div class="ar">→</div>
+    <div class="card good"><div class="t">Five-minute conversation</div></div>
+    <div class="ar">→</div>
+    <div class="card good"><div class="t">Decision on all the evidence</div></div>
+  </div>
+</div>
+</body></html>

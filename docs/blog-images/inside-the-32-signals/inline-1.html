@@ -1,0 +1,30 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css">
+<style>
+  .grid { position: absolute; left: 56px; right: 56px; top: 100px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .card { height: 176px; padding: 20px 20px 18px; }
+  .w { font-family: "JB", monospace; font-size: 40px; font-weight: 500; line-height: 1; margin-bottom: 12px; }
+  .t { font-size: 20px; font-weight: 600; line-height: 1.2; letter-spacing: -0.01em; }
+  .bar { position: absolute; left: 20px; right: 20px; bottom: 20px; height: 8px; border-radius: 4px; background: var(--night-3); overflow: hidden; }
+  .bar i { display: block; height: 100%; border-radius: 4px; background: var(--grad); }
+  .ref .w { color: var(--muted); font-size: 26px; padding-top: 8px; margin-bottom: 18px; }
+  .ref { border-style: dashed; }
+  .note { position: absolute; left: 56px; bottom: 34px; }
+</style></head>
+<body>
+<div id="canvas" class="inline light">
+  <div class="glow" style="right:-320px;bottom:-420px;opacity:.7"></div>
+  <div class="label" style="position:absolute;left:56px;top:44px">8 sections · default weights</div>
+  <div class="grid">
+    <div class="card"><div class="w grad-text">12%</div><div class="t">Structure &amp; Flow</div><div class="bar"><i style="width:75%"></i></div></div>
+    <div class="card"><div class="w grad-text">15%</div><div class="t">Word Choice &amp; Phrasing</div><div class="bar"><i style="width:94%"></i></div></div>
+    <div class="card"><div class="w grad-text">14%</div><div class="t">Voice &amp; Perspective</div><div class="bar"><i style="width:88%"></i></div></div>
+    <div class="card"><div class="w grad-text">13%</div><div class="t">Content &amp; Logic</div><div class="bar"><i style="width:81%"></i></div></div>
+    <div class="card"><div class="w grad-text">16%</div><div class="t">Cognitive Fingerprinting</div><div class="bar"><i style="width:100%"></i></div></div>
+    <div class="card"><div class="w grad-text">12%</div><div class="t">Emotional Texture</div><div class="bar"><i style="width:75%"></i></div></div>
+    <div class="card"><div class="w grad-text">10%</div><div class="t">Pragmatics &amp; Subtext</div><div class="bar"><i style="width:63%"></i></div></div>
+    <div class="card ref"><div class="w">REF ONLY</div><div class="t">Statistical Proxies</div><div class="bar"></div></div>
+  </div>
+  <div class="label note">7 judged by Claude · 1 measured in code, no weight</div>
+</div>
+</body></html>

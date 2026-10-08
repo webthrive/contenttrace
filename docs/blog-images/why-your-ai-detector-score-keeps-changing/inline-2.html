@@ -1,0 +1,21 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css">
+<style>
+  .grid { position: absolute; left: 56px; right: 56px; top: 130px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .card { height: 310px; padding: 26px 24px; display: flex; flex-direction: column; }
+  .num { font-family: "JB", monospace; font-size: 46px; font-weight: 500; color: var(--coral); line-height: 1; }
+  .unit { font-family: "JB", monospace; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--coral); margin-top: 10px; }
+  .t { font-size: 23px; font-weight: 600; line-height: 1.25; letter-spacing: -0.01em; margin-top: 26px; }
+  .src { margin-top: auto; font-family: "JB", monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+</style></head>
+<body>
+<div id="canvas" class="inline light">
+  <div class="glow" style="right:-360px;top:-380px;opacity:.8"></div>
+  <div class="label" style="position:absolute;left:56px;top:44px">Limits the vendors publish themselves</div>
+  <div class="grid">
+    <div class="card"><div class="num">1,000</div><div class="unit">characters</div><div class="t">Below this, &quot;very unreliable&quot;</div><div class="src">OpenAI classifier · 2023</div></div>
+    <div class="card"><div class="num">300</div><div class="unit">words of prose</div><div class="t">Below this, no result at all</div><div class="src">Turnitin guide</div></div>
+    <div class="card"><div class="num">1-20%</div><div class="unit">score range</div><div class="t">Marked with an asterisk: more false positives</div><div class="src">Turnitin guide</div></div>
+  </div>
+</div>
+</body></html>

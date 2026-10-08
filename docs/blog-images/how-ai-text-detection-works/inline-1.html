@@ -1,0 +1,29 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css">
+<style>
+  .grid { position: absolute; left: 56px; right: 56px; top: 100px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .card { height: 380px; padding: 26px 24px; }
+  .n { font-family: "JB", monospace; font-size: 36px; font-weight: 500; line-height: 1; margin-bottom: 16px; }
+  .t { font-size: 27px; font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; margin-bottom: 26px; }
+  .row { margin-bottom: 20px; }
+  .row .label { font-size: 12px; margin-bottom: 6px; }
+  .row .v { font-size: 19px; line-height: 1.3; color: var(--ink-2); }
+  .bad .label { color: var(--coral); }
+</style></head>
+<body>
+<div id="canvas" class="inline light">
+  <div class="glow" style="left:-300px;bottom:-420px;opacity:.7"></div>
+  <div class="label" style="position:absolute;left:56px;top:44px">Three families of detection</div>
+  <div class="grid">
+    <div class="card"><div class="n grad-text">01</div><div class="t">Perplexity statistics</div>
+      <div class="row"><div class="label">Reads</div><div class="v">How predictable each word is</div></div>
+      <div class="row bad"><div class="label">Breaks on</div><div class="v">Formal and second-language writing</div></div></div>
+    <div class="card"><div class="n grad-text">02</div><div class="t">Trained classifiers</div>
+      <div class="row"><div class="label">Reads</div><div class="v">Patterns from past AI output</div></div>
+      <div class="row bad"><div class="label">Breaks on</div><div class="v">New models and paraphrasing</div></div></div>
+    <div class="card"><div class="n grad-text">03</div><div class="t">Rubric-based reading</div>
+      <div class="row"><div class="label">Reads</div><div class="v">Opinions, insider detail, self-correction</div></div>
+      <div class="row bad"><div class="label">Breaks on</div><div class="v">Short texts with little to read</div></div></div>
+  </div>
+</div>
+</body></html>

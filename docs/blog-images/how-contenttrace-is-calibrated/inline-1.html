@@ -1,0 +1,40 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css">
+<style>
+  .chart { position: absolute; left: 56px; width: 590px; top: 96px; }
+  .row { display: grid; grid-template-columns: 170px 1fr 92px; align-items: center; height: 54px; }
+  .nm { font-family: "JB", monospace; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-2); }
+  .tr { height: 14px; border-radius: 4px; background: var(--night-3); position: relative; }
+  .tr i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; background: #6a1fc0; }
+  .tr.prob i { background: var(--coral); }
+  .v { font-family: "JB", monospace; font-size: 15px; color: var(--ink); text-align: right; }
+  .gap { height: 16px; }
+  .sub { font-family: "JB", monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); padding: 4px 0 2px; }
+  .auc { position: absolute; right: 56px; top: 140px; width: 248px; height: 270px; padding: 24px 22px; }
+  .auc .big { font-size: 58px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; margin: 10px 0 6px; }
+  .auc .from { margin-top: 18px; font-family: "JB", monospace; font-size: 22px; color: var(--muted); text-decoration: line-through; }
+  .auc .t { font-size: 18px; font-weight: 600; line-height: 1.3; margin-top: 18px; }
+  .foot2 { position: absolute; left: 56px; bottom: 30px; }
+</style></head>
+<body>
+<div id="canvas" class="inline light">
+  <div class="glow" style="right:-360px;top:-380px;opacity:.8"></div>
+  <div class="label" style="position:absolute;left:56px;top:44px">Internal test, Oct 3, 2026 · leave-one-out</div>
+  <div class="chart">
+    <div class="row"><div class="nm">Human texts</div><div class="tr"><i style="width:94.7%"></i></div><div class="v">71 / 75</div></div>
+    <div class="row"><div class="nm">AI texts</div><div class="tr"><i style="width:82.7%"></i></div><div class="v">62 / 75</div></div>
+    <div class="sub">AI texts by provider</div>
+    <div class="row"><div class="nm">Gemini</div><div class="tr"><i style="width:92%"></i></div><div class="v">23 / 25</div></div>
+    <div class="row"><div class="nm">Claude</div><div class="tr"><i style="width:80%"></i></div><div class="v">20 / 25</div></div>
+    <div class="row"><div class="nm">ChatGPT</div><div class="tr"><i style="width:76%"></i></div><div class="v">19 / 25</div></div>
+    <div class="row"><div class="nm">"Sound human" AI</div><div class="tr prob"><i style="width:25%"></i></div><div class="v">3 / 12</div></div>
+  </div>
+  <div class="card auc">
+    <div class="label">Area under curve</div>
+    <div class="from">83.7%</div>
+    <div class="big grad-text">94.8%</div>
+    <div class="t">After the routing fix and new anchors</div>
+  </div>
+  <div class="label foot2">Correctly classified · modest sample, not a guarantee</div>
+</div>
+</body></html>

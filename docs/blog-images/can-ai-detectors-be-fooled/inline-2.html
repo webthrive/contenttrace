@@ -1,0 +1,29 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css">
+<style>
+  .tbl { position: absolute; left: 56px; right: 56px; top: 96px; }
+  .r { display: grid; grid-template-columns: 300px 1fr 1fr 1fr; align-items: center; height: 92px; border-bottom: 1.5px solid var(--night-3); }
+  .r.hd { height: 56px; }
+  .r:last-child { border-bottom: 0; }
+  .r.hd div { font-family: "JB", monospace; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-align: center; }
+  .r.hd div:first-child { text-align: left; }
+  .q { font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
+  .c { text-align: center; font-family: "JB", monospace; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .y { color: var(--violet-hi); } .n { color: var(--coral); } .m { color: var(--muted); }
+  .dot { display: inline-block; width: 14px; height: 14px; border-radius: 50%; margin-right: 8px; vertical-align: -1px; }
+  .y .dot { background: var(--grad); } .n .dot { background: var(--coral); } .m .dot { background: var(--night-3); }
+  .rw { color: var(--ink) !important; }
+</style></head>
+<body>
+<div id="canvas" class="inline light">
+  <div class="glow" style="right:-360px;top:-380px;opacity:.8"></div>
+  <div class="label" style="position:absolute;left:56px;top:44px">Three ways to change an AI draft</div>
+  <div class="tbl">
+    <div class="r hd"><div></div><div>Paraphrase tool</div><div>Better prompt</div><div class="rw">Real rewrite</div></div>
+    <div class="r"><div class="q">Changes the surface</div><div class="c y"><span class="dot"></span>Yes</div><div class="c y"><span class="dot"></span>Yes</div><div class="c y"><span class="dot"></span>Yes</div></div>
+    <div class="r"><div class="q">Adds a real example</div><div class="c n"><span class="dot"></span>No</div><div class="c n"><span class="dot"></span>No</div><div class="c y"><span class="dot"></span>Yes</div></div>
+    <div class="r"><div class="q">Takes a held position</div><div class="c n"><span class="dot"></span>No</div><div class="c m"><span class="dot"></span>Faked</div><div class="c y"><span class="dot"></span>Yes</div></div>
+    <div class="r"><div class="q">Readers get more</div><div class="c n"><span class="dot"></span>No</div><div class="c m"><span class="dot"></span>A little</div><div class="c y"><span class="dot"></span>Yes</div></div>
+  </div>
+</div>
+</body></html>

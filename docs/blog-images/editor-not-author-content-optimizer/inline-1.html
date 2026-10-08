@@ -1,0 +1,32 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css">
+<style>
+  .flow { position: absolute; left: 56px; right: 56px; top: 112px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .card { height: 236px; padding: 20px 20px 18px; }
+  .n { font-family: "JB", monospace; font-size: 36px; font-weight: 500; line-height: 1; margin-bottom: 14px; }
+  .t { font-size: 21px; font-weight: 600; line-height: 1.22; letter-spacing: -0.01em; }
+  .s { position: absolute; left: 20px; right: 16px; bottom: 16px; font-family: "JB", monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); line-height: 1.5; }
+  .guard .n { color: var(--coral); }
+  .split { position: absolute; left: 56px; right: 56px; bottom: 72px; }
+  .split .lbl { margin-bottom: 10px; }
+  .sb { display: flex; gap: 2px; height: 34px; }
+  .sb div { border-radius: 6px; display: flex; align-items: center; padding-left: 14px; font-family: "JB", monospace; font-size: 13px; letter-spacing: 0.06em; color: #fff; }
+  .a { width: 65%; background: #6a1fc0; }
+  .b { width: 35%; background: #8f5bd6; }
+</style></head>
+<body>
+<div id="canvas" class="inline light">
+  <div class="glow" style="left:-300px;bottom:-420px;opacity:.7"></div>
+  <div class="label" style="position:absolute;left:56px;top:44px">What happens after you press optimize</div>
+  <div class="flow">
+    <div class="card"><div class="n grad-text">01</div><div class="t">Rewrite for one goal</div><div class="s">Humanize · SEO · AI answers</div></div>
+    <div class="card guard"><div class="n">02</div><div class="t">Fact guard compares both versions</div><div class="s">New names, numbers, changed quotes</div></div>
+    <div class="card guard"><div class="n">03</div><div class="t">One repair pass, or a warning</div><div class="s">Check these before you publish</div></div>
+    <div class="card"><div class="n grad-text">04</div><div class="t">Re-score with the same engine</div><div class="s">Same content type · side by side</div></div>
+  </div>
+  <div class="split">
+    <div class="label lbl">Search &amp; AI-answer readiness</div>
+    <div class="sb"><div class="a">65% model rubric</div><div class="b">35% code checks</div></div>
+  </div>
+</div>
+</body></html>

@@ -1,0 +1,30 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css">
+<style>
+  .src { position: absolute; left: 56px; top: 110px; width: 250px; display: flex; flex-direction: column; gap: 18px; }
+  .src .card { height: 88px; display: flex; align-items: center; padding: 0 22px; font-size: 22px; font-weight: 600; }
+  .q { position: absolute; left: 380px; top: 186px; width: 260px; height: 170px; padding: 24px; }
+  .q .t { font-size: 27px; font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; margin-top: 10px; }
+  .out { position: absolute; left: 712px; width: 232px; height: 150px; padding: 22px; }
+  .out .t { font-size: 21px; font-weight: 600; line-height: 1.2; margin-top: 10px; }
+  .yes { top: 104px; } .no { top: 290px; }
+  .no .label { color: var(--coral); }
+  .arr { position: absolute; font-size: 34px; color: var(--muted); }
+</style></head>
+<body>
+<div id="canvas" class="inline light">
+  <div class="glow" style="left:-300px;bottom:-420px;opacity:.7"></div>
+  <div class="label" style="position:absolute;left:56px;top:44px">Google's scaled content rule</div>
+  <div class="src">
+    <div class="card">Automation</div>
+    <div class="card">People</div>
+    <div class="card">A combination</div>
+  </div>
+  <div class="arr" style="left:326px;top:246px">→</div>
+  <div class="card q"><div class="label">The real test</div><div class="t">Does each page add <span class="grad-text">value for users?</span></div></div>
+  <div class="arr" style="left:660px;top:150px">↗</div>
+  <div class="arr" style="left:660px;top:330px">↘</div>
+  <div class="card out yes"><div class="label grad-text">Yes</div><div class="t">Eligible to rank, however it was made</div></div>
+  <div class="card out no"><div class="label">No, at scale</div><div class="t">Scaled content abuse</div></div>
+</div>
+</body></html>

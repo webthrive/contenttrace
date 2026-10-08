@@ -1,0 +1,22 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css">
+<style>
+  .grid { position: absolute; left: 56px; right: 56px; top: 100px; display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  .card { height: 176px; padding: 22px 24px; }
+  .n { font-family: "JB", monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 14px; }
+  .old { font-family: "JB", monospace; font-size: 17px; color: var(--coral); text-decoration: line-through; text-decoration-thickness: 2px; margin-bottom: 12px; }
+  .new { font-size: 23px; font-weight: 600; line-height: 1.25; letter-spacing: -0.01em; }
+  .new b { font-weight: 600; background: rgba(106,31,192,0.12); padding: 0 5px; border-radius: 4px; color: var(--violet-hi); }
+</style></head>
+<body>
+<div id="canvas" class="inline light">
+  <div class="glow" style="right:-380px;bottom:-420px;opacity:.7"></div>
+  <div class="label" style="position:absolute;left:56px;top:44px">Generic phrase → specific detail</div>
+  <div class="grid">
+    <div class="card"><div class="n grad-text">01 · Odd number</div><div class="old">"significantly improved"</div><div class="new">Open rates sat at <b>23%</b> before the test</div></div>
+    <div class="card"><div class="n grad-text">02 · Inconvenient detail</div><div class="old">"saw great results"</div><div class="new">Engagement rose, but in a segment that <b>never converted</b></div></div>
+    <div class="card"><div class="n grad-text">03 · Named source</div><div class="old">"research suggests"</div><div class="new"><b>Sadoski et al., 2000</b>: concrete text recalled better</div></div>
+    <div class="card"><div class="n grad-text">04 · Time stamp</div><div class="old">"in today's landscape"</div><div class="new">In the <b>second sprint</b> after launch</div></div>
+  </div>
+</div>
+</body></html>

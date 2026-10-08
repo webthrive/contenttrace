@@ -1,0 +1,33 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css">
+<style>
+  .cols { position: absolute; left: 56px; right: 56px; top: 112px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .card { height: 360px; padding: 26px 28px; }
+  .h { font-family: "JB", monospace; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
+  .sub { font-size: 16px; color: var(--muted); margin-bottom: 18px; }
+  .row { display: flex; gap: 14px; align-items: center; font-size: 22px; font-weight: 600; height: 62px; border-top: 1.5px solid var(--night-3); letter-spacing: -0.01em; }
+  .m { font-family: "JB", monospace; width: 22px; }
+  .bad .h, .bad .m { color: var(--coral); }
+  .bad .row { color: var(--ink-2); }
+  .good .m { color: var(--violet-hi); }
+</style></head>
+<body>
+<div id="canvas" class="inline light">
+  <div class="glow" style="left:-320px;bottom:-440px;opacity:.7"></div>
+  <div class="label" style="position:absolute;left:56px;top:44px">Two ways to govern AI-assisted writing</div>
+  <div class="cols">
+    <div class="card bad"><div class="h">Process rules</div><div class="sub">Checked by trusting a log</div>
+      <div class="row"><span class="m">✕</span>Disclose every AI touch</div>
+      <div class="row"><span class="m">✕</span>Log tool usage</div>
+      <div class="row"><span class="m">✕</span>Approval by word count</div>
+      <div class="row"><span class="m">✕</span>Enforce with a detector</div>
+    </div>
+    <div class="card good"><div class="h grad-text">Output standards</div><div class="sub">Checked by reading the piece</div>
+      <div class="row"><span class="m">✓</span>Every claim has a source</div>
+      <div class="row"><span class="m">✓</span>One position worth arguing</div>
+      <div class="row"><span class="m">✓</span>Named, accountable editor</div>
+      <div class="row"><span class="m">✓</span>Disclosure where readers ask</div>
+    </div>
+  </div>
+</div>
+</body></html>

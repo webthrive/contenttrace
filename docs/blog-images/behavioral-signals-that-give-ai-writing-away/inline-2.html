@@ -1,0 +1,35 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css">
+<style>
+  .cols { position: absolute; left: 56px; right: 56px; top: 124px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .card { height: 330px; padding: 24px 26px; }
+  .h { font-family: "JB", monospace; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 18px; }
+  .bad .h { color: var(--coral); }
+  .step { display: flex; gap: 14px; align-items: flex-start; padding: 13px 0; border-bottom: 1.5px solid var(--night-3); }
+  .step:last-of-type { border-bottom: 0; }
+  .i { font-family: "JB", monospace; font-size: 13px; color: var(--muted); width: 26px; padding-top: 4px; flex-shrink: 0; }
+  .t { font-size: 21px; font-weight: 600; line-height: 1.25; letter-spacing: -0.01em; }
+  .bad .t { color: var(--ink-2); }
+  .hl { background: rgba(106,31,192,0.1); border-radius: 4px; padding: 0 4px; }
+  .foot2 { font-family: "JB", monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); position: absolute; left: 26px; bottom: 20px; }
+</style></head>
+<body>
+<div id="canvas" class="inline light">
+  <div class="glow" style="right:-360px;top:-380px;opacity:.8"></div>
+  <div class="label" style="position:absolute;left:56px;top:44px">Two outlines for the same post</div>
+  <div class="cols">
+    <div class="card bad"><div class="h">Delivery only</div>
+      <div class="step"><div class="i">1</div><div class="t">There are three key factors</div></div>
+      <div class="step"><div class="i">2</div><div class="t">Factor one, two, three</div></div>
+      <div class="step"><div class="i">3</div><div class="t">In conclusion, three factors</div></div>
+      <div class="foot2">Ending known from line one</div>
+    </div>
+    <div class="card good"><div class="h grad-text">With discovery</div>
+      <div class="step"><div class="i">1</div><div class="t">Why did signups stall?</div></div>
+      <div class="step"><div class="i">2</div><div class="t">The assumed cause <span class="hl">didn't hold</span></div></div>
+      <div class="step"><div class="i">3</div><div class="t">A smaller factor mattered more</div></div>
+      <div class="foot2">Reader reads to find out</div>
+    </div>
+  </div>
+</div>
+</body></html>

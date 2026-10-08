@@ -1,0 +1,34 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css">
+<style>
+  .cols { position: absolute; left: 56px; right: 56px; top: 118px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .card { height: 330px; padding: 26px 28px; }
+  .h { font-family: "JB", monospace; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 22px; }
+  .bad .h { color: var(--coral); }
+  .row { display: flex; align-items: center; gap: 14px; font-size: 24px; font-weight: 600; letter-spacing: -0.01em; padding: 16px 0; border-bottom: 1.5px solid var(--night-3); }
+  .row:last-child { border-bottom: 0; }
+  .ic { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: "JB", monospace; font-size: 18px; flex-shrink: 0; }
+  .bad .ic { background: rgba(196,46,74,0.1); color: var(--coral); }
+  .good .ic { background: rgba(106,31,192,0.1); color: var(--violet-hi); }
+  .note { font-family: "JB", monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-top: 18px; }
+</style></head>
+<body>
+<div id="canvas" class="inline light">
+  <div class="glow" style="left:-300px;bottom:-420px;opacity:.7"></div>
+  <div class="label" style="position:absolute;left:56px;top:44px">One paraphrase pass</div>
+  <div class="cols">
+    <div class="card bad"><div class="h">What it changes</div>
+      <div class="row"><div class="ic">~</div>Word choice</div>
+      <div class="row"><div class="ic">~</div>Sentence order</div>
+      <div class="row"><div class="ic">~</div>Sentence length</div>
+      <div class="note">Surface statistics move</div>
+    </div>
+    <div class="card good"><div class="h grad-text">What it can't add</div>
+      <div class="row"><div class="ic">+</div>A real example</div>
+      <div class="row"><div class="ic">+</div>An opinion you hold</div>
+      <div class="row"><div class="ic">+</div>Insider detail</div>
+      <div class="note">Only the writer adds these</div>
+    </div>
+  </div>
+</div>
+</body></html>

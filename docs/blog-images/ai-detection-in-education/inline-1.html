@@ -1,0 +1,26 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css">
+<style>
+  .stack { position: absolute; left: 56px; width: 560px; top: 100px; display: flex; flex-direction: column; gap: 14px; }
+  .card { height: 88px; padding: 0 24px; display: flex; align-items: center; gap: 20px; }
+  .n { font-family: "JB", monospace; font-size: 30px; font-weight: 500; width: 46px; }
+  .t { font-size: 24px; font-weight: 600; letter-spacing: -0.01em; }
+  .s { margin-left: auto; font-family: "JB", monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .score { border-style: dashed; }
+  .score .n, .score .s { color: var(--coral); }
+  .side { position: absolute; left: 660px; right: 56px; top: 100px; height: 394px; padding: 30px 28px; display: flex; flex-direction: column; justify-content: center; }
+  .side .big { font-size: 34px; font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; margin: 16px 0; }
+</style></head>
+<body>
+<div id="canvas" class="inline light">
+  <div class="glow" style="left:-300px;bottom:-420px;opacity:.7"></div>
+  <div class="label" style="position:absolute;left:56px;top:44px">The evidence stack for a fair decision</div>
+  <div class="stack">
+    <div class="card"><div class="n grad-text">04</div><div class="t">A short conversation</div><div class="s">Strongest</div></div>
+    <div class="card"><div class="n grad-text">03</div><div class="t">In-class writing baseline</div></div>
+    <div class="card"><div class="n grad-text">02</div><div class="t">Draft history</div></div>
+    <div class="card score"><div class="n">01</div><div class="t">Detector score</div><div class="s">Pointer only</div></div>
+  </div>
+  <div class="card side"><div class="label">The rule</div><div class="big">No score is ever the <span class="grad-text">only</span> evidence.</div><div class="label">It starts the review</div></div>
+</div>
+</body></html>

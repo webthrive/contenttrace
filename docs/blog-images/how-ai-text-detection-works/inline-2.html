@@ -1,0 +1,39 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css">
+<style>
+  .wrap { position: absolute; left: 56px; right: 56px; top: 96px; display: grid; grid-template-columns: 1.55fr 1fr; gap: 24px; }
+  .card { padding: 24px 26px; height: 400px; }
+  .h { font-size: 24px; font-weight: 600; margin-bottom: 6px; letter-spacing: -0.01em; }
+  .sub { font-size: 12px; margin-bottom: 18px; }
+  .sec { display: flex; align-items: center; gap: 12px; font-size: 18px; color: var(--ink-2); height: 40px; border-bottom: 1.5px solid var(--night-3); }
+  .sec:last-child { border-bottom: 0; }
+  .dot { width: 12px; height: 12px; border-radius: 3px; background: var(--grad); flex-shrink: 0; }
+  .ref .dot { background: var(--dim); }
+  .ref .sec { color: var(--muted); }
+  .tag { display: inline-block; margin-top: 18px; font-family: "JB", monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--coral); border: 1.5px solid var(--coral); border-radius: 20px; padding: 6px 12px; }
+  .big { font-family: "JB", monospace; font-size: 64px; line-height: 1; color: var(--muted); margin: 6px 0 14px; }
+</style></head>
+<body>
+<div id="canvas" class="inline light">
+  <div class="glow" style="right:-360px;top:-380px;opacity:.8"></div>
+  <div class="label" style="position:absolute;left:56px;top:44px">8 report sections, since Oct 3, 2026</div>
+  <div class="wrap">
+    <div class="card"><div class="h">7 sections move the score</div><div class="label sub">Rubric reading</div>
+      <div class="sec"><span class="dot"></span>Structure &amp; Flow</div>
+      <div class="sec"><span class="dot"></span>Word Choice &amp; Phrasing</div>
+      <div class="sec"><span class="dot"></span>Voice &amp; Perspective</div>
+      <div class="sec"><span class="dot"></span>Content &amp; Logic</div>
+      <div class="sec"><span class="dot"></span>Cognitive Fingerprinting</div>
+      <div class="sec"><span class="dot"></span>Emotional Texture</div>
+      <div class="sec"><span class="dot"></span>Pragmatics &amp; Subtext</div>
+    </div>
+    <div class="card ref"><div class="h">1 section for reference</div><div class="label sub">Statistical Proxies</div>
+      <div class="big">0%<span class="label" style="font-size:14px;margin-left:12px">weight</span></div>
+      <div class="sec"><span class="dot"></span>Burstiness <span class="tag" style="margin:0 0 0 auto;padding:3px 9px;font-size:10px">chance-level</span></div>
+      <div class="sec"><span class="dot"></span>Vocabulary Richness</div>
+      <div class="sec"><span class="dot"></span>Response Calibration</div>
+      <div class="sec"><span class="dot"></span>Entropy Variance</div>
+    </div>
+  </div>
+</div>
+</body></html>
