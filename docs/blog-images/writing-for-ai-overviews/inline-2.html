@@ -1,0 +1,32 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css">
+<style>
+  .doc { position: absolute; left: 56px; top: 96px; width: 540px; height: 392px; padding: 34px 36px; }
+  .q { font-size: 34px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 28px; }
+  .txt { font-size: 27px; line-height: 1.65; color: var(--ink-2); }
+  .hl { border-radius: 4px; padding: 1px 4px; }
+  .a1 { background: rgba(106,31,192,0.12); }
+  .a2 { background: rgba(106,31,192,0.22); color: var(--ink); font-weight: 600; }
+  .a3 { background: rgba(106,31,192,0.06); box-shadow: inset 0 -2px 0 rgba(106,31,192,0.5); }
+  .n { display: inline-block; font-family: "JB", monospace; font-size: 12px; font-weight: 500; width: 22px; height: 22px; line-height: 22px; text-align: center; border-radius: 50%; color: #fff; background: var(--violet-hi); vertical-align: 3px; margin-right: 4px; }
+  .n.c { background: var(--coral); }
+  .notes { position: absolute; left: 630px; right: 56px; top: 96px; display: flex; flex-direction: column; gap: 16px; }
+  .note { padding: 16px 18px; }
+  .note .t { font-size: 19px; font-weight: 600; line-height: 1.25; margin-top: 6px; }
+</style></head>
+<body>
+<div id="canvas" class="inline light">
+  <div class="glow" style="left:-300px;bottom:-420px;opacity:.7"></div>
+  <div class="label" style="position:absolute;left:56px;top:44px">Anatomy of a quotable passage (hypothetical)</div>
+  <div class="card doc">
+    <div class="q"><span class="n">1</span>Can BakeryOS import recipes from a spreadsheet?</div>
+    <div class="txt"><span class="n">2</span><span class="hl a2">Yes.</span> <span class="n">3</span><span class="hl a1">The BakeryOS importer</span> reads a CSV file with one ingredient per row. <span class="n">4</span><span class="hl a3">Files over 500 rows must be split first.</span></div>
+  </div>
+  <div class="notes">
+    <div class="card note"><div class="label"><span class="n">1</span>Heading</div><div class="t">Asks the real question</div></div>
+    <div class="card note"><div class="label"><span class="n">2</span>Answer</div><div class="t">First word answers it</div></div>
+    <div class="card note"><div class="label"><span class="n">3</span>Entity</div><div class="t">Named, never &quot;it&quot; or &quot;this&quot;</div></div>
+    <div class="card note"><div class="label"><span class="n">4</span>Qualifier</div><div class="t">Stays inside the passage</div></div>
+  </div>
+</div>
+</body></html>

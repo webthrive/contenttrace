@@ -1,0 +1,24 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css">
+<style>
+  .tbl { position: absolute; left: 56px; right: 56px; top: 96px; padding: 4px 28px; }
+  .r { display: grid; grid-template-columns: 60px 1fr 230px; align-items: center; height: 80px; border-bottom: 1.5px solid var(--night-3); }
+  .r:last-child { border-bottom: 0; }
+  .n { font-family: "JB", monospace; font-size: 22px; }
+  .t { font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
+  .who { font-family: "JB", monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; text-align: right; }
+  .ai { color: var(--coral); } .hu { color: var(--violet-hi); }
+</style></head>
+<body>
+<div id="canvas" class="inline light">
+  <div class="glow" style="right:-360px;top:-380px;opacity:.8"></div>
+  <div class="label" style="position:absolute;left:56px;top:44px">Adding information gain on purpose</div>
+  <div class="card tbl">
+    <div class="r"><div class="n grad-text">01</div><div class="t">List what the top five results all say</div><div class="who hu">You</div></div>
+    <div class="r"><div class="n grad-text">02</div><div class="t">Write a gain list before you prompt</div><div class="who hu">You</div></div>
+    <div class="r"><div class="n grad-text">03</div><div class="t">Draft around the gain list</div><div class="who ai">AI</div></div>
+    <div class="r"><div class="n grad-text">04</div><div class="t">Mark every claim any page could make</div><div class="who hu">You + AI</div></div>
+    <div class="r"><div class="n grad-text">05</div><div class="t">Replace marked claims with your evidence</div><div class="who hu">You</div></div>
+  </div>
+</div>
+</body></html>

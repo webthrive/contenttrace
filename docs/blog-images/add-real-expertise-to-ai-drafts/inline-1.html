@@ -1,0 +1,30 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css">
+<style>
+  .flow { position: absolute; left: 56px; right: 56px; top: 104px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px 22px; }
+  .card { height: 176px; padding: 22px 22px 18px; }
+  .n { font-family: "JB", monospace; font-size: 40px; font-weight: 500; line-height: 1; margin-bottom: 14px; }
+  .t { font-size: 24px; font-weight: 600; line-height: 1.2; letter-spacing: -0.01em; }
+  .s { position: absolute; left: 22px; bottom: 16px; font-family: "JB", monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .bad { border-style: dashed; border-color: var(--coral); background: rgba(196,46,74,0.03); }
+  .bad .n, .bad .s { color: var(--coral); }
+  .bad .t { color: var(--coral); text-decoration: line-through; text-decoration-thickness: 2px; }
+  .key { position: absolute; left: 56px; bottom: 30px; display: flex; gap: 26px; }
+  .key span::before { content: ""; display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 8px; vertical-align: -1px; }
+  .key .a::before { background: var(--grad); } .key .b::before { background: var(--coral); }
+</style></head>
+<body>
+<div id="canvas" class="inline light">
+  <div class="glow" style="left:-300px;bottom:-420px;opacity:.7"></div>
+  <div class="label" style="position:absolute;left:56px;top:44px">Where real experience comes from</div>
+  <div class="flow">
+    <div class="card"><div class="n grad-text">01</div><div class="t">Interview someone who did the work</div><div class="s">Recording + approval</div></div>
+    <div class="card"><div class="n grad-text">02</div><div class="t">Use your own data</div><div class="s">Dated export</div></div>
+    <div class="card"><div class="n grad-text">03</div><div class="t">Show the real artifact</div><div class="s">Original file</div></div>
+    <div class="card"><div class="n grad-text">04</div><div class="t">Name the decision and its cost</div><div class="s">Named source</div></div>
+    <div class="card"><div class="n grad-text">05</div><div class="t">Admit what broke</div><div class="s">Ticket or postmortem</div></div>
+    <div class="card bad"><div class="n">&times;</div><div class="t">Invented anecdotes</div><div class="s">No trail at all</div></div>
+  </div>
+  <div class="key label"><span class="a">Honest source</span><span class="b">Never use</span></div>
+</div>
+</body></html>

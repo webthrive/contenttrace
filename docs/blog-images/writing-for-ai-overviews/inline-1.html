@@ -1,0 +1,34 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css">
+<style>
+  .cols { position: absolute; left: 56px; right: 56px; top: 96px; bottom: 44px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .card { padding: 24px 26px; }
+  .h { font-size: 30px; font-weight: 800; letter-spacing: -0.02em; margin: 10px 0 18px; }
+  .row { font-size: 21px; font-weight: 600; line-height: 1.3; padding: 24px 0; border-top: 1.5px solid var(--night-3); display: flex; gap: 12px; align-items: baseline; }
+  .row i { font-style: normal; font-family: "JB", monospace; font-size: 13px; color: var(--muted); flex-shrink: 0; width: 22px; }
+  .g .h span { color: var(--ink); }
+  .r .h span { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .tag { position: absolute; right: 22px; top: 24px; font-family: "JB", monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; }
+  .g .tag { color: var(--muted); background: rgba(124,113,144,0.1); }
+  .r .tag { color: var(--violet-hi); background: rgba(106,31,192,0.08); }
+</style></head>
+<body>
+<div id="canvas" class="inline light">
+  <div class="glow" style="right:-360px;top:-380px;opacity:.8"></div>
+  <div class="label" style="position:absolute;left:56px;top:44px">AI Overviews: fact vs practice</div>
+  <div class="cols">
+    <div class="card g"><div class="tag">Documented</div><div class="label">Google Search Central</div><div class="h"><span>Google</span> says</div>
+      <div class="row"><i>01</i>Indexed and snippet-eligible</div>
+      <div class="row"><i>02</i>No special schema or AI files</div>
+      <div class="row"><i>03</i>Normal SEO best practices</div>
+      <div class="row"><i>04</i>Snippet controls apply</div>
+    </div>
+    <div class="card r"><div class="tag">Practice</div><div class="label">Editorial habits</div><div class="h"><span>Writers</span> do</div>
+      <div class="row"><i>01</i>Question-shaped headings</div>
+      <div class="row"><i>02</i>Answer in the first sentence</div>
+      <div class="row"><i>03</i>Name entities, skip pronouns</div>
+      <div class="row"><i>04</i>Keep the caveat with the claim</div>
+    </div>
+  </div>
+</div>
+</body></html>

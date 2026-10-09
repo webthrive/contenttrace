@@ -1,0 +1,26 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css">
+<style>
+  #canvas { width: 1300px; height: 640px; }
+  .dials { position: absolute; left: 56px; right: 56px; top: 92px; padding: 18px 36px; }
+  .d { display: grid; grid-template-columns: 170px 1fr 170px; align-items: center; height: 116px; border-bottom: 1.5px solid var(--night-3); }
+  .d:last-child { border-bottom: 0; }
+  .end { font-size: 21px; font-weight: 600; letter-spacing: -0.01em; }
+  .end.r { text-align: right; }
+  .track { position: relative; height: 8px; border-radius: 4px; background: var(--night-3); margin: 0 28px; }
+  .fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; background: var(--grad); }
+  .knob { position: absolute; top: 50%; width: 30px; height: 30px; margin: -15px 0 0 -15px; border-radius: 50%; background: #fff; border: 4px solid var(--violet-hi); box-shadow: 0 4px 12px rgba(87,13,158,.2); }
+  .note { position: absolute; top: 22px; transform: translateX(-50%); white-space: nowrap; font-family: "JB", monospace; font-size: 13px; color: var(--coral); letter-spacing: .04em; }
+</style></head>
+<body>
+<div id="canvas" class="inline light">
+  <div class="glow" style="right:-300px;bottom:-420px;opacity:.7"></div>
+  <div class="label" style="position:absolute;left:56px;top:44px">Four tone dials · a hypothetical B2B analytics brand</div>
+  <div class="card dials">
+    <div class="d"><div class="end">Formal</div><div class="track"><div class="fill" style="width:65%"></div><div class="knob" style="left:65%"></div><div class="note" style="left:65%">casual, never sloppy</div></div><div class="end r">Casual</div></div>
+    <div class="d"><div class="end">Serious</div><div class="track"><div class="fill" style="width:35%"></div><div class="knob" style="left:35%"></div><div class="note" style="left:35%">serious about the data</div></div><div class="end r">Funny</div></div>
+    <div class="d"><div class="end">Respectful</div><div class="track"><div class="fill" style="width:25%"></div><div class="knob" style="left:25%"></div><div class="note" style="left:25%">respects the reader's time</div></div><div class="end r">Irreverent</div></div>
+    <div class="d"><div class="end">Matter-of-fact</div><div class="track"><div class="fill" style="width:20%"></div><div class="knob" style="left:20%"></div><div class="note" style="left:20%">numbers carry the excitement</div></div><div class="end r">Enthusiastic</div></div>
+  </div>
+</div>
+</body></html>

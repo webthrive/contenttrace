@@ -6,6 +6,7 @@ const SLUG = "brand-voice-guides-ai-can-follow";
 const TITLE = "Brand Voice Guides That AI Can Actually Follow";
 const DESCRIPTION = "Most voice guides list adjectives a model can't act on. How to turn a vague AI brand voice guide into dials, rules and examples a model obeys.";
 const HERO = `/blog/${SLUG}/hero.webp`;
+const OG = `/og/blog/${SLUG}.jpg`; // 1200 x 630 social image
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -20,9 +21,9 @@ export const metadata: Metadata = {
     publishedTime: "2026-05-28",
     modifiedTime: "2026-05-28",
     authors: ["Colin H"],
-    images: [{ url: HERO, width: 1600, height: 900, alt: "Vague voice adjectives struck out and replaced by concrete writing rules a model can follow" }],
+    images: [{ url: OG, width: 1200, height: 630, alt: "Vague voice adjectives struck out and replaced by concrete writing rules a model can follow", type: "image/jpeg" }],
   },
-  twitter: { card: "summary_large_image", images: [HERO] },
+  twitter: { card: "summary_large_image", images: [OG] },
   robots: { index: true, follow: true },
 };
 

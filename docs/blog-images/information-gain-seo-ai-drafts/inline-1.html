@@ -1,0 +1,35 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css">
+<style>
+  .wrap { position: absolute; left: 56px; right: 56px; top: 100px; display: grid; grid-template-columns: 280px 50px 1fr; align-items: stretch; }
+  .base { padding: 26px 24px; display: flex; flex-direction: column; justify-content: space-between; }
+  .base .lab { font-family: "JB", monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--coral); }
+  .base .t { font-size: 26px; font-weight: 600; line-height: 1.2; letter-spacing: -0.01em; }
+  .base .s { font-family: "JB", monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .plus { display: flex; align-items: center; justify-content: center; font-size: 34px; color: var(--muted); }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .card.g { height: 172px; padding: 20px 22px; }
+  .n { font-family: "JB", monospace; font-size: 34px; font-weight: 500; line-height: 1; margin-bottom: 12px; }
+  .t2 { font-size: 21px; font-weight: 600; line-height: 1.2; letter-spacing: -0.01em; }
+  .s2 { position: absolute; left: 22px; bottom: 16px; font-family: "JB", monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+</style></head>
+<body>
+<div id="canvas" class="inline light">
+  <div class="glow" style="left:-300px;bottom:-420px;opacity:.7"></div>
+  <div class="label" style="position:absolute;left:56px;top:44px">Where information gain comes from</div>
+  <div class="wrap">
+    <div class="card base">
+      <div class="lab">Raw AI draft</div>
+      <div class="t">The consensus of pages that already rank</div>
+      <div class="s">Commodity layer</div>
+    </div>
+    <div class="plus">+</div>
+    <div class="grid">
+      <div class="card g"><div class="n grad-text">01</div><div class="t2">Numbers only you have</div><div class="s2">Original data</div></div>
+      <div class="card g"><div class="n grad-text">02</div><div class="t2">What happened when you tried it</div><div class="s2">Experience</div></div>
+      <div class="card g"><div class="n grad-text">03</div><div class="t2">Where you disagree with page one</div><div class="s2">Opinion</div></div>
+      <div class="card g"><div class="n grad-text">04</div><div class="t2">Your real example, step by step</div><div class="s2">Worked specifics</div></div>
+    </div>
+  </div>
+</div>
+</body></html>

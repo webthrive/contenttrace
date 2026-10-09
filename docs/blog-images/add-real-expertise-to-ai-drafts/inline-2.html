@@ -1,0 +1,25 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../base.css">
+<style>
+  .tbl { position: absolute; left: 56px; right: 56px; top: 100px; padding: 10px 28px; }
+  .hd, .r { display: grid; grid-template-columns: 1fr 1.25fr; gap: 24px; align-items: center; }
+  .hd { padding: 16px 0 12px; }
+  .r { padding: 22px 0; border-top: 1.5px solid var(--night-3); font-size: 22px; font-weight: 600; line-height: 1.25; }
+  .r .p { color: var(--violet-hi); }
+  .r.noproof .p, .r.noproof .c { color: var(--coral); }
+  .r i { font-style: normal; font-family: "JB", monospace; font-size: 13px; color: var(--muted); margin-right: 12px; }
+</style></head>
+<body>
+<div id="canvas" class="inline light">
+  <div class="glow" style="right:-360px;top:-380px;opacity:.8"></div>
+  <div class="label" style="position:absolute;left:56px;top:44px">Provenance check before publishing</div>
+  <div class="card tbl">
+    <div class="hd label"><div>Claim in the draft</div><div>Proof on file</div></div>
+    <div class="r"><div class="c"><i>01</i>Expert quote</div><div class="p">Recording and signed-off quote</div></div>
+    <div class="r"><div class="c"><i>02</i>Number or count</div><div class="p">Dated export or source link</div></div>
+    <div class="r"><div class="c"><i>03</i>&quot;The team tried&quot; story</div><div class="p">Ticket, doc or project note</div></div>
+    <div class="r"><div class="c"><i>04</i>Screenshot</div><div class="p">Original file with capture date</div></div>
+    <div class="r noproof"><div class="c"><i>05</i>No proof found</div><div class="p">Cut it or attribute it</div></div>
+  </div>
+</div>
+</body></html>
